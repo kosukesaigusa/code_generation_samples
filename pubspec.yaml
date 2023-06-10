@@ -1,0 +1,22 @@
+name: flutterfire_gen
+description: flutterfire_gen
+version: 0.0.1
+homepage: https://github.com/KosukeSaigusa/flutterfire_gen
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  cloud_firestore: ^4.8.0
+  flutter:
+    sdk: flutter
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  analyzer: ^5.13.0
+  build_runner: ^2.4.4
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^6.7.0
+  source_gen: ^1.3.2
