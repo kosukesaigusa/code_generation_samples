@@ -1,0 +1,24 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+          - lines_longer_than_80_chars
+          # Only for the JSON literal output file
+          - text_direction_code_point_in_literal
+
+      flutterfire_gen:
+        generate_for:
+        - example/*
+        - test/helper/*
+
+builders:
+  flutterfire_gen:
+    import: "package:flutterfire_gen/builder.dart"
+    builder_factories: ["flutterfireGen"]
+    build_extensions: {".dart": ["flutterfire_gen.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
