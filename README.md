@@ -1,0 +1,1 @@
+packages/flutterfire_gen/README.md
