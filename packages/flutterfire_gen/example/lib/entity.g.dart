@@ -7,44 +7,41 @@ part of 'entity.dart';
 // **************************************************************************
 
 class EntityFlutterFireGen {
-  final String name;
-  final String lastName;
-  final bool isAdult;
-  final int age;
   const EntityFlutterFireGen({
     required this.name,
-    required this.lastName,
-    required this.isAdult,
     required this.age,
+    required this.isAdult,
   });
-  Map<String, dynamic> toMap() {
+
+  final String name;
+  final int age;
+  final bool isAdult;
+
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'lastName': lastName,
-      'isAdult': isAdult,
       'age': age,
+      'isAdult': isAdult,
     };
   }
 
-  factory EntityFlutterFireGen.fromMap(Map<String, dynamic> map) {
+  factory EntityFlutterFireGen.fromJson(Map<String, dynamic> json) {
     return EntityFlutterFireGen(
-      name: map['name'],
-      lastName: map['lastName'],
-      isAdult: map['isAdult'],
-      age: map['age'],
+      name: json['name'] as String,
+      age: json['age'] as int,
+      isAdult: json['isAdult'] as bool,
     );
   }
+
   EntityFlutterFireGen copyWith({
     String? name,
-    String? lastName,
-    bool? isAdult,
     int? age,
+    bool? isAdult,
   }) {
     return EntityFlutterFireGen(
       name: name ?? this.name,
-      lastName: lastName ?? this.lastName,
-      isAdult: isAdult ?? this.isAdult,
       age: age ?? this.age,
+      isAdult: isAdult ?? this.isAdult,
     );
   }
 }

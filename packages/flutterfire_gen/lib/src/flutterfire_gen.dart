@@ -16,62 +16,65 @@ class FlutterFireGen extends GeneratorForAnnotation<FlutterFireGenAnnotation> {
   ) {
     final visitor = ModelVisitor();
     element.visitChildren(visitor);
+    final fields = visitor.fields;
 
     final buffer = StringBuffer();
     final className = '${visitor.className}FlutterFireGen';
+
+    // 冒頭のクラスの定義
     buffer.writeln('class $className {');
-    for (var i = 0; i < visitor.fields.length; i++) {
-      buffer.writeln(
-        'final ${visitor.fields.values.elementAt(i)} ${visitor.fields.keys.elementAt(i)};',
-      );
-    }
-    // CONSTRUCTOR
+
+    // コンストラクタ
     buffer.writeln('const $className({');
-    for (var i = 0; i < visitor.fields.length; i++) {
-      buffer.writeln(
-        'required this.${visitor.fields.keys.elementAt(i)},',
-      );
+    for (final entry in fields.entries) {
+      buffer.writeln('required this.${entry.key},');
     }
     buffer.writeln('});');
+    buffer.writeln();
 
-    // TO MAP
-    buffer.writeln('Map<String, dynamic> toMap() {');
+    // 各フィールド
+    for (final entry in fields.entries) {
+      buffer.writeln('final ${entry.value} ${entry.key};');
+    }
+    buffer.writeln();
+
+    // fromJson
+    buffer.writeln('Map<String, dynamic> toJson() {');
     buffer.writeln('return {');
-    for (var i = 0; i < visitor.fields.length; i++) {
-      buffer.writeln(
-        "'${visitor.fields.keys.elementAt(i)}': ${visitor.fields.keys.elementAt(i)},",
-      );
+    for (final entry in fields.entries) {
+      buffer.writeln("'${entry.key}': ${entry.key},");
     }
     buffer.writeln('};');
     buffer.writeln('}');
 
-    // FROM MAP
-    buffer.writeln('factory $className.fromMap(Map<String, dynamic> map) {');
+    // toJson
+    buffer.writeln('factory $className.fromJson(Map<String, dynamic> json) {');
     buffer.writeln('return $className(');
-    for (var i = 0; i < visitor.fields.length; i++) {
+    for (final entry in fields.entries) {
       buffer.writeln(
-        "${visitor.fields.keys.elementAt(i)}: map['${visitor.fields.keys.elementAt(i)}'],",
+        // TODO: 型に応じてデフォルト値を決められるようにする。
+        // "${entry.key}: (json['${entry.key}'] as ${entry.value}?) ?? '',",
+        "${entry.key}: json['${entry.key}'] as ${entry.value},",
       );
+    }
+    buffer.writeln(');');
+    buffer.writeln('}');
+    buffer.writeln();
+
+    // copyWith
+    buffer.writeln('$className copyWith({');
+    for (final entry in fields.entries) {
+      buffer.writeln('${entry.value}? ${entry.key},');
+    }
+    buffer.writeln('}) {');
+    buffer.writeln('return $className(');
+    for (final entry in fields.entries) {
+      buffer.writeln('${entry.key}: ${entry.key} ?? this.${entry.key},');
     }
     buffer.writeln(');');
     buffer.writeln('}');
 
-    // copyWith
-    buffer.writeln('$className copyWith({');
-    for (var i = 0; i < visitor.fields.length; i++) {
-      buffer.writeln(
-        '${visitor.fields.values.elementAt(i)}? ${visitor.fields.keys.elementAt(i)},',
-      );
-    }
-    buffer.writeln('}) {');
-    buffer.writeln('return $className(');
-    for (var i = 0; i < visitor.fields.length; i++) {
-      buffer.writeln(
-        '${visitor.fields.keys.elementAt(i)}: ${visitor.fields.keys.elementAt(i)} ?? this.${visitor.fields.keys.elementAt(i)},',
-      );
-    }
-    buffer.writeln(');');
-    buffer.writeln('}');
+    // クラス定義の最後の閉じカッコ
     buffer.writeln('}');
 
     return buffer.toString();

@@ -4,14 +4,13 @@ part 'entity.g.dart';
 
 @flutterFireGen
 class Entity {
-  Entity({
+  const Entity({
     required this.name,
-    required this.lastName,
-    required this.isAdult,
     required this.age,
+    required this.isAdult,
   });
-  String name;
-  String lastName;
-  bool isAdult;
-  int age;
+
+  final String name;
+  final int age;
+  final bool isAdult;
 }
