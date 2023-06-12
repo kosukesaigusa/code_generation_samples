@@ -7,13 +7,34 @@ import 'package:source_gen/source_gen.dart';
 
 import 'model_visitor.dart';
 
-class FlutterFireGen extends GeneratorForAnnotation<FlutterFireGenAnnotation> {
+class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
   @override
   String generateForAnnotatedElement(
     Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
+    var collectionName = '';
+    var documentName = '';
+    const matcher = TypeChecker.fromRuntime(FirestoreDocument);
+    final metadata = element.metadata;
+    for (final meta in metadata) {
+      final obj = meta.computeConstantValue()!;
+      if (matcher.isExactlyType(obj.type!)) {
+        final source = meta.toSource();
+        // "@FirestoreDocument(collectionName: 'entity', documentName: 'entityId')"
+        final regExp = RegExp(
+          r"@FirestoreDocument\(collectionName: '(.*)', documentName: '(.*)'\)",
+        );
+
+        final match = regExp.firstMatch(source);
+        if (match != null) {
+          collectionName = match.group(1)!;
+          documentName = match.group(2)!;
+        }
+      }
+    }
+
     final visitor = ModelVisitor();
     element.visitChildren(visitor);
     final fields = visitor.fields;
@@ -62,6 +83,19 @@ class FlutterFireGen extends GeneratorForAnnotation<FlutterFireGenAnnotation> {
       }
     }
     buffer.writeln(');');
+    buffer.writeln('}');
+    buffer.writeln();
+
+    // fromDocumentSnapshot
+    buffer.writeln(
+      'factory $className.fromDocumentSnapshot(DocumentSnapshot ds) {',
+    );
+    buffer.writeln('final data = ds.data()! as Map<String, dynamic>;');
+    buffer.writeln('return EntityFlutterFireGen.fromJson(<String, dynamic>{');
+    buffer.writeln('...data,');
+    // buffer.writeln("'documentId': ds.id,");
+    buffer.writeln("'${documentName}Id': ds.id,");
+    buffer.writeln('});');
     buffer.writeln('}');
     buffer.writeln();
 

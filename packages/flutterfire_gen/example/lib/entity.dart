@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 
 part 'entity.g.dart';
 
-@flutterFireGen
+@FirestoreDocument(collectionName: 'entities', documentName: 'entity')
 class Entity {
   const Entity({
     required this.name,
@@ -11,16 +12,14 @@ class Entity {
     required this.foo,
   });
 
-  @Default('aaaaa')
   final String name;
 
-  // @Default(0)
   final int age;
 
   @Default(false)
   final bool isAdult;
 
-  @Default(Foo('ba'))
+  @Default(Foo('bar'))
   final Foo foo;
 }
 
