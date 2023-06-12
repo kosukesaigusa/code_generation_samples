@@ -50,12 +50,16 @@ class FlutterFireGen extends GeneratorForAnnotation<FlutterFireGenAnnotation> {
     // toJson
     buffer.writeln('factory $className.fromJson(Map<String, dynamic> json) {');
     buffer.writeln('return $className(');
+
     for (final entry in fields.entries) {
-      buffer.writeln(
-        // TODO: 型に応じてデフォルト値を決められるようにする。
-        // "${entry.key}: (json['${entry.key}'] as ${entry.value}?) ?? '',",
-        "${entry.key}: json['${entry.key}'] as ${entry.value},",
-      );
+      final key = entry.key;
+      final value = entry.value;
+      final defaultValue = visitor.defaultValues[key];
+      if (defaultValue != null) {
+        buffer.writeln("$key: json['$key'] as $value? ?? $defaultValue,");
+      } else {
+        buffer.writeln("$key: json['$key'] as $value,");
+      }
     }
     buffer.writeln(');');
     buffer.writeln('}');
