@@ -6,8 +6,8 @@ part of 'entity.dart';
 // Generator: FlutterFireGen
 // **************************************************************************
 
-class EntityFlutterFireGen {
-  const EntityFlutterFireGen({
+class ReadEntity {
+  const ReadEntity({
     required this.name,
     required this.age,
     required this.isAdult,
@@ -28,8 +28,8 @@ class EntityFlutterFireGen {
     };
   }
 
-  factory EntityFlutterFireGen.fromJson(Map<String, dynamic> json) {
-    return EntityFlutterFireGen(
+  factory ReadEntity.fromJson(Map<String, dynamic> json) {
+    return ReadEntity(
       name: json['name'] as String,
       age: json['age'] as int,
       isAdult: json['isAdult'] as bool? ?? false,
@@ -37,21 +37,21 @@ class EntityFlutterFireGen {
     );
   }
 
-  factory EntityFlutterFireGen.fromDocumentSnapshot(DocumentSnapshot ds) {
+  factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return EntityFlutterFireGen.fromJson(<String, dynamic>{
+    return ReadEntity.fromJson(<String, dynamic>{
       ...data,
       'entityId': ds.id,
     });
   }
 
-  EntityFlutterFireGen copyWith({
+  ReadEntity copyWith({
     String? name,
     int? age,
     bool? isAdult,
     Foo? foo,
   }) {
-    return EntityFlutterFireGen(
+    return ReadEntity(
       name: name ?? this.name,
       age: age ?? this.age,
       isAdult: isAdult ?? this.isAdult,

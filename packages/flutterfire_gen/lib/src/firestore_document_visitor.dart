@@ -3,22 +3,31 @@ import 'package:analyzer/dart/element/visitor.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
-class ModelVisitor extends SimpleElementVisitor<void> {
+/// A [SimpleElementVisitor] to visit [FirestoreDocument] annotated class.
+class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
+  /// A name of visited [FirestoreDocument] annotated class.
   String className = '';
+
+  /// Fields of visited [FirestoreDocument] annotated class.
   Map<String, dynamic> fields = {};
+
+  /// Default values of visited [FirestoreDocument] annotated class' each field.
   Map<String, dynamic> defaultValues = {};
 
   @override
   void visitConstructorElement(ConstructorElement element) {
     final returnType = element.returnType.toString();
-    className = returnType.replaceFirst('*', '');
+    className = returnType;
   }
 
   @override
   void visitFieldElement(FieldElement element) {
-    fields[element.name] = element.type.toString().replaceFirst('*', '');
+    fields[element.name] = element.type.toString();
+    _parseDefaultAnnotation(element);
+  }
 
-    // TODO: このロジック @Default を適用するロジックを完全に理解する
+  /// Parses [Default] annotation.
+  void _parseDefaultAnnotation(FieldElement element) {
     const matcher = TypeChecker.fromRuntime(Default);
     final metadata = element.metadata;
     for (final meta in metadata) {

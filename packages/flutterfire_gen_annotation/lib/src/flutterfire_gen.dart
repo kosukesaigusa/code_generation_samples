@@ -6,10 +6,14 @@ class FirestoreDocument {
     required this.documentName,
   });
 
-  /// Collection name of the document is stored (e.g. users).
+  /// A [RegExp] source string to parse annotation.
+  static const regExpSource =
+      r"@FirestoreDocument\(collectionName: '(.*)', documentName: '(.*)'\)";
+
+  /// A collection name of the document is stored (e.g. users).
   final String collectionName;
 
-  /// Document name which is used for document ID field (e.g. user).
+  /// A document name which is used for document ID field (e.g. user).
   final String documentName;
 }
 
@@ -19,5 +23,6 @@ class Default {
   /// Create a [Default].
   const Default(this.value);
 
+  /// A default value.
   final dynamic value;
 }

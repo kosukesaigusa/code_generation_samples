@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 
 part 'entity.g.dart';
 
-@flutterFireGen
+@FirestoreDocument(collectionName: 'entity', documentName: 'entityName')
 class Entity {
   Entity({
     required this.name,

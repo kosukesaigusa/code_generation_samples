@@ -9,17 +9,19 @@ part of 'entity.dart';
 // **************************************************************************
 
 class EntityFlutterFireGen {
-  final String name;
-  final String lastName;
-  final bool isAdult;
-  final int age;
   const EntityFlutterFireGen({
     required this.name,
     required this.lastName,
     required this.isAdult,
     required this.age,
   });
-  Map<String, dynamic> toMap() {
+
+  final String name;
+  final String lastName;
+  final bool isAdult;
+  final int age;
+
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'lastName': lastName,
@@ -28,14 +30,23 @@ class EntityFlutterFireGen {
     };
   }
 
-  factory EntityFlutterFireGen.fromMap(Map<String, dynamic> map) {
+  factory EntityFlutterFireGen.fromJson(Map<String, dynamic> json) {
     return EntityFlutterFireGen(
-      name: map['name'],
-      lastName: map['lastName'],
-      isAdult: map['isAdult'],
-      age: map['age'],
+      name: json['name'] as String,
+      lastName: json['lastName'] as String,
+      isAdult: json['isAdult'] as bool,
+      age: json['age'] as int,
     );
   }
+
+  factory EntityFlutterFireGen.fromDocumentSnapshot(DocumentSnapshot ds) {
+    final data = ds.data()! as Map<String, dynamic>;
+    return EntityFlutterFireGen.fromJson(<String, dynamic>{
+      ...data,
+      'entityNameId': ds.id,
+    });
+  }
+
   EntityFlutterFireGen copyWith({
     String? name,
     String? lastName,
