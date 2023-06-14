@@ -6,8 +6,9 @@ import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'firestore_document_visitor.dart';
+import 'templates/query.dart';
 import 'templates/read.dart';
-import 'templates/ref.dart';
+import 'templates/refs.dart';
 import 'utils/string.dart';
 
 /// A generator for [FirestoreDocument] annotation.
@@ -35,14 +36,13 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       documentName: documentName,
     );
 
-    final buffer = StringBuffer();
-    writeReadClass(
-      buffer: buffer,
-      config: config,
-      visitor: visitor,
-      fields: fields,
-    );
-    writeReadRefs(buffer: buffer, config: config);
+    final buffer = StringBuffer()
+      ..writeln(
+        readClassTemplate(config: config, visitor: visitor, fields: fields),
+      )
+      ..writeln(refsTemplate(config: config))
+      ..writeln(queryClassTemplate(config: config))
+      ..toString();
 
     return buffer.toString();
   }
