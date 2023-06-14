@@ -1,35 +1,35 @@
-import '../firestore_document_visitor.dart';
-import '../utils/string.dart';
+import '../flutterfire_gen.dart';
 
 ///
 void writeReadRefs({
   required StringBuffer buffer,
-  required String readClassName,
-  required String collectionName,
-  required String documentName,
-  required FirestoreDocumentVisitor visitor,
-  required Map<String, dynamic> fields,
+  required FirestoreDocumentConfig config,
 }) {
-  buffer.writeln(
-    '/// A [CollectionReference] to $collectionName collection to read.',
-  );
-  buffer.writeln('final read${collectionName.capitalize()}Ref = ');
-  buffer.writeln(
-    "FirebaseFirestore.instance.collection('$collectionName').withConverter(",
-  );
-  buffer.writeln(
-    'fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),',
-  );
-  buffer.writeln('toFirestore: (obj, _) => obj.toJson(),');
-  buffer.writeln(');');
-  buffer.writeln();
   buffer
-      .writeln('/// A [DocumentReference] to $documentName document to read.');
-  buffer.writeln(
-    'DocumentReference<$readClassName> '
-    'read${documentName.capitalize()}Ref'
-    '({required String ${documentName}Id}) =>',
-  );
-  buffer
-      .writeln('read${collectionName.capitalize()}Ref.doc(${documentName}Id);');
+    ..writeln(
+      '/// A [CollectionReference] to ${config.collectionName} collection to read.',
+    )
+    ..writeln('final '
+        'read${config.baseClassName}CollectionReference = ')
+    ..writeln(
+      'FirebaseFirestore.instance'
+      ".collection('${config.collectionName}').withConverter(",
+    )
+    ..writeln(
+      'fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),',
+    )
+    ..writeln('toFirestore: (obj, _) => obj.toJson(),')
+    ..writeln(');')
+    ..writeln()
+    ..writeln('/// A [DocumentReference] to '
+        '${config.documentName} document to read.')
+    ..writeln(
+      'DocumentReference<${config.readClassName}> '
+      'read${config.baseClassName}DocumentReference'
+      '({required String ${config.documentName}Id,}) =>',
+    )
+    ..writeln(
+      'read${config.baseClassName}CollectionReference'
+      '.doc(${config.documentName}Id);',
+    );
 }

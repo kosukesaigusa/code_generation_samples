@@ -8,6 +8,7 @@ import 'package:source_gen/source_gen.dart';
 import 'firestore_document_visitor.dart';
 import 'templates/read.dart';
 import 'templates/ref.dart';
+import 'utils/string.dart';
 
 /// A generator for [FirestoreDocument] annotation.
 class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
@@ -28,22 +29,20 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     final collectionName = firestoreDocument.collectionName;
     final documentName = firestoreDocument.documentName;
 
+    final config = FirestoreDocumentConfig(
+      baseClassName: baseClassName,
+      collectionName: collectionName,
+      documentName: documentName,
+    );
+
     final buffer = StringBuffer();
     writeReadClass(
       buffer: buffer,
-      readClassName: 'Read$baseClassName',
-      documentName: documentName,
+      config: config,
       visitor: visitor,
       fields: fields,
     );
-    writeReadRefs(
-      buffer: buffer,
-      readClassName: 'Read$baseClassName',
-      collectionName: collectionName,
-      documentName: documentName,
-      visitor: visitor,
-      fields: fields,
-    );
+    writeReadRefs(buffer: buffer, config: config);
 
     return buffer.toString();
   }
@@ -81,4 +80,43 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       documentName: match.group(2)!,
     );
   }
+}
+
+///
+class FirestoreDocumentConfig {
+  ///
+  FirestoreDocumentConfig({
+    required this.baseClassName,
+    required this.collectionName,
+    required this.documentName,
+  });
+
+  ///
+  final String baseClassName;
+
+  ///
+  final String collectionName;
+
+  ///
+  final String documentName;
+
+  ///
+  String get capitalizedCollectionName => collectionName.capitalize();
+
+  ///
+  String get capitalizedDocumentName => documentName.capitalize();
+
+  ///
+  String get readClassName => 'Read$baseClassName';
+
+  ///
+  String get writeClassName => 'Write$baseClassName';
+
+  ///
+  String get readCollectionReferenceName =>
+      'read${baseClassName}CollectionReference';
+
+  ///
+  String get readDocumentReferenceName =>
+      'read${baseClassName}DocumentReference';
 }

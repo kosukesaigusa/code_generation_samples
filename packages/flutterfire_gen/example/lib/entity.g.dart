@@ -61,12 +61,14 @@ class ReadEntity {
 }
 
 /// A [CollectionReference] to entities collection to read.
-final readEntitiesRef =
+final readEntityCollectionReference =
     FirebaseFirestore.instance.collection('entities').withConverter(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
           toFirestore: (obj, _) => obj.toJson(),
         );
 
 /// A [DocumentReference] to entity document to read.
-DocumentReference<ReadEntity> readEntityRef({required String entityId}) =>
-    readEntitiesRef.doc(entityId);
+DocumentReference<ReadEntity> readEntityDocumentReference({
+  required String entityId,
+}) =>
+    readEntityCollectionReference.doc(entityId);

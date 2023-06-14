@@ -1,43 +1,35 @@
 import '../firestore_document_visitor.dart';
+import '../flutterfire_gen.dart';
 
 ///  Writes Read class to the given [StringBuffer].
 void writeReadClass({
   required StringBuffer buffer,
-  required String readClassName,
-  required String documentName,
+  required FirestoreDocumentConfig config,
   required FirestoreDocumentVisitor visitor,
   required Map<String, dynamic> fields,
 }) {
-  buffer.writeln('class $readClassName {');
-  _writeConstructor(
-    buffer: buffer,
-    readClassName: readClassName,
-    fields: fields,
-  );
+  buffer.writeln('class ${config.readClassName} {');
+  _writeConstructor(buffer: buffer, config: config, fields: fields);
   _writeFields(buffer: buffer, fields: fields);
   _writeFromJson(buffer: buffer, fields: fields);
   _writeToJson(
     buffer: buffer,
-    readClassName: readClassName,
+    config: config,
     visitor: visitor,
     fields: fields,
   );
-  _writeFromDocumentSnapshot(
-    buffer: buffer,
-    readClassName: readClassName,
-    documentName: documentName,
-  );
-  _writeCopyWith(buffer: buffer, readClassName: readClassName, fields: fields);
+  _writeFromDocumentSnapshot(buffer: buffer, config: config);
+  _writeCopyWith(buffer: buffer, config: config, fields: fields);
   buffer.writeln('}');
 }
 
 ///
 void _writeConstructor({
   required StringBuffer buffer,
-  required String readClassName,
+  required FirestoreDocumentConfig config,
   required Map<String, dynamic> fields,
 }) {
-  buffer.writeln('const $readClassName({');
+  buffer.writeln('const ${config.readClassName}({');
   for (final entry in fields.entries) {
     buffer.writeln('required this.${entry.key},');
   }
@@ -71,13 +63,13 @@ void _writeFromJson({
 
 void _writeToJson({
   required StringBuffer buffer,
-  required String readClassName,
+  required FirestoreDocumentConfig config,
   required FirestoreDocumentVisitor visitor,
   required Map<String, dynamic> fields,
 }) {
-  buffer
-      .writeln('factory $readClassName.fromJson(Map<String, dynamic> json) {');
-  buffer.writeln('return $readClassName(');
+  buffer.writeln('factory ${config.readClassName}'
+      '.fromJson(Map<String, dynamic> json) {');
+  buffer.writeln('return ${config.readClassName}(');
 
   for (final entry in fields.entries) {
     final key = entry.key;
@@ -96,16 +88,14 @@ void _writeToJson({
 
 void _writeFromDocumentSnapshot({
   required StringBuffer buffer,
-  required String readClassName,
-  required String documentName,
+  required FirestoreDocumentConfig config,
 }) {
-  buffer.writeln(
-    'factory $readClassName.fromDocumentSnapshot(DocumentSnapshot ds) {',
-  );
+  buffer.writeln('factory ${config.readClassName}'
+      '.fromDocumentSnapshot(DocumentSnapshot ds) {');
   buffer.writeln('final data = ds.data()! as Map<String, dynamic>;');
-  buffer.writeln('return $readClassName.fromJson(<String, dynamic>{');
+  buffer.writeln('return ${config.readClassName}.fromJson(<String, dynamic>{');
   buffer.writeln('...data,');
-  buffer.writeln("'${documentName}Id': ds.id,");
+  buffer.writeln("'${config.documentName}Id': ds.id,");
   buffer.writeln('});');
   buffer.writeln('}');
   buffer.writeln();
@@ -113,15 +103,15 @@ void _writeFromDocumentSnapshot({
 
 void _writeCopyWith({
   required StringBuffer buffer,
-  required String readClassName,
+  required FirestoreDocumentConfig config,
   required Map<String, dynamic> fields,
 }) {
-  buffer.writeln('$readClassName copyWith({');
+  buffer.writeln('${config.readClassName} copyWith({');
   for (final entry in fields.entries) {
     buffer.writeln('${entry.value}? ${entry.key},');
   }
   buffer.writeln('}) {');
-  buffer.writeln('return $readClassName(');
+  buffer.writeln('return ${config.readClassName}(');
   for (final entry in fields.entries) {
     buffer.writeln('${entry.key}: ${entry.key} ?? this.${entry.key},');
   }
