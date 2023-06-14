@@ -72,3 +72,73 @@ DocumentReference<ReadEntity> readEntityDocumentReference({
   required String entityId,
 }) =>
     readEntityCollectionReference.doc(entityId);
+
+/// A query manager to execute query against [Entity].
+class EntityQuery {
+  /// Fetches [ReadEntity] documents.
+  Future<List<ReadEntity>> fetchDocuments({
+    GetOptions? options,
+    Query<ReadEntity>? Function(Query<ReadEntity> query)? queryBuilder,
+    int Function(ReadEntity lhs, ReadEntity rhs)? compare,
+  }) async {
+    Query<ReadEntity> query = readEntityCollectionReference;
+    if (queryBuilder != null) {
+      query = queryBuilder(query)!;
+    }
+    final qs = await query.get(options);
+    final result = qs.docs.map((qds) => qds.data()).toList();
+    if (compare != null) {
+      result.sort(compare);
+    }
+    return result;
+  }
+
+  /// Subscribes [Entity] documents.
+  Stream<List<ReadEntity>> subscribeDocuments({
+    Query<ReadEntity>? Function(Query<ReadEntity> query)? queryBuilder,
+    int Function(ReadEntity lhs, ReadEntity rhs)? compare,
+    bool includeMetadataChanges = false,
+    bool excludePendingWrites = false,
+  }) {
+    Query<ReadEntity> query = readEntityCollectionReference;
+    if (queryBuilder != null) {
+      query = queryBuilder(query)!;
+    }
+    var streamQs =
+        query.snapshots(includeMetadataChanges: includeMetadataChanges);
+    if (excludePendingWrites) {
+      streamQs = streamQs.where((qs) => !qs.metadata.hasPendingWrites);
+    }
+    return streamQs.map((qs) {
+      final result = qs.docs.map((qds) => qds.data()).toList();
+      if (compare != null) {
+        result.sort(compare);
+      }
+      return result;
+    });
+  }
+
+  /// Fetches [ReadEntity] document.
+  Future<ReadEntity?> fetchDocument({
+    required String entityId,
+    GetOptions? options,
+  }) async {
+    final ds =
+        await readEntityDocumentReference(entityId: entityId).get(options);
+    return ds.data();
+  }
+
+  /// Subscribes [Entity] document.
+  Future<Stream<ReadEntity?>> subscribeDocument({
+    required String entityId,
+    bool includeMetadataChanges = false,
+    bool excludePendingWrites = false,
+  }) async {
+    var streamDs = readEntityDocumentReference(entityId: entityId)
+        .snapshots(includeMetadataChanges: includeMetadataChanges);
+    if (excludePendingWrites) {
+      streamDs = streamDs.where((ds) => !ds.metadata.hasPendingWrites);
+    }
+    return streamDs.map((ds) => ds.data());
+  }
+}
