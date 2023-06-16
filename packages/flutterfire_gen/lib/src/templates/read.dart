@@ -1,5 +1,6 @@
 import '../firestore_document_visitor.dart';
 import '../flutterfire_gen.dart';
+import '../utils/string.dart';
 
 /// Returns Read class template.
 String readClassTemplate({
@@ -24,13 +25,13 @@ class ${config.readClassName} {
   factory ${config.readClassName}.fromJson(Map<String, dynamic> json) {
     return ${config.readClassName}(
       ${fields.entries.map((entry) {
-    final key = entry.key;
-    final value = entry.value;
-    final defaultValue = visitor.defaultValues[key];
+    final fieldNameString = entry.key;
+    final typeNameString = entry.value as String;
+    final defaultValue = visitor.defaultValues[fieldNameString];
     if (defaultValue != null) {
-      return "$key: json['$key'] as $value? ?? $defaultValue,";
+      return "$fieldNameString: json['$fieldNameString'] as ${typeNameString.ensureNullable()} ?? $defaultValue,";
     } else {
-      return "$key: json['$key'] as $value,";
+      return "$fieldNameString: json['$fieldNameString'] as $typeNameString,";
     }
   }).join('\n')}
     );
@@ -45,7 +46,11 @@ class ${config.readClassName} {
   }
 
   ${config.readClassName} copyWith({
-    ${fields.entries.map((entry) => '${entry.value}? ${entry.key},').join('\n')}
+    ${fields.entries.map((entry) {
+    final fieldNameString = entry.key;
+    final typeNameString = entry.value as String;
+    return '${typeNameString.ensureNullable()} $fieldNameString,';
+  }).join('\n')}
   }) {
     return ${config.readClassName}(
       ${fields.entries.map((entry) => '${entry.key}: ${entry.key} ?? this.${entry.key},').join('\n')}

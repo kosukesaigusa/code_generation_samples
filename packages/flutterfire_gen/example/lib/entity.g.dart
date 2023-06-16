@@ -15,12 +15,16 @@ class ReadEntity {
     required this.name,
     required this.age,
     required this.isAdult,
+    required this.nullableInt,
+    required this.nullableText,
     required this.foo,
   });
 
   final String name;
   final int age;
   final bool isAdult;
+  final int? nullableInt;
+  final String? nullableText;
   final Foo foo;
 
   Map<String, dynamic> toJson() {
@@ -28,6 +32,8 @@ class ReadEntity {
       'name': name,
       'age': age,
       'isAdult': isAdult,
+      'nullableInt': nullableInt,
+      'nullableText': nullableText,
       'foo': foo,
     };
   }
@@ -37,6 +43,8 @@ class ReadEntity {
       name: json['name'] as String,
       age: json['age'] as int,
       isAdult: json['isAdult'] as bool? ?? false,
+      nullableInt: json['nullableInt'] as int?,
+      nullableText: json['nullableText'] as String? ?? 'defaultText',
       foo: json['foo'] as Foo? ?? const Foo('bar'),
     );
   }
@@ -53,12 +61,16 @@ class ReadEntity {
     String? name,
     int? age,
     bool? isAdult,
+    int? nullableInt,
+    String? nullableText,
     Foo? foo,
   }) {
     return ReadEntity(
       name: name ?? this.name,
       age: age ?? this.age,
       isAdult: isAdult ?? this.isAdult,
+      nullableInt: nullableInt ?? this.nullableInt,
+      nullableText: nullableText ?? this.nullableText,
       foo: foo ?? this.foo,
     );
   }
