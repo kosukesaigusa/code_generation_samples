@@ -1,3 +1,5 @@
+// import 'package:meta/meta.dart';
+
 import '../firestore_document_visitor.dart';
 import '../flutterfire_gen.dart';
 import '../utils/string.dart';
@@ -28,6 +30,19 @@ class ${config.readClassName} {
     final fieldNameString = entry.key;
     final typeNameString = entry.value as String;
     final defaultValue = visitor.defaultValues[fieldNameString];
+    // TODO: ここのロジックを良い感じにリファクタする
+    // TODO: Map の場合も Map<String, dynamic> でない場合の考慮が必要なはず
+    if (typeNameString.startsWith('List')) {
+      // if (defaultValue != null) {
+      //   return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>?)?.map((e) => e as String).toList() ?? $defaultValue,";
+      // } else {
+      //   return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>).map((e) => e as String).toList(),";
+      // }
+      return fromJsonEachField(
+        fieldNameString: fieldNameString,
+        typeNameString: typeNameString,
+      );
+    }
     if (defaultValue != null) {
       return "$fieldNameString: json['$fieldNameString'] as ${typeNameString.ensureNullable()} ?? $defaultValue,";
     } else {
@@ -58,4 +73,24 @@ class ${config.readClassName} {
   }
 }
 ''';
+}
+
+String fromJsonEachField({
+  required String fieldNameString,
+  required String typeNameString,
+  Object? defaultValue,
+}) {
+  final listItemType = typeNameString.substring(
+    typeNameString.indexOf('<') + 1,
+    typeNameString.indexOf('>'),
+  );
+  if (defaultValue != null) {
+    // ignore: missing_whitespace_between_adjacent_strings
+    return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>?)?"
+        '.map((e) => e as $listItemType).toList() ?? $defaultValue,';
+  } else {
+    // ignore: missing_whitespace_between_adjacent_strings
+    return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>)"
+        '.map((e) => e as $listItemType).toList(),';
+  }
 }

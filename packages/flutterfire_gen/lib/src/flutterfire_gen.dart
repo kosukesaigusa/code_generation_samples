@@ -26,14 +26,9 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
 
     final baseClassName = visitor.className;
     final fields = visitor.fields;
-    final firestoreDocument = _parseFirestoreDocumentAnnotation(element);
-    final collectionName = firestoreDocument.collectionName;
-    final documentName = firestoreDocument.documentName;
-
-    final config = FirestoreDocumentConfig(
+    final config = _parseFirestoreDocumentAnnotation(
       baseClassName: baseClassName,
-      collectionName: collectionName,
-      documentName: documentName,
+      element: element,
     );
 
     final buffer = StringBuffer()
@@ -52,10 +47,12 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     return buffer.toString();
   }
 
+  // TODO: メソッド名、doc comment を更新する。
   /// Parses [FirestoreDocument] annotation.
-  FirestoreDocument _parseFirestoreDocumentAnnotation(
-    Element element,
-  ) {
+  FirestoreDocumentConfig _parseFirestoreDocumentAnnotation({
+    required String baseClassName,
+    required Element element,
+  }) {
     const matcher = TypeChecker.fromRuntime(FirestoreDocument);
     final firestoreDocumentAnnotation = element.metadata.where((meta) {
       final obj = meta.computeConstantValue()!;
@@ -71,19 +68,58 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     }
 
     final source = firestoreDocumentAnnotation.toSource();
-    final regExp = RegExp(FirestoreDocument.regExpSource);
-    final match = regExp.firstMatch(source);
+
+    return FirestoreDocumentConfig(
+      useFakeFirebaseFirestore:
+          _useFakeFirebaseFirestore(element: element, source: source),
+      baseClassName: baseClassName,
+      collectionName: _collectionName(element: element, source: source),
+      documentName: _documentName(element: element, source: source),
+    );
+  }
+
+  bool _useFakeFirebaseFirestore({
+    required Element element,
+    required String source,
+  }) {
+    final match = RegExp(FirestoreDocument.useFakeFirebaseFirestoreRegExpSource)
+        .firstMatch(source);
+    if (match == null) {
+      return false;
+    }
+    return match.group(1) == 'true';
+  }
+
+  String _collectionName({
+    required Element element,
+    required String source,
+  }) {
+    final match =
+        RegExp(FirestoreDocument.collectionNameRegExpSource).firstMatch(source);
     if (match == null) {
       throw InvalidGenerationSourceError(
-        'No @FirestoreDocument annotation format is invalid. '
+        '@FirestoreDocument annotation does not contain collectionName. '
         'Failing element: ${element.name}',
         element: element,
       );
     }
-    return FirestoreDocument(
-      collectionName: match.group(1)!,
-      documentName: match.group(2)!,
-    );
+    return match.group(1)!;
+  }
+
+  String _documentName({
+    required Element element,
+    required String source,
+  }) {
+    final match = RegExp(FirestoreDocument.documentNameNameRegExpSource)
+        .firstMatch(source);
+    if (match == null) {
+      throw InvalidGenerationSourceError(
+        '@FirestoreDocument annotation does not contain documentName. '
+        'Failing element: ${element.name}',
+        element: element,
+      );
+    }
+    return match.group(1)!;
   }
 }
 
@@ -91,10 +127,14 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
 class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({
+    required this.useFakeFirebaseFirestore,
     required this.baseClassName,
     required this.collectionName,
     required this.documentName,
   });
+
+  ///
+  final bool useFakeFirebaseFirestore;
 
   ///
   final String baseClassName;

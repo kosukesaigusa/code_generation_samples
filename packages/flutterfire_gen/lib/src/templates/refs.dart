@@ -6,7 +6,7 @@ String refsTemplate({required FirestoreDocumentConfig config}) {
   return """
 /// A [CollectionReference] to ${config.collectionName} collection to read.
 final read${config.baseClassName}CollectionReference =
-    FirebaseFirestore.instance.collection('${config.collectionName}').withConverter(
+    ${config.useFakeFirebaseFirestore ? "FakeFirebaseFirestore().collection('${config.collectionName}').withConverter(" : "FirebaseFirestore.instance.collection('${config.collectionName}').withConverter("} 
           fromFirestore: (ds, _) => ${config.readClassName}.fromDocumentSnapshot(ds),
           toFirestore: (obj, _) => obj.toJson(),
         );
