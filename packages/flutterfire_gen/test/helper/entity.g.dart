@@ -63,20 +63,14 @@ class ReadEntity {
       isSomething: json['isSomething'] as bool,
       nullableBool: json['nullableBool'] as bool? ?? false,
       map: json['map'] as Map<String, dynamic>,
-      texts: (json['texts'] as List<dynamic>)
-          .map((e) => json['texts'] as String)
-          .toList(),
+      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
       nullableTexts: json['nullableTexts'] as List<String>? ?? const <String>[],
       twoDList: (json['twoDList'] as List<dynamic>)
-          .map((e) => (json['twoDList'] as List<dynamic>)
-              .map((e) => json['twoDList'] as String)
-              .toList())
+          .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
           .toList(),
       threeDList: (json['threeDList'] as List<dynamic>)
-          .map((e) => (json['threeDList'] as List<dynamic>)
-              .map((e) => (json['threeDList'] as List<dynamic>)
-                  .map((e) => json['threeDList'] as String)
-                  .toList())
+          .map((e) => (e as List<dynamic>)
+              .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
               .toList())
           .toList(),
       geoPoint: json['geoPoint'] as GeoPoint,

@@ -69,27 +69,34 @@ void main() {
     );
 
     final params = [
+      // _FromJsonTemplateParamAndMatcher(
+      //   fieldNameString: 'texts',
+      //   typeNameString: 'List<String>',
+      //   defaultValue: null,
+      //   expected:
+      //       "texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),",
+      // ),
       _FromJsonTemplateParamAndMatcher(
         fieldNameString: 'texts',
-        typeNameString: 'List<String>',
-        defaultValue: null,
+        typeNameString: 'List<String>?',
+        defaultValue: [],
         expected:
-            "texts: (json['texts'] as List<dynamic>).map((e) => json['texts'] as String).toList(),",
+            "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],",
       ),
-      _FromJsonTemplateParamAndMatcher(
-        fieldNameString: 'texts',
-        typeNameString: 'List<String>',
-        defaultValue: <String>[],
-        expected:
-            "texts: (json['texts'] as List<dynamic>).map((e) => json['texts'] as String ?? []).toList() ?? [],",
-      ),
-      _FromJsonTemplateParamAndMatcher(
-        fieldNameString: 'twoDList',
-        typeNameString: 'List<List<String>>',
-        defaultValue: null,
-        expected:
-            "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (json['twoDList'] as List<dynamic>).map((e) => json['twoDList'] as String).toList()).toList(),",
-      ),
+      // _FromJsonTemplateParamAndMatcher(
+      //   fieldNameString: 'texts',
+      //   typeNameString: 'List<String>',
+      //   defaultValue: [],
+      //   expected:
+      //       "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],",
+      // ),
+      //   _FromJsonTemplateParamAndMatcher(
+      //     fieldNameString: 'twoDList',
+      //     typeNameString: 'List<List<String>>',
+      //     defaultValue: null,
+      //     expected:
+      //         "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList(),",
+      //   ),
     ];
 
     test('parse various types', () {

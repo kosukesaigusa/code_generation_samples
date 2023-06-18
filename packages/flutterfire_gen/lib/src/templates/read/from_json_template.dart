@@ -50,23 +50,29 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
   String _parseType(
     String fieldNameString,
     String typeNameString, {
+    required int loopCount,
     Object? defaultValue,
   }) {
-    final match = _listType.firstMatch(typeNameString);
-    final defaultValueString = defaultValue != null ? ' ?? $defaultValue' : '';
+    // List<String>? にもマッチするようにする
+    final listMatch = _listType.firstMatch(typeNameString);
+    // TODO: Map にも対応する。
 
-    if (match != null) {
-      final listItemType = match.group(1)!;
+    final defaultValueString = defaultValue != null ? ' ?? $defaultValue' : '';
+    final parsedKey = loopCount == 0 ? "json['$fieldNameString']" : 'e';
+
+    if (listMatch != null) {
+      final listItemType = listMatch.group(1)!;
       final nullableSign = listItemType.endsWith('?') ? '?' : '';
       final nonNullableListItemType = listItemType.replaceAll('?', '');
       final parsedListItemType = _parseType(
         fieldNameString,
         nonNullableListItemType,
+        loopCount: loopCount + 1,
         defaultValue: defaultValue,
       );
-      return "(json['$fieldNameString'] as List<dynamic>$nullableSign).map((e) => $parsedListItemType).toList()$defaultValueString";
+      return '($parsedKey as List<dynamic>$nullableSign).map((e) => $parsedListItemType).toList()$defaultValueString';
     } else {
-      return "json['$fieldNameString'] as $typeNameString$defaultValueString";
+      return '$parsedKey as $typeNameString$defaultValueString';
     }
   }
 
@@ -81,6 +87,7 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         '${_parseType(
       fieldNameString,
       typeNameString,
+      loopCount: 0,
       defaultValue: defaultValue,
     )},';
   }
