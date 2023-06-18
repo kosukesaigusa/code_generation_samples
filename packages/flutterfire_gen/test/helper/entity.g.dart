@@ -17,51 +17,70 @@ class ReadEntity {
     required this.name,
     required this.nullableText,
     required this.age,
-    required this.isAdult,
-    required this.map,
+    required this.isSomething,
+    required this.nullableBool,
     required this.texts,
     required this.nullableTexts,
+    required this.twoDList,
+    required this.threeDList,
+    required this.nullableTwoDList,
     required this.geoPoint,
-    required this.foo,
   });
 
   final String name;
   final String? nullableText;
   final int age;
-  final bool isAdult;
-  final Map<String, dynamic> map;
+  final bool isSomething;
+  final bool? nullableBool;
   final List<String> texts;
   final List<String>? nullableTexts;
+  final List<List<String>> twoDList;
+  final List<List<List<String>>> threeDList;
+  final List<List<String>>? nullableTwoDList;
   final GeoPoint geoPoint;
-  final Foo foo;
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'nullableText': nullableText,
       'age': age,
-      'isAdult': isAdult,
-      'map': map,
+      'isSomething': isSomething,
+      'nullableBool': nullableBool,
       'texts': texts,
       'nullableTexts': nullableTexts,
+      'twoDList': twoDList,
+      'threeDList': threeDList,
+      'nullableTwoDList': nullableTwoDList,
       'geoPoint': geoPoint,
-      'foo': foo,
     };
   }
 
   factory ReadEntity.fromJson(Map<String, dynamic> json) {
     return ReadEntity(
       name: json['name'] as String,
-      nullableText: json['nullableText'] as String?,
+      nullableText: json['nullableText'] as String? ?? 'defaultText',
       age: json['age'] as int,
-      isAdult: json['isAdult'] as bool,
-      map: json['map'] as Map<String, dynamic>,
-      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
-      nullableTexts: (json['nullableTexts'] as List<dynamic>)
-          .map((e) => e as String)
+      isSomething: json['isSomething'] as bool,
+      nullableBool: json['nullableBool'] as bool? ?? false,
+      texts: (json['texts'] as List<dynamic>)
+          .map((e) => json['texts'] as String)
           .toList(),
+      nullableTexts: json['nullableTexts'] as List<String>? ?? const <String>[],
+      twoDList: (json['twoDList'] as List<dynamic>)
+          .map((e) => (json['twoDList'] as List<dynamic>)
+              .map((e) => json['twoDList'] as String)
+              .toList())
+          .toList(),
+      threeDList: (json['threeDList'] as List<dynamic>)
+          .map((e) => (json['threeDList'] as List<dynamic>)
+              .map((e) => (json['threeDList'] as List<dynamic>)
+                  .map((e) => json['threeDList'] as String)
+                  .toList())
+              .toList())
+          .toList(),
+      nullableTwoDList:
+          json['nullableTwoDList'] as List<List<String>>? ?? const <String>[],
       geoPoint: json['geoPoint'] as GeoPoint,
-      foo: json['foo'] as Foo,
     );
   }
 
@@ -77,23 +96,27 @@ class ReadEntity {
     String? name,
     String? nullableText,
     int? age,
-    bool? isAdult,
-    Map<String, dynamic>? map,
+    bool? isSomething,
+    bool? nullableBool,
     List<String>? texts,
     List<String>? nullableTexts,
+    List<List<String>>? twoDList,
+    List<List<List<String>>>? threeDList,
+    List<List<String>>? nullableTwoDList,
     GeoPoint? geoPoint,
-    Foo? foo,
   }) {
     return ReadEntity(
       name: name ?? this.name,
       nullableText: nullableText ?? this.nullableText,
       age: age ?? this.age,
-      isAdult: isAdult ?? this.isAdult,
-      map: map ?? this.map,
+      isSomething: isSomething ?? this.isSomething,
+      nullableBool: nullableBool ?? this.nullableBool,
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
+      twoDList: twoDList ?? this.twoDList,
+      threeDList: threeDList ?? this.threeDList,
+      nullableTwoDList: nullableTwoDList ?? this.nullableTwoDList,
       geoPoint: geoPoint ?? this.geoPoint,
-      foo: foo ?? this.foo,
     );
   }
 }

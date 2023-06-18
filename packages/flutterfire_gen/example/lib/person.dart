@@ -11,6 +11,8 @@ class Person {
     required this.isAdult,
     required this.map,
     required this.texts,
+    this.nullableTexts,
+    required this.twoDimensionList,
     required this.geoPoint,
     required this.foo,
   });
@@ -22,8 +24,17 @@ class Person {
       age: json['age'] as int,
       isAdult: json['isAdult'] as bool? ?? false,
       map: json['map'] as Map<String, dynamic>,
-      // texts: json['texts'] as List<String>,
       texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
+      nullableTexts: (json['nullableTexts'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      twoDimensionList: (json['towDimensionList'] as List<dynamic>)
+          .map(
+            (item) =>
+                (item as List<dynamic>).map((item) => item as String).toList(),
+          )
+          .toList(),
       geoPoint: json['geoPoint'] as GeoPoint,
       foo: json['foo'] as Foo? ?? const Foo('bar'),
     );
@@ -43,6 +54,8 @@ class Person {
   final bool isAdult;
   final Map<String, dynamic> map;
   final List<String> texts;
+  final List<String>? nullableTexts;
+  final List<List<String>> twoDimensionList;
   final GeoPoint geoPoint;
   final Foo foo;
 

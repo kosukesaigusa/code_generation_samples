@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutterfire_gen/src/templates/read/from_json.dart';
 
 import 'helper/entity.dart';
 
@@ -65,24 +66,4 @@ void main() {
     );
     print(aaa);
   });
-}
-
-String fromJsonEachField({
-  required String fieldNameString,
-  required String typeNameString,
-  Object? defaultValue,
-}) {
-  final listItemType = typeNameString.substring(
-    typeNameString.indexOf('<') + 1,
-    typeNameString.indexOf('>'),
-  );
-  if (defaultValue != null) {
-    // ignore: missing_whitespace_between_adjacent_strings
-    return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>?)?"
-        '.map((e) => e as $listItemType).toList() ?? $defaultValue,';
-  } else {
-    // ignore: missing_whitespace_between_adjacent_strings
-    return "$fieldNameString: (json['$fieldNameString'] as List<dynamic>)"
-        '.map((e) => e as $listItemType).toList(),';
-  }
 }

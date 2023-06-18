@@ -42,11 +42,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
           defaultValues[element.name] = 'const $res';
         } else {
           defaultValues[element.name] = res;
-          print('🐼 source: $source, ');
         }
-        print(
-          '🐼 source: $source, default(${element.name}): ${defaultValues[element.name]}',
-        );
       }
     }
   }

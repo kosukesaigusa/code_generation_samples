@@ -7,7 +7,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'firestore_document_visitor.dart';
 import 'templates/query.dart';
-import 'templates/read.dart';
+import 'templates/read/read.dart';
 import 'templates/refs.dart';
 import 'utils/string.dart';
 

@@ -14,28 +14,39 @@ class Entity {
     required this.name,
     this.nullableText,
     required this.age,
-    required this.isAdult,
-    required this.map,
+    required this.isSomething,
+    required this.nullableBool,
+    // required this.map,
     required this.texts,
     this.nullableTexts,
+    required this.twoDList,
+    required this.threeDList,
+    this.nullableTwoDList,
     required this.geoPoint,
     // required this.dateTime,
     // this.serverTimestamp,
-    required this.foo,
+    // required this.foo,
   });
 
   final String name;
+  @Default('defaultText')
   final String? nullableText;
   final int age;
-  final bool isAdult;
-  final Map<String, dynamic> map;
+  final bool isSomething;
+  @Default(false)
+  final bool? nullableBool;
+  // final Map<String, dynamic> map;
   final List<String> texts;
   @Default(<String>[])
   final List<String>? nullableTexts;
+  final List<List<String>> twoDList;
+  final List<List<List<String>>> threeDList;
+  @Default(<String>[])
+  final List<List<String>>? nullableTwoDList;
   final GeoPoint geoPoint;
   // final DateTime dateTime;
   // final DateTime? serverTimestamp;
-  final Foo foo;
+  // final Foo foo;
 }
 
 class Foo {
