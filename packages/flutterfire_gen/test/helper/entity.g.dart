@@ -20,7 +20,6 @@ class ReadEntity {
     required this.isSomething,
     required this.nullableBool,
     required this.map,
-    required this.nestedMap,
     required this.texts,
     required this.nullableTexts,
     required this.twoDList,
@@ -34,7 +33,6 @@ class ReadEntity {
   final bool isSomething;
   final bool? nullableBool;
   final Map<String, dynamic> map;
-  final Map<String, Map<String, int>> nestedMap;
   final List<String> texts;
   final List<String>? nullableTexts;
   final List<List<String>> twoDList;
@@ -49,7 +47,6 @@ class ReadEntity {
       'isSomething': isSomething,
       'nullableBool': nullableBool,
       'map': map,
-      'nestedMap': nestedMap,
       'texts': texts,
       'nullableTexts': nullableTexts,
       'twoDList': twoDList,
@@ -66,7 +63,6 @@ class ReadEntity {
       isSomething: json['isSomething'] as bool,
       nullableBool: json['nullableBool'] as bool? ?? false,
       map: json['map'] as Map<String, dynamic>,
-      nestedMap: json['nestedMap'] as Map<String, Map<String, int>>,
       texts: (json['texts'] as List<dynamic>)
           .map((e) => json['texts'] as String)
           .toList(),
@@ -102,7 +98,6 @@ class ReadEntity {
     bool? isSomething,
     bool? nullableBool,
     Map<String, dynamic>? map,
-    Map<String, Map<String, int>>? nestedMap,
     List<String>? texts,
     List<String>? nullableTexts,
     List<List<String>>? twoDList,
@@ -116,7 +111,6 @@ class ReadEntity {
       isSomething: isSomething ?? this.isSomething,
       nullableBool: nullableBool ?? this.nullableBool,
       map: map ?? this.map,
-      nestedMap: nestedMap ?? this.nestedMap,
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
       twoDList: twoDList ?? this.twoDList,

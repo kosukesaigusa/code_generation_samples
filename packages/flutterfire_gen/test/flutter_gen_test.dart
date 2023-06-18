@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutterfire_gen/src/templates/read/from_json.dart';
 
 import 'helper/entity.dart';
 
@@ -57,13 +56,5 @@ void main() {
 
     final entity = await query.fetchDocument(entityId: ref.id);
     print(entity);
-  });
-
-  test('aaa', () {
-    final aaa = fromJsonEachField(
-      fieldNameString: 'texts',
-      typeNameString: 'List<String>',
-    );
-    print(aaa);
   });
 }

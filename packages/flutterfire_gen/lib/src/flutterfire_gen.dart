@@ -7,7 +7,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'firestore_document_visitor.dart';
 import 'templates/query.dart';
-import 'templates/read/read.dart';
+import 'templates/read/read_class_template.dart';
 import 'templates/refs.dart';
 import 'utils/string.dart';
 
@@ -38,7 +38,7 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 ''')
       ..writeln(
-        readClassTemplate(config: config, visitor: visitor, fields: fields),
+        ReadClassTemplate(config: config, visitor: visitor, fields: fields),
       )
       ..writeln(refsTemplate(config: config))
       ..writeln(queryClassTemplate(config: config))
