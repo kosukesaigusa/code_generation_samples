@@ -19,11 +19,12 @@ class ReadEntity {
     required this.age,
     required this.isSomething,
     required this.nullableBool,
+    required this.map,
+    required this.nestedMap,
     required this.texts,
     required this.nullableTexts,
     required this.twoDList,
     required this.threeDList,
-    required this.nullableTwoDList,
     required this.geoPoint,
   });
 
@@ -32,11 +33,12 @@ class ReadEntity {
   final int age;
   final bool isSomething;
   final bool? nullableBool;
+  final Map<String, dynamic> map;
+  final Map<String, Map<String, int>> nestedMap;
   final List<String> texts;
   final List<String>? nullableTexts;
   final List<List<String>> twoDList;
   final List<List<List<String>>> threeDList;
-  final List<List<String>>? nullableTwoDList;
   final GeoPoint geoPoint;
 
   Map<String, dynamic> toJson() {
@@ -46,11 +48,12 @@ class ReadEntity {
       'age': age,
       'isSomething': isSomething,
       'nullableBool': nullableBool,
+      'map': map,
+      'nestedMap': nestedMap,
       'texts': texts,
       'nullableTexts': nullableTexts,
       'twoDList': twoDList,
       'threeDList': threeDList,
-      'nullableTwoDList': nullableTwoDList,
       'geoPoint': geoPoint,
     };
   }
@@ -62,6 +65,8 @@ class ReadEntity {
       age: json['age'] as int,
       isSomething: json['isSomething'] as bool,
       nullableBool: json['nullableBool'] as bool? ?? false,
+      map: json['map'] as Map<String, dynamic>,
+      nestedMap: json['nestedMap'] as Map<String, Map<String, int>>,
       texts: (json['texts'] as List<dynamic>)
           .map((e) => json['texts'] as String)
           .toList(),
@@ -78,8 +83,6 @@ class ReadEntity {
                   .toList())
               .toList())
           .toList(),
-      nullableTwoDList:
-          json['nullableTwoDList'] as List<List<String>>? ?? const <String>[],
       geoPoint: json['geoPoint'] as GeoPoint,
     );
   }
@@ -98,11 +101,12 @@ class ReadEntity {
     int? age,
     bool? isSomething,
     bool? nullableBool,
+    Map<String, dynamic>? map,
+    Map<String, Map<String, int>>? nestedMap,
     List<String>? texts,
     List<String>? nullableTexts,
     List<List<String>>? twoDList,
     List<List<List<String>>>? threeDList,
-    List<List<String>>? nullableTwoDList,
     GeoPoint? geoPoint,
   }) {
     return ReadEntity(
@@ -111,11 +115,12 @@ class ReadEntity {
       age: age ?? this.age,
       isSomething: isSomething ?? this.isSomething,
       nullableBool: nullableBool ?? this.nullableBool,
+      map: map ?? this.map,
+      nestedMap: nestedMap ?? this.nestedMap,
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
       twoDList: twoDList ?? this.twoDList,
       threeDList: threeDList ?? this.threeDList,
-      nullableTwoDList: nullableTwoDList ?? this.nullableTwoDList,
       geoPoint: geoPoint ?? this.geoPoint,
     );
   }
