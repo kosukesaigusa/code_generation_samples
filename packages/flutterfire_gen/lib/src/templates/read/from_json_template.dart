@@ -27,7 +27,15 @@ class FromJsonTemplate {
     return '''
 factory $readClassName.fromJson(Map<String, dynamic> json) {
     return $readClassName(
-      ${fields.entries.map((entry) {
+      ${_parseFields()}
+    );
+  }
+''';
+  }
+
+  ///
+  String _parseFields() {
+    return fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
       final defaultValue = defaultValues[fieldNameString];
@@ -36,10 +44,7 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         typeNameString: typeNameString,
         defaultValue: defaultValue,
       );
-    }).join('\n')}
-    );
-  }
-''';
+    }).join('\n');
   }
 
   String _parseType(

@@ -1,6 +1,9 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutterfire_gen/src/templates/read/from_json_template.dart';
 
 import 'helper/entity.dart';
 
@@ -57,4 +60,64 @@ void main() {
     final entity = await query.fetchDocument(entityId: ref.id);
     print(entity);
   });
+
+  group('test fromJsonTemplate', () {
+    final template = FromJsonTemplate(
+      readClassName: '',
+      fields: {},
+      defaultValues: {},
+    );
+
+    final params = [
+      _FromJsonTemplateParamAndMatcher(
+        fieldNameString: 'texts',
+        typeNameString: 'List<String>',
+        defaultValue: null,
+        expected:
+            "texts: (json['texts'] as List<dynamic>).map((e) => json['texts'] as String).toList(),",
+      ),
+      _FromJsonTemplateParamAndMatcher(
+        fieldNameString: 'texts',
+        typeNameString: 'List<String>',
+        defaultValue: <String>[],
+        expected:
+            "texts: (json['texts'] as List<dynamic>).map((e) => json['texts'] as String ?? []).toList() ?? [],",
+      ),
+      _FromJsonTemplateParamAndMatcher(
+        fieldNameString: 'twoDList',
+        typeNameString: 'List<List<String>>',
+        defaultValue: null,
+        expected:
+            "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (json['twoDList'] as List<dynamic>).map((e) => json['twoDList'] as String).toList()).toList(),",
+      ),
+    ];
+
+    test('parse various types', () {
+      for (final p in params) {
+        final result = template.fromJsonEachField(
+          fieldNameString: p.fieldNameString,
+          typeNameString: p.typeNameString,
+          defaultValue: p.defaultValue,
+        );
+        expect(result, p.expected);
+      }
+    });
+  });
+}
+
+class _FromJsonTemplateParamAndMatcher {
+  _FromJsonTemplateParamAndMatcher({
+    required this.fieldNameString,
+    required this.typeNameString,
+    required this.defaultValue,
+    required this.expected,
+  });
+
+  final String fieldNameString;
+
+  final String typeNameString;
+
+  final Object? defaultValue;
+
+  final String expected;
 }
