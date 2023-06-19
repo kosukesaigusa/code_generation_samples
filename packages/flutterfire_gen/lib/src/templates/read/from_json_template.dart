@@ -44,21 +44,19 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         typeNameString: typeNameString,
         defaultValue: defaultValue,
       );
-    }).join('\n');
+    }).join(',\n');
   }
 
   String _parseType(
     String fieldNameString,
     String typeNameString, {
-    required int loopCount,
+    required bool isFirstLoop,
     Object? defaultValue,
   }) {
-    // List<String>? にもマッチするようにする
     final listMatch = _listType.firstMatch(typeNameString);
-    // TODO: Map にも対応する。
 
     final defaultValueString = defaultValue != null ? ' ?? $defaultValue' : '';
-    final parsedKey = loopCount == 0 ? "json['$fieldNameString']" : 'e';
+    final parsedKey = isFirstLoop ? "json['$fieldNameString']" : 'e';
 
     if (listMatch != null) {
       final listItemType = listMatch.group(1)!;
@@ -67,8 +65,8 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
       final parsedListItemType = _parseType(
         fieldNameString,
         nonNullableListItemType,
-        loopCount: loopCount + 1,
         defaultValue: defaultValue,
+        isFirstLoop: false,
       );
       return '($parsedKey as List<dynamic>$nullableSign).map((e) => $parsedListItemType).toList()$defaultValueString';
     } else {
@@ -87,8 +85,8 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         '${_parseType(
       fieldNameString,
       typeNameString,
-      loopCount: 0,
       defaultValue: defaultValue,
-    )},';
+      isFirstLoop: true,
+    )}';
   }
 }

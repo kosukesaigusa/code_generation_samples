@@ -33,11 +33,6 @@ void main() {
   };
   final query = EntityQuery();
 
-  test('test', () {
-    const a = 2 + 3;
-    expect(a, 5);
-  });
-
   test('test', () async {
     final ref = await db.collection('entities').add(data);
     final json = (await ref.get()).data();
@@ -68,63 +63,51 @@ void main() {
       defaultValues: {},
     );
 
-    final params = [
-      // _FromJsonTemplateParamAndMatcher(
-      //   fieldNameString: 'texts',
-      //   typeNameString: 'List<String>',
-      //   defaultValue: null,
-      //   expected:
-      //       "texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),",
-      // ),
-      _FromJsonTemplateParamAndMatcher(
+    test('parse List<String>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'texts',
+        typeNameString: 'List<String>',
+      );
+      expect(
+        result,
+        "texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList()",
+      );
+    });
+
+    test('parse List<String> with default value', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'texts',
+        typeNameString: 'List<String>',
+        defaultValue: [],
+      );
+      expect(
+        result,
+        "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []",
+      );
+    });
+
+    test('parse List<String>?', () {
+      final result = template.fromJsonEachField(
         fieldNameString: 'texts',
         typeNameString: 'List<String>?',
         defaultValue: [],
-        expected:
-            "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],",
-      ),
-      // _FromJsonTemplateParamAndMatcher(
-      //   fieldNameString: 'texts',
-      //   typeNameString: 'List<String>',
-      //   defaultValue: [],
-      //   expected:
-      //       "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],",
-      // ),
-      //   _FromJsonTemplateParamAndMatcher(
-      //     fieldNameString: 'twoDList',
-      //     typeNameString: 'List<List<String>>',
-      //     defaultValue: null,
-      //     expected:
-      //         "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList(),",
-      //   ),
-    ];
+      );
+      print(result);
+      expect(
+        result,
+        "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []",
+      );
+    });
 
-    test('parse various types', () {
-      for (final p in params) {
-        final result = template.fromJsonEachField(
-          fieldNameString: p.fieldNameString,
-          typeNameString: p.typeNameString,
-          defaultValue: p.defaultValue,
-        );
-        expect(result, p.expected);
-      }
+    test('parse List<List<String>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'twoDList',
+        typeNameString: 'List<List<String>>',
+      );
+      expect(
+        result,
+        "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList()",
+      );
     });
   });
-}
-
-class _FromJsonTemplateParamAndMatcher {
-  _FromJsonTemplateParamAndMatcher({
-    required this.fieldNameString,
-    required this.typeNameString,
-    required this.defaultValue,
-    required this.expected,
-  });
-
-  final String fieldNameString;
-
-  final String typeNameString;
-
-  final Object? defaultValue;
-
-  final String expected;
 }

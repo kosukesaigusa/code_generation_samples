@@ -14,12 +14,11 @@ part of 'entity.dart';
 
 class ReadEntity {
   const ReadEntity({
-    required this.name,
+    required this.text,
     required this.nullableText,
-    required this.age,
-    required this.isSomething,
-    required this.nullableBool,
-    required this.map,
+    required this.integer,
+    required this.isBool,
+    required this.isNullableBool,
     required this.texts,
     required this.nullableTexts,
     required this.twoDList,
@@ -27,12 +26,11 @@ class ReadEntity {
     required this.geoPoint,
   });
 
-  final String name;
+  final String text;
   final String? nullableText;
-  final int age;
-  final bool isSomething;
-  final bool? nullableBool;
-  final Map<String, dynamic> map;
+  final int integer;
+  final bool isBool;
+  final bool? isNullableBool;
   final List<String> texts;
   final List<String>? nullableTexts;
   final List<List<String>> twoDList;
@@ -41,12 +39,11 @@ class ReadEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
+      'text': text,
       'nullableText': nullableText,
-      'age': age,
-      'isSomething': isSomething,
-      'nullableBool': nullableBool,
-      'map': map,
+      'integer': integer,
+      'isBool': isBool,
+      'isNullableBool': isNullableBool,
       'texts': texts,
       'nullableTexts': nullableTexts,
       'twoDList': twoDList,
@@ -57,24 +54,25 @@ class ReadEntity {
 
   factory ReadEntity.fromJson(Map<String, dynamic> json) {
     return ReadEntity(
-      name: json['name'] as String,
-      nullableText: json['nullableText'] as String? ?? 'defaultText',
-      age: json['age'] as int,
-      isSomething: json['isSomething'] as bool,
-      nullableBool: json['nullableBool'] as bool? ?? false,
-      map: json['map'] as Map<String, dynamic>,
-      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
-      nullableTexts: json['nullableTexts'] as List<String>? ?? const <String>[],
-      twoDList: (json['twoDList'] as List<dynamic>)
-          .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
-          .toList(),
-      threeDList: (json['threeDList'] as List<dynamic>)
-          .map((e) => (e as List<dynamic>)
-              .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
-              .toList())
-          .toList(),
-      geoPoint: json['geoPoint'] as GeoPoint,
-    );
+        text: json['text'] as String,
+        nullableText: json['nullableText'] as String? ?? 'defaultText',
+        integer: json['integer'] as int,
+        isBool: json['isBool'] as bool,
+        isNullableBool: json['isNullableBool'] as bool? ?? false,
+        texts:
+            (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
+        nullableTexts:
+            json['nullableTexts'] as List<String>? ?? const <String>[],
+        twoDList: (json['twoDList'] as List<dynamic>)
+            .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
+            .toList(),
+        threeDList: (json['threeDList'] as List<dynamic>)
+            .map((e) => (e as List<dynamic>)
+                .map((e) =>
+                    (e as List<dynamic>).map((e) => e as String).toList())
+                .toList())
+            .toList(),
+        geoPoint: json['geoPoint'] as GeoPoint);
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
@@ -86,12 +84,11 @@ class ReadEntity {
   }
 
   ReadEntity copyWith({
-    String? name,
+    String? text,
     String? nullableText,
-    int? age,
-    bool? isSomething,
-    bool? nullableBool,
-    Map<String, dynamic>? map,
+    int? integer,
+    bool? isBool,
+    bool? isNullableBool,
     List<String>? texts,
     List<String>? nullableTexts,
     List<List<String>>? twoDList,
@@ -99,12 +96,11 @@ class ReadEntity {
     GeoPoint? geoPoint,
   }) {
     return ReadEntity(
-      name: name ?? this.name,
+      text: text ?? this.text,
       nullableText: nullableText ?? this.nullableText,
-      age: age ?? this.age,
-      isSomething: isSomething ?? this.isSomething,
-      nullableBool: nullableBool ?? this.nullableBool,
-      map: map ?? this.map,
+      integer: integer ?? this.integer,
+      isBool: isBool ?? this.isBool,
+      isNullableBool: isNullableBool ?? this.isNullableBool,
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
       twoDList: twoDList ?? this.twoDList,

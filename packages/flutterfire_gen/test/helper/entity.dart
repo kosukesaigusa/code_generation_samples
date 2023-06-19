@@ -11,12 +11,12 @@ part 'entity.g.dart';
 )
 class Entity {
   Entity({
-    required this.name,
+    required this.text,
     this.nullableText,
-    required this.age,
-    required this.isSomething,
-    required this.nullableBool,
-    required this.map,
+    required this.integer,
+    required this.isBool,
+    required this.isNullableBool,
+    // required this.map,
     // required this.nestedMap,
     required this.texts,
     this.nullableTexts,
@@ -29,14 +29,14 @@ class Entity {
     // required this.foo,
   });
 
-  final String name;
+  final String text;
   @Default('defaultText')
   final String? nullableText;
-  final int age;
-  final bool isSomething;
+  final int integer;
+  final bool isBool;
   @Default(false)
-  final bool? nullableBool;
-  final Map<String, dynamic> map;
+  final bool? isNullableBool;
+  // final Map<String, dynamic> map;
   // TODO: nestedMap の対応
   // final Map<String, Map<String, int>> nestedMap;
   final List<String> texts;
