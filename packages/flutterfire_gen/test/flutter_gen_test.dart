@@ -142,6 +142,29 @@ void main() {
       );
     });
 
+    test('parse Map<String, dynamic>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'map',
+        typeNameString: 'Map<String, dynamic>',
+      );
+      expect(
+        result,
+        "map: json['map'] as Map<String, dynamic>",
+      );
+    });
+
+    test('parse Map<String, dynamic>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableMap',
+        typeNameString: 'Map<String, dynamic>?',
+        defaultValueString: '{}',
+      );
+      expect(
+        result,
+        "nullableMap: json['nullableMap'] as Map<String, dynamic>? ?? {}",
+      );
+    });
+
     test('parse Map<String, int>', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'map',
@@ -153,7 +176,7 @@ void main() {
       );
     });
 
-    test('parse Map<String, int>? with default', () {
+    test('parse Map<String, int>?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableMap',
         typeNameString: 'Map<String, int>?',
@@ -176,7 +199,7 @@ void main() {
       );
     });
 
-    test('parse Map<String, Map<String, int>>? with default', () {
+    test('parse Map<String, Map<String, int>>?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableNestedMap',
         typeNameString: 'Map<String, Map<String, int>>?',
@@ -199,7 +222,7 @@ void main() {
       );
     });
 
-    test('parse Map<String, List<int>>? with default', () {
+    test('parse Map<String, List<int>>?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableListMap',
         typeNameString: 'Map<String, List<int>>?',
@@ -222,7 +245,7 @@ void main() {
       );
     });
 
-    test('parse List<Map<String, int>>? with default', () {
+    test('parse List<Map<String, int>>?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableMapList',
         typeNameString: 'List<Map<String, int>>?',
@@ -242,6 +265,18 @@ void main() {
       expect(
         result,
         "geoPoint: json['geoPoint'] as GeoPoint",
+      );
+    });
+
+    test('parse GeoPoint?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableGeoPoint',
+        typeNameString: 'GeoPoint?',
+        defaultValueString: 'GeoPoint(0, 0)',
+      );
+      expect(
+        result,
+        "nullableGeoPoint: json['nullableGeoPoint'] as GeoPoint? ?? GeoPoint(0, 0)",
       );
     });
   });

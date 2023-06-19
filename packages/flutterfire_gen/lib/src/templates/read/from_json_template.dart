@@ -83,6 +83,23 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
       return '($effectiveParsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
     }
 
+    final nullableMapMatch =
+        RegExp(r'^Map<String, (.*)>\?$').firstMatch(typeNameString);
+    if (nullableMapMatch != null) {
+      final mapValueType = nullableMapMatch.group(1)!;
+      if (mapValueType == 'dynamic') {
+        return '$effectiveParsedKey as Map<String, dynamic>?$defaultValueExpression';
+      }
+      final parsedMapValueType = _parseType(
+        fieldNameString,
+        mapValueType,
+        defaultValueString: defaultValueString,
+        isFirstLoop: false,
+        parsedKey: 'v',
+      );
+      return '($effectiveParsedKey as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
+    }
+
     final mapMatch = RegExp(r'^Map<String, (.*)>$').firstMatch(typeNameString);
     if (mapMatch != null) {
       final mapValueType = mapMatch.group(1)!;
