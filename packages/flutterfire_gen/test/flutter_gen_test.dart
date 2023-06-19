@@ -68,16 +68,18 @@ void main() {
         fieldNameString: 'text',
         typeNameString: 'String',
       );
-      expect(result, "text: json['text'] as String");
+      expect(
+        result,
+        "text: json['text'] as String",
+      );
     });
 
-    test('parse String? with default value', () {
+    test('parse String?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableText',
         typeNameString: 'String?',
         defaultValueString: "'defaultText'",
       );
-      print(result);
       expect(
         result,
         "nullableText: json['nullableText'] as String? ?? 'defaultText'",
@@ -89,7 +91,10 @@ void main() {
         fieldNameString: 'integer',
         typeNameString: 'int',
       );
-      expect(result, "integer: json['integer'] as int");
+      expect(
+        result,
+        "integer: json['integer'] as int",
+      );
     });
 
     test('parse bool', () {
@@ -97,10 +102,13 @@ void main() {
         fieldNameString: 'isBool',
         typeNameString: 'bool',
       );
-      expect(result, "isBool: json['isBool'] as bool");
+      expect(
+        result,
+        "isBool: json['isBool'] as bool",
+      );
     });
 
-    test('parse bool? with default value', () {
+    test('parse bool?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'isNullableBool',
         typeNameString: 'bool?',
@@ -123,7 +131,7 @@ void main() {
       );
     });
 
-    test('parse List<String>? with default value', () {
+    test('parse List<String>?', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableTexts',
         typeNameString: 'List<String>?',
@@ -162,7 +170,10 @@ void main() {
         fieldNameString: 'geoPoint',
         typeNameString: 'GeoPoint',
       );
-      expect(result, "geoPoint: json['geoPoint'] as GeoPoint");
+      expect(
+        result,
+        "geoPoint: json['geoPoint'] as GeoPoint",
+      );
     });
   });
 }
