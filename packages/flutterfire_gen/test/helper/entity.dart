@@ -15,16 +15,21 @@ class Entity {
     this.nullableText,
     required this.integer,
     required this.isBool,
-    required this.isNullableBool,
-    // required this.map,
-    // required this.nestedMap,
+    this.nullableIsBool,
     required this.texts,
     this.nullableTexts,
-    // this.nullableTwoDList,
+    required this.map,
+    this.nullableMap,
+    required this.stringMap,
+    this.nullableStringMap,
+    required this.nestedMap,
+    this.nullableNestedMap,
+    required this.listMap,
+    this.nullableListMap,
+    required this.mapList,
+    this.nullableMapList,
     required this.geoPoint,
-    // required this.dateTime,
-    // this.serverTimestamp,
-    // required this.foo,
+    this.nullableGeoPoint,
   });
 
   final String text;
@@ -32,20 +37,28 @@ class Entity {
   final String? nullableText;
   final int integer;
   final bool isBool;
-  @Default(false)
-  final bool? isNullableBool;
-  // final Map<String, dynamic> map;
-  // TODO: nestedMap の対応
-  // final Map<String, Map<String, int>> nestedMap;
+  final bool? nullableIsBool;
   final List<String> texts;
   @Default(<String>[])
   final List<String>? nullableTexts;
-  // @Default(<String>[])
-  // final List<List<String>>? nullableTwoDList;
+  final Map<String, dynamic> map;
+  @Default(<String, dynamic>{})
+  final Map<String, dynamic>? nullableMap;
+  final Map<String, String> stringMap;
+  @Default(<String, String>{})
+  final Map<String, String>? nullableStringMap;
+  final Map<String, Map<String, int>> nestedMap;
+  @Default(<String, Map<String, int>>{})
+  final Map<String, Map<String, int>>? nullableNestedMap;
+  final Map<String, List<int>> listMap;
+  @Default(<String, List<int>>{})
+  final Map<String, List<int>>? nullableListMap;
+  final List<Map<String, int>> mapList;
+  @Default(<Map<String, int>>[])
+  final List<Map<String, int>>? nullableMapList;
   final GeoPoint geoPoint;
-  // final DateTime dateTime;
-  // final DateTime? serverTimestamp;
-  // final Foo foo;
+  @Default(GeoPoint(0, 0))
+  final GeoPoint? nullableGeoPoint;
 }
 
 class Foo {

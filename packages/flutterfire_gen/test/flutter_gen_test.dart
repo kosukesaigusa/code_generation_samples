@@ -12,23 +12,31 @@ void main() {
     'nullableText': null,
     'integer': 40,
     'isBool': true,
-    'isNullableBool': null,
-    'map': {
+    'nullableIsBool': null,
+    'texts': ['a', 'b', 'c'],
+    'nullableTexts': null,
+    'map': <String, dynamic>{
       'text': 'text',
       'nullableText': null,
       'integer': 40,
       'isBool': true,
-      'isNullableBool': null,
-      'map': <String, dynamic>{},
+      'nullableIsBool': null,
       'texts': ['a', 'b', 'c'],
       'nullableTexts': null,
+      'map': <String, dynamic>{},
       'geoPoint': const GeoPoint(0, 0),
-      // 'dateTime': DateTime.now(),
-      // 'nullableDateTime': FieldValue.serverTimestamp(),
     },
-    'texts': ['a', 'b', 'c'],
-    'nullableTexts': null,
+    'nullableMap': null,
+    'stringMap': <String, String>{},
+    'nullableStringMap': null,
+    'nestedMap': <String, Map<String, int>>{},
+    'nullableNestedMap': null,
+    'listMap': <String, List<int>>{},
+    'nullableListMap': null,
+    'mapList': <Map<String, int>>[],
+    'nullableMapList': null,
     'geoPoint': const GeoPoint(0, 0),
+    'nullableGeoPoint': null,
     // 'dateTime': DateTime.now(),
     // 'nullableDateTime': FieldValue.serverTimestamp(),
     // 'foo': const Foo('foo'),
@@ -39,17 +47,6 @@ void main() {
     final ref = await fakeDb.collection('entities').add(data);
     final json = (await ref.get()).data();
     print(json);
-
-    final a = (await fakeDb.collection('entities').doc(ref.id).get()).data();
-    print(a);
-
-    final aa = await fakeDb.collection('entities').doc(ref.id).get();
-    final aaa = await readEntityDocumentReference(entityId: ref.id).get();
-    final aaaa = await fakeDb.collection('entities').doc(ref.id).get();
-
-    final b =
-        (await readEntityDocumentReference(entityId: ref.id).get()).data();
-    print(b);
 
     final entity = await query.fetchDocument(entityId: ref.id);
     print(entity);
@@ -109,13 +106,13 @@ void main() {
 
     test('parse bool?', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'isNullableBool',
+        fieldNameString: 'nullableIsBool',
         typeNameString: 'bool?',
         defaultValueString: 'false',
       );
       expect(
         result,
-        "isNullableBool: json['isNullableBool'] as bool? ?? false",
+        "nullableIsBool: json['nullableIsBool'] as bool? ?? false",
       );
     });
 
@@ -157,34 +154,34 @@ void main() {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableMap',
         typeNameString: 'Map<String, dynamic>?',
-        defaultValueString: '{}',
+        defaultValueString: '<String, dynamic>{}',
       );
       expect(
         result,
-        "nullableMap: json['nullableMap'] as Map<String, dynamic>? ?? {}",
+        "nullableMap: json['nullableMap'] as Map<String, dynamic>? ?? <String, dynamic>{}",
       );
     });
 
-    test('parse Map<String, int>', () {
+    test('parse Map<String, String>', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'map',
-        typeNameString: 'Map<String, int>',
+        fieldNameString: 'stringMap',
+        typeNameString: 'Map<String, String>',
       );
       expect(
         result,
-        "map: (json['map'] as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))",
+        "stringMap: (json['stringMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, v as String))",
       );
     });
 
-    test('parse Map<String, int>?', () {
+    test('parse Map<String, String>?', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'nullableMap',
-        typeNameString: 'Map<String, int>?',
-        defaultValueString: '{}',
+        fieldNameString: 'nullableStringMap',
+        typeNameString: 'Map<String, string>?',
+        defaultValueString: '<String, String>{}',
       );
       expect(
         result,
-        "nullableMap: (json['nullableMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as int)) ?? {}",
+        "nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as string)) ?? <String, String>{}",
       );
     });
 
@@ -203,11 +200,11 @@ void main() {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableNestedMap',
         typeNameString: 'Map<String, Map<String, int>>?',
-        defaultValueString: '{}',
+        defaultValueString: '<String, Map<String, int>>{}',
       );
       expect(
         result,
-        "nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? {}",
+        "nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? <String, Map<String, int>>{}",
       );
     });
 
@@ -226,11 +223,11 @@ void main() {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableListMap',
         typeNameString: 'Map<String, List<int>>?',
-        defaultValueString: '{}',
+        defaultValueString: '<String, List<int>>{}',
       );
       expect(
         result,
-        "nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ?? {}",
+        "nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ?? <String, List<int>>{}",
       );
     });
 
@@ -249,11 +246,103 @@ void main() {
       final result = template.fromJsonEachField(
         fieldNameString: 'nullableMapList',
         typeNameString: 'List<Map<String, int>>?',
-        defaultValueString: '[]',
+        defaultValueString: 'Map<String, int>>[]',
       );
       expect(
         result,
-        "nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? []",
+        "nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? Map<String, int>>[]",
+      );
+    });
+
+    test('parse Map<String, Map<String, int>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nestedMapMap',
+        typeNameString: 'Map<String, Map<String, int>>',
+      );
+      expect(
+        result,
+        "nestedMapMap: (json['nestedMapMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))",
+      );
+    });
+
+    test('parse Map<String, Map<String, int>>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableNestedMapMap',
+        typeNameString: 'Map<String, Map<String, int>>?',
+        defaultValueString: '<String, Map<String, int>>{}',
+      );
+      expect(
+        result,
+        "nullableNestedMapMap: (json['nullableNestedMapMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? <String, Map<String, int>>{}",
+      );
+    });
+
+    test('parse List<Map<String, int>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nestedListMap',
+        typeNameString: 'List<Map<String, int>>',
+      );
+      expect(
+        result,
+        "nestedListMap: (json['nestedListMap'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList()",
+      );
+    });
+
+    test('parse List<Map<String, int>>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableNestedListMap',
+        typeNameString: 'List<Map<String, int>>?',
+        defaultValueString: '<Map<String, int>>[]',
+      );
+      expect(
+        result,
+        "nullableNestedListMap: (json['nullableNestedListMap'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? <Map<String, int>>[]",
+      );
+    });
+
+    test('parse Map<String, Map<String, Map<String, int>>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'mapNestedMap',
+        typeNameString: 'Map<String, Map<String, Map<String, int>>>',
+      );
+      expect(
+        result,
+        "mapNestedMap: (json['mapNestedMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))))",
+      );
+    });
+
+    test('parse Map<String, Map<String, Map<String, int>>>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableMapNestedMap',
+        typeNameString: 'Map<String, Map<String, Map<String, int>>>?',
+        defaultValueString: '<String, Map<String, Map<String, int>>{}',
+      );
+      expect(
+        result,
+        "nullableMapNestedMap: (json['nullableMapNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))))) ?? <String, Map<String, Map<String, int>>{}",
+      );
+    });
+
+    test('parse List<Map<String, Map<String, int>>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'listMapMap',
+        typeNameString: 'List<Map<String, Map<String, int>>>',
+      );
+      expect(
+        result,
+        "listMapMap: (json['listMapMap'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))).toList()",
+      );
+    });
+
+    test('parse List<Map<String, Map<String, int>>>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableListMapMap',
+        typeNameString: 'List<Map<String, Map<String, int>>>?',
+        defaultValueString: '<Map<String, Map<String, int>>>[]',
+      );
+      expect(
+        result,
+        "nullableListMapMap: (json['nullableListMapMap'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))).toList() ?? <Map<String, Map<String, int>>>[]",
       );
     });
 

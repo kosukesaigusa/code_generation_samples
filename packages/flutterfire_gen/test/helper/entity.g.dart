@@ -24,6 +24,19 @@ class ReadEntity {
     required this.texts,
     required this.nullableTexts,
     required this.geoPoint,
+    required this.nullableIsBool,
+    required this.map,
+    required this.nullableMap,
+    required this.nestedMap,
+    required this.nullableNestedMa,
+    required this.listMap,
+    required this.nullableListMap,
+    required this.mapList,
+    required this.nullableMapList,
+    required this.nullableGeoPoint,
+    required this.stringMap,
+    required this.nullableStringMap,
+    required this.nullableNestedMap,
   });
 
   final String text;
@@ -34,6 +47,19 @@ class ReadEntity {
   final List<String> texts;
   final List<String>? nullableTexts;
   final GeoPoint geoPoint;
+  final bool? nullableIsBool;
+  final Map<String, dynamic> map;
+  final Map<String, dynamic>? nullableMap;
+  final Map<String, Map<String, int>> nestedMap;
+  final Map<String, Map<String, int>>? nullableNestedMa;
+  final Map<String, List<int>> listMap;
+  final Map<String, List<int>>? nullableListMap;
+  final List<Map<String, int>> mapList;
+  final List<Map<String, int>>? nullableMapList;
+  final GeoPoint? nullableGeoPoint;
+  final Map<String, String> stringMap;
+  final Map<String, String>? nullableStringMap;
+  final Map<String, Map<String, int>>? nullableNestedMap;
 
   Map<String, dynamic> toJson() {
     return {
@@ -45,6 +71,19 @@ class ReadEntity {
       'texts': texts,
       'nullableTexts': nullableTexts,
       'geoPoint': geoPoint,
+      'nullableIsBool': nullableIsBool,
+      'map': map,
+      'nullableMap': nullableMap,
+      'nestedMap': nestedMap,
+      'nullableNestedMa': nullableNestedMa,
+      'listMap': listMap,
+      'nullableListMap': nullableListMap,
+      'mapList': mapList,
+      'nullableMapList': nullableMapList,
+      'nullableGeoPoint': nullableGeoPoint,
+      'stringMap': stringMap,
+      'nullableStringMap': nullableStringMap,
+      'nullableNestedMap': nullableNestedMap,
     };
   }
 
@@ -61,7 +100,28 @@ class ReadEntity {
                 ?.map((e) => e as String)
                 .toList() ??
             const <String>[],
-        geoPoint: json['geoPoint'] as GeoPoint);
+        geoPoint: json['geoPoint'] as GeoPoint,
+        nullableIsBool: json['nullableIsBool'] as bool?,
+        map: json['map'] as Map<String, dynamic>,
+        nullableMap: json['nullableMap'] as Map<String, dynamic>? ??
+            const <String, dynamic>{},
+        nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) => MapEntry(
+            k,
+            (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))),
+        nullableNestedMa:
+            (json['nullableNestedMa'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ??
+                const <String, Map<String, int>>{},
+        listMap: (json['listMap'] as Map<String, dynamic>).map((k, v) =>
+            MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())),
+        nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)
+                ?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ??
+            const <String, List<int>>{},
+        mapList: (json['mapList'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList(),
+        nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? const <Map<String, int>>[],
+        nullableGeoPoint: json['nullableGeoPoint'] as GeoPoint? ?? const GeoPoint(0, 0),
+        stringMap: (json['stringMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, v as String)),
+        nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as String)) ?? const <String, String>{},
+        nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? const <String, Map<String, int>>{});
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
@@ -81,6 +141,19 @@ class ReadEntity {
     List<String>? texts,
     List<String>? nullableTexts,
     GeoPoint? geoPoint,
+    bool? nullableIsBool,
+    Map<String, dynamic>? map,
+    Map<String, dynamic>? nullableMap,
+    Map<String, Map<String, int>>? nestedMap,
+    Map<String, Map<String, int>>? nullableNestedMa,
+    Map<String, List<int>>? listMap,
+    Map<String, List<int>>? nullableListMap,
+    List<Map<String, int>>? mapList,
+    List<Map<String, int>>? nullableMapList,
+    GeoPoint? nullableGeoPoint,
+    Map<String, String>? stringMap,
+    Map<String, String>? nullableStringMap,
+    Map<String, Map<String, int>>? nullableNestedMap,
   }) {
     return ReadEntity(
       text: text ?? this.text,
@@ -91,6 +164,19 @@ class ReadEntity {
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
       geoPoint: geoPoint ?? this.geoPoint,
+      nullableIsBool: nullableIsBool ?? this.nullableIsBool,
+      map: map ?? this.map,
+      nullableMap: nullableMap ?? this.nullableMap,
+      nestedMap: nestedMap ?? this.nestedMap,
+      nullableNestedMa: nullableNestedMa ?? this.nullableNestedMa,
+      listMap: listMap ?? this.listMap,
+      nullableListMap: nullableListMap ?? this.nullableListMap,
+      mapList: mapList ?? this.mapList,
+      nullableMapList: nullableMapList ?? this.nullableMapList,
+      nullableGeoPoint: nullableGeoPoint ?? this.nullableGeoPoint,
+      stringMap: stringMap ?? this.stringMap,
+      nullableStringMap: nullableStringMap ?? this.nullableStringMap,
+      nullableNestedMap: nullableNestedMap ?? this.nullableNestedMap,
     );
   }
 }
