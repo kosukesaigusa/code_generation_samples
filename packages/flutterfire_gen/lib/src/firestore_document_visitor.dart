@@ -12,7 +12,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   Map<String, dynamic> fields = {};
 
   /// Default values of visited [FirestoreDocument] annotated class' each field.
-  Map<String, dynamic> defaultValues = {};
+  Map<String, String> defaultValues = {};
 
   @override
   void visitConstructorElement(ConstructorElement element) {

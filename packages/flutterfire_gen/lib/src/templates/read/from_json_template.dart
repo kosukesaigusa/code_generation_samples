@@ -16,11 +16,7 @@ class FromJsonTemplate {
   final Map<String, dynamic> fields;
 
   ///
-  final Map<String, dynamic> defaultValues;
-
-  final _listType = RegExp(r'^List<(.*)>$');
-
-  final _mapType = RegExp(r'^Map<(.+),\s*(.*)>$');
+  final Map<String, String> defaultValues;
 
   @override
   String toString() {
@@ -38,11 +34,11 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
-      final defaultValue = defaultValues[fieldNameString];
+      final defaultValueString = defaultValues[fieldNameString];
       return fromJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,
-        defaultValue: defaultValue,
+        defaultValueString: defaultValueString,
       );
     }).join(',\n');
   }
@@ -51,27 +47,39 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     String fieldNameString,
     String typeNameString, {
     required bool isFirstLoop,
-    Object? defaultValue,
+    String? defaultValueString,
   }) {
-    final listMatch = _listType.firstMatch(typeNameString);
-
-    final defaultValueString = defaultValue != null ? ' ?? $defaultValue' : '';
+    final defaultValueExpression = (isFirstLoop && defaultValueString != null)
+        ? ' ?? $defaultValueString'
+        : '';
     final parsedKey = isFirstLoop ? "json['$fieldNameString']" : 'e';
 
-    if (listMatch != null) {
-      final listItemType = listMatch.group(1)!;
-      final nullableSign = listItemType.endsWith('?') ? '?' : '';
-      final nonNullableListItemType = listItemType.replaceAll('?', '');
+    final nullableListMatch =
+        RegExp(r'^List<(.*)>\?$').firstMatch(typeNameString);
+    if (nullableListMatch != null) {
+      final listItemType = nullableListMatch.group(1)!;
       final parsedListItemType = _parseType(
         fieldNameString,
-        nonNullableListItemType,
-        defaultValue: defaultValue,
+        listItemType,
+        defaultValueString: defaultValueString,
         isFirstLoop: false,
       );
-      return '($parsedKey as List<dynamic>$nullableSign).map((e) => $parsedListItemType).toList()$defaultValueString';
-    } else {
-      return '$parsedKey as $typeNameString$defaultValueString';
+      return '($parsedKey as List<dynamic>?)?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
     }
+
+    final listMatch = RegExp(r'^List<(.*)>$').firstMatch(typeNameString);
+    if (listMatch != null) {
+      final listItemType = listMatch.group(1)!;
+      final parsedListItemType = _parseType(
+        fieldNameString,
+        listItemType,
+        defaultValueString: defaultValueString,
+        isFirstLoop: false,
+      );
+      return '($parsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
+    }
+
+    return '$parsedKey as $typeNameString$defaultValueExpression';
   }
 
   ///
@@ -79,13 +87,12 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
   String fromJsonEachField({
     required String fieldNameString,
     required String typeNameString,
-    Object? defaultValue,
+    String? defaultValueString,
   }) {
-    return '$fieldNameString: '
-        '${_parseType(
+    return '$fieldNameString: ${_parseType(
       fieldNameString,
       typeNameString,
-      defaultValue: defaultValue,
+      defaultValueString: defaultValueString,
       isFirstLoop: true,
     )}';
   }

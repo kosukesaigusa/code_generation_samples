@@ -63,6 +63,55 @@ void main() {
       defaultValues: {},
     );
 
+    test('parse String', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'text',
+        typeNameString: 'String',
+      );
+      expect(result, "text: json['text'] as String");
+    });
+
+    test('parse String? with default value', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableText',
+        typeNameString: 'String?',
+        defaultValueString: "'defaultText'",
+      );
+      print(result);
+      expect(
+        result,
+        "nullableText: json['nullableText'] as String? ?? 'defaultText'",
+      );
+    });
+
+    test('parse int', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'integer',
+        typeNameString: 'int',
+      );
+      expect(result, "integer: json['integer'] as int");
+    });
+
+    test('parse bool', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'isBool',
+        typeNameString: 'bool',
+      );
+      expect(result, "isBool: json['isBool'] as bool");
+    });
+
+    test('parse bool? with default value', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'isNullableBool',
+        typeNameString: 'bool?',
+        defaultValueString: 'false',
+      );
+      expect(
+        result,
+        "isNullableBool: json['isNullableBool'] as bool? ?? false",
+      );
+    });
+
     test('parse List<String>', () {
       final result = template.fromJsonEachField(
         fieldNameString: 'texts',
@@ -74,28 +123,15 @@ void main() {
       );
     });
 
-    test('parse List<String> with default value', () {
+    test('parse List<String>? with default value', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'texts',
-        typeNameString: 'List<String>',
-        defaultValue: [],
-      );
-      expect(
-        result,
-        "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []",
-      );
-    });
-
-    test('parse List<String>?', () {
-      final result = template.fromJsonEachField(
-        fieldNameString: 'texts',
+        fieldNameString: 'nullableTexts',
         typeNameString: 'List<String>?',
-        defaultValue: [],
+        defaultValueString: '<String>[]',
       );
-      print(result);
       expect(
         result,
-        "texts: (json['texts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? []",
+        "nullableTexts: (json['nullableTexts'] as List<dynamic>?)?.map((e) => e as String).toList() ?? <String>[]",
       );
     });
 
@@ -108,6 +144,25 @@ void main() {
         result,
         "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList()",
       );
+    });
+
+    test('parse List<List<List<String>>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'threeDList',
+        typeNameString: 'List<List<List<String>>>',
+      );
+      expect(
+        result,
+        "threeDList: (json['threeDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList()).toList()",
+      );
+    });
+
+    test('parse GeoPoint', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'geoPoint',
+        typeNameString: 'GeoPoint',
+      );
+      expect(result, "geoPoint: json['geoPoint'] as GeoPoint");
     });
   });
 }

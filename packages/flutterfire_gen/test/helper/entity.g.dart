@@ -61,8 +61,10 @@ class ReadEntity {
         isNullableBool: json['isNullableBool'] as bool? ?? false,
         texts:
             (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
-        nullableTexts:
-            json['nullableTexts'] as List<String>? ?? const <String>[],
+        nullableTexts: (json['nullableTexts'] as List<dynamic>?)
+                ?.map((e) => e as String)
+                .toList() ??
+            const <String>[],
         twoDList: (json['twoDList'] as List<dynamic>)
             .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
             .toList(),
