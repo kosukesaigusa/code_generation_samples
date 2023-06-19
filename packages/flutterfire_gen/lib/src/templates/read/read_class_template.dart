@@ -26,6 +26,8 @@ class ReadClassTemplate {
   @override
   String toString() {
     return '''
+${config.useFakeFirebaseFirestore ? 'final fakeDb = FakeFirebaseFirestore();' : ''}
+
 class ${config.readClassName} {
   const ${config.readClassName}({
     ${fields.entries.map((entry) => 'required this.${entry.key},').join('\n')}

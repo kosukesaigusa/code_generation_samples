@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:meta/meta.dart';
 
 ///
@@ -48,11 +50,13 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     String typeNameString, {
     required bool isFirstLoop,
     String? defaultValueString,
+    String parsedKey = 'e',
   }) {
     final defaultValueExpression = (isFirstLoop && defaultValueString != null)
         ? ' ?? $defaultValueString'
         : '';
-    final parsedKey = isFirstLoop ? "json['$fieldNameString']" : 'e';
+    final effectiveParsedKey =
+        isFirstLoop ? "json['$fieldNameString']" : parsedKey;
 
     final nullableListMatch =
         RegExp(r'^List<(.*)>\?$').firstMatch(typeNameString);
@@ -64,7 +68,7 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         defaultValueString: defaultValueString,
         isFirstLoop: false,
       );
-      return '($parsedKey as List<dynamic>?)?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
+      return '($effectiveParsedKey as List<dynamic>?)?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
     }
 
     final listMatch = RegExp(r'^List<(.*)>$').firstMatch(typeNameString);
@@ -76,10 +80,27 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         defaultValueString: defaultValueString,
         isFirstLoop: false,
       );
-      return '($parsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
+      return '($effectiveParsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
     }
 
-    return '$parsedKey as $typeNameString$defaultValueExpression';
+    final mapMatch = RegExp(r'^Map<String, (.*)>$').firstMatch(typeNameString);
+    if (mapMatch != null) {
+      final mapValueType = mapMatch.group(1)!;
+      if (mapValueType == 'dynamic') {
+        return '$effectiveParsedKey as Map<String, dynamic>$defaultValueExpression';
+      } else {
+        final parsedMapValueType = _parseType(
+          fieldNameString,
+          mapValueType,
+          defaultValueString: defaultValueString,
+          isFirstLoop: false,
+          parsedKey: 'v',
+        );
+        return '($effectiveParsedKey as Map<String, dynamic>).map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
+      }
+    }
+
+    return '$effectiveParsedKey as $typeNameString$defaultValueExpression';
   }
 
   ///

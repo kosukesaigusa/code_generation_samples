@@ -1,55 +1,54 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutterfire_gen/src/templates/read/from_json_template.dart';
 
 import 'helper/entity.dart';
 
 void main() {
-  final db = FakeFirebaseFirestore();
   final data = <String, dynamic>{
-    'name': 'name',
-    'nullableText': 'nullableText',
-    'age': 40,
-    'isAdult': true,
+    'text': 'text',
+    'nullableText': null,
+    'integer': 40,
+    'isBool': true,
+    'isNullableBool': null,
     'map': {
-      'name': 'name',
-      'nullableText': 'nullableText',
-      'age': 40,
-      'isAdult': true,
+      'text': 'text',
+      'nullableText': null,
+      'integer': 40,
+      'isBool': true,
+      'isNullableBool': null,
+      'map': <String, dynamic>{},
       'texts': ['a', 'b', 'c'],
+      'nullableTexts': null,
       'geoPoint': const GeoPoint(0, 0),
-      'dateTime': DateTime.now(),
-      'nullableDateTime': FieldValue.serverTimestamp(),
-      // 'foo': const Foo('foo'),
+      // 'dateTime': DateTime.now(),
+      // 'nullableDateTime': FieldValue.serverTimestamp(),
     },
     'texts': ['a', 'b', 'c'],
+    'nullableTexts': null,
     'geoPoint': const GeoPoint(0, 0),
-    'dateTime': DateTime.now(),
-    'nullableDateTime': FieldValue.serverTimestamp(),
+    // 'dateTime': DateTime.now(),
+    // 'nullableDateTime': FieldValue.serverTimestamp(),
     // 'foo': const Foo('foo'),
   };
   final query = EntityQuery();
 
   test('test', () async {
-    final ref = await db.collection('entities').add(data);
+    final ref = await fakeDb.collection('entities').add(data);
     final json = (await ref.get()).data();
     print(json);
 
-    final a = (await db.collection('entities').doc(ref.id).get()).data();
+    final a = (await fakeDb.collection('entities').doc(ref.id).get()).data();
     print(a);
 
-    final b = (await db
-            .collection('entities')
-            .withConverter(
-              fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
-              toFirestore: (obj, _) => obj.toJson(),
-            )
-            .doc(ref.id)
-            .get())
-        .data();
+    final aa = await fakeDb.collection('entities').doc(ref.id).get();
+    final aaa = await readEntityDocumentReference(entityId: ref.id).get();
+    final aaaa = await fakeDb.collection('entities').doc(ref.id).get();
+
+    final b =
+        (await readEntityDocumentReference(entityId: ref.id).get()).data();
     print(b);
 
     final entity = await query.fetchDocument(entityId: ref.id);
@@ -143,25 +142,95 @@ void main() {
       );
     });
 
-    test('parse List<List<String>>', () {
+    test('parse Map<String, int>', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'twoDList',
-        typeNameString: 'List<List<String>>',
+        fieldNameString: 'map',
+        typeNameString: 'Map<String, int>',
       );
       expect(
         result,
-        "twoDList: (json['twoDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList()",
+        "map: (json['map'] as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))",
       );
     });
 
-    test('parse List<List<List<String>>>', () {
+    test('parse Map<String, int>? with default', () {
       final result = template.fromJsonEachField(
-        fieldNameString: 'threeDList',
-        typeNameString: 'List<List<List<String>>>',
+        fieldNameString: 'nullableMap',
+        typeNameString: 'Map<String, int>?',
+        defaultValueString: '{}',
       );
       expect(
         result,
-        "threeDList: (json['threeDList'] as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => (e as List<dynamic>).map((e) => e as String).toList()).toList()).toList()",
+        "nullableMap: (json['nullableMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as int)) ?? {}",
+      );
+    });
+
+    test('parse Map<String, Map<String, int>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nestedMap',
+        typeNameString: 'Map<String, Map<String, int>>',
+      );
+      expect(
+        result,
+        "nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))",
+      );
+    });
+
+    test('parse Map<String, Map<String, int>>? with default', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableNestedMap',
+        typeNameString: 'Map<String, Map<String, int>>?',
+        defaultValueString: '{}',
+      );
+      expect(
+        result,
+        "nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? {}",
+      );
+    });
+
+    test('parse Map<String, List<int>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'listMap',
+        typeNameString: 'Map<String, List<int>>',
+      );
+      expect(
+        result,
+        "listMap: (json['listMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList()))",
+      );
+    });
+
+    test('parse Map<String, List<int>>? with default', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableListMap',
+        typeNameString: 'Map<String, List<int>>?',
+        defaultValueString: '{}',
+      );
+      expect(
+        result,
+        "nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ?? {}",
+      );
+    });
+
+    test('parse List<Map<String, int>>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'mapList',
+        typeNameString: 'List<Map<String, int>>',
+      );
+      expect(
+        result,
+        "mapList: (json['mapList'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList()",
+      );
+    });
+
+    test('parse List<Map<String, int>>? with default', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableMapList',
+        typeNameString: 'List<Map<String, int>>?',
+        defaultValueString: '[]',
+      );
+      expect(
+        result,
+        "nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? []",
       );
     });
 

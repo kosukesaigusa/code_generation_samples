@@ -12,6 +12,8 @@ part of 'entity.dart';
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
+final fakeDb = FakeFirebaseFirestore();
+
 class ReadEntity {
   const ReadEntity({
     required this.text,
@@ -21,8 +23,6 @@ class ReadEntity {
     required this.isNullableBool,
     required this.texts,
     required this.nullableTexts,
-    required this.twoDList,
-    required this.threeDList,
     required this.geoPoint,
   });
 
@@ -33,8 +33,6 @@ class ReadEntity {
   final bool? isNullableBool;
   final List<String> texts;
   final List<String>? nullableTexts;
-  final List<List<String>> twoDList;
-  final List<List<List<String>>> threeDList;
   final GeoPoint geoPoint;
 
   Map<String, dynamic> toJson() {
@@ -46,8 +44,6 @@ class ReadEntity {
       'isNullableBool': isNullableBool,
       'texts': texts,
       'nullableTexts': nullableTexts,
-      'twoDList': twoDList,
-      'threeDList': threeDList,
       'geoPoint': geoPoint,
     };
   }
@@ -65,15 +61,6 @@ class ReadEntity {
                 ?.map((e) => e as String)
                 .toList() ??
             const <String>[],
-        twoDList: (json['twoDList'] as List<dynamic>)
-            .map((e) => (e as List<dynamic>).map((e) => e as String).toList())
-            .toList(),
-        threeDList: (json['threeDList'] as List<dynamic>)
-            .map((e) => (e as List<dynamic>)
-                .map((e) =>
-                    (e as List<dynamic>).map((e) => e as String).toList())
-                .toList())
-            .toList(),
         geoPoint: json['geoPoint'] as GeoPoint);
   }
 
@@ -93,8 +80,6 @@ class ReadEntity {
     bool? isNullableBool,
     List<String>? texts,
     List<String>? nullableTexts,
-    List<List<String>>? twoDList,
-    List<List<List<String>>>? threeDList,
     GeoPoint? geoPoint,
   }) {
     return ReadEntity(
@@ -105,8 +90,6 @@ class ReadEntity {
       isNullableBool: isNullableBool ?? this.isNullableBool,
       texts: texts ?? this.texts,
       nullableTexts: nullableTexts ?? this.nullableTexts,
-      twoDList: twoDList ?? this.twoDList,
-      threeDList: threeDList ?? this.threeDList,
       geoPoint: geoPoint ?? this.geoPoint,
     );
   }
@@ -114,7 +97,7 @@ class ReadEntity {
 
 /// A [CollectionReference] to entities collection to read.
 final readEntityCollectionReference =
-    FakeFirebaseFirestore().collection('entities').withConverter(
+    fakeDb.collection('entities').withConverter(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
           toFirestore: (obj, _) => obj.toJson(),
         );

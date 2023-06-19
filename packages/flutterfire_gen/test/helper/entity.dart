@@ -20,8 +20,6 @@ class Entity {
     // required this.nestedMap,
     required this.texts,
     this.nullableTexts,
-    required this.twoDList,
-    required this.threeDList,
     // this.nullableTwoDList,
     required this.geoPoint,
     // required this.dateTime,
@@ -42,9 +40,6 @@ class Entity {
   final List<String> texts;
   @Default(<String>[])
   final List<String>? nullableTexts;
-  final List<List<String>> twoDList;
-  final List<List<List<String>>> threeDList;
-  // TODO: nullableNDList の対応
   // @Default(<String>[])
   // final List<List<String>>? nullableTwoDList;
   final GeoPoint geoPoint;
