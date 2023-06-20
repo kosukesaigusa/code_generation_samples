@@ -37,7 +37,7 @@ class ${config.readClassName} {
 
   ${ToJsonTemplate(fields: fields)}
 
-  ${FromJsonTemplate(readClassName: config.readClassName, fields: fields, defaultValues: visitor.defaultValues)}
+  ${FromJsonTemplate(readClassName: config.readClassName, fields: fields, defaultValues: visitor.defaultValues, jsonConverters: visitor.jsonConverters)}
 
   ${FromDocumentSnapshotTemplate(readClassName: config.readClassName, documentName: config.documentName)}
 

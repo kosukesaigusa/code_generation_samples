@@ -9,6 +9,7 @@ class FromJsonTemplate {
     required this.readClassName,
     required this.fields,
     required this.defaultValues,
+    required this.jsonConverters,
   });
 
   ///
@@ -19,6 +20,9 @@ class FromJsonTemplate {
 
   ///
   final Map<String, String> defaultValues;
+
+  ///
+  final Map<String, String> jsonConverters;
 
   @override
   String toString() {
@@ -37,10 +41,12 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
       final defaultValueString = defaultValues[fieldNameString];
+      final jsonConverterString = jsonConverters[fieldNameString];
       return fromJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
+        jsonConverterString: jsonConverterString,
       );
     }).join(',\n');
   }
@@ -50,8 +56,13 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     String typeNameString, {
     required bool isFirstLoop,
     String? defaultValueString,
+    String? jsonConverterString,
     String parsedKey = 'e',
   }) {
+    // TODO: nullable の場合のデフォルト値の取扱を考える
+    if ((jsonConverterString ?? '').isNotEmpty) {
+      return "$jsonConverterString.fromJson(json['$fieldNameString'] as Object)";
+    }
     final defaultValueExpression = (isFirstLoop && defaultValueString != null)
         ? ' ?? $defaultValueString'
         : '';
@@ -135,11 +146,13 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     required String fieldNameString,
     required String typeNameString,
     String? defaultValueString,
+    String? jsonConverterString,
   }) {
     return '$fieldNameString: ${_parseType(
       fieldNameString,
       typeNameString,
       defaultValueString: defaultValueString,
+      jsonConverterString: jsonConverterString,
       isFirstLoop: true,
     )}';
   }

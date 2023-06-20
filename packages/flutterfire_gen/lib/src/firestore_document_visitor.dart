@@ -1,6 +1,9 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// A [SimpleElementVisitor] to visit [FirestoreDocument] annotated class.
@@ -9,10 +12,13 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   String className = '';
 
   /// Fields of visited [FirestoreDocument] annotated class.
-  Map<String, dynamic> fields = {};
+  final Map<String, dynamic> fields = {};
 
-  /// Default values of visited [FirestoreDocument] annotated class' each field.
-  Map<String, String> defaultValues = {};
+  /// Default value strings of each field.
+  final Map<String, String> defaultValues = {};
+
+  /// [JsonConverter] strings of each field.
+  final Map<String, String> jsonConverters = {};
 
   @override
   void visitConstructorElement(ConstructorElement element) {
@@ -23,27 +29,61 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   @override
   void visitFieldElement(FieldElement element) {
     fields[element.name] = element.type.toString();
-    _parseDefaultAnnotation(element);
+    _parseAnnotations(element);
+  }
+
+  /// Parses annotations and json converters.
+  void _parseAnnotations(FieldElement element) {
+    const defaultTypeChecker = TypeChecker.fromRuntime(Default);
+    const jsonConverterTypeChecker = TypeChecker.fromRuntime(JsonConverter);
+
+    final metadata = element.metadata;
+    for (final meta in metadata) {
+      final fieldName = element.name;
+      final source = meta.toSource();
+      final object = meta.computeConstantValue()!;
+      final objectType = object.type!;
+      if (defaultTypeChecker.isExactlyType(objectType)) {
+        parseDefaultAnnotation(
+          fieldName: fieldName,
+          source: source,
+          objectType: objectType,
+        );
+      } else if (jsonConverterTypeChecker.isAssignableFromType(objectType)) {
+        parseJsonConverterAnnotation(fieldName: fieldName, source: source);
+      }
+    }
   }
 
   /// Parses [Default] annotation.
-  void _parseDefaultAnnotation(FieldElement element) {
-    const matcher = TypeChecker.fromRuntime(Default);
-    final metadata = element.metadata;
-    for (final meta in metadata) {
-      final obj = meta.computeConstantValue()!;
-      if (matcher.isExactlyType(obj.type!)) {
-        final source = meta.toSource();
-        final res = source.substring('@Default('.length, source.length - 1);
-        final needsConstModifier = !obj.type!.isDartCoreString &&
-            !res.trimLeft().startsWith('const') &&
-            (res.contains('(') || res.contains('[') || res.contains('{'));
-        if (needsConstModifier) {
-          defaultValues[element.name] = 'const $res';
-        } else {
-          defaultValues[element.name] = res;
-        }
-      }
+  @visibleForTesting
+  void parseDefaultAnnotation({
+    required String fieldName,
+    required String source,
+    // TODO: objectType は受け取らなくても良い方法があれば試してみる
+    required DartType objectType,
+  }) {
+    final res = source.substring('@Default('.length, source.length - 1);
+    final needsConstModifier = !objectType.isDartCoreString &&
+        !res.trimLeft().startsWith('const') &&
+        (res.contains('(') || res.contains('[') || res.contains('{'));
+    if (needsConstModifier) {
+      defaultValues[fieldName] = 'const $res';
+    } else {
+      defaultValues[fieldName] = res;
+    }
+  }
+
+  /// Parses [JsonConverter] annotation.
+  @visibleForTesting
+  void parseJsonConverterAnnotation({
+    required String fieldName,
+    required String source,
+  }) {
+    final pattern = RegExp('@(.*)');
+    final match = pattern.firstMatch(source);
+    if (match != null) {
+      jsonConverters[fieldName] = match.group(1)!;
     }
   }
 }

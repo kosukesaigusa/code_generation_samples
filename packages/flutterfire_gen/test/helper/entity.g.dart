@@ -44,6 +44,8 @@ class ReadEntity {
     required this.nullableTimestamp,
     required this.documentReference,
     required this.nullableDocumentReference,
+    required this.updatedAt,
+    required this.updatedAt2,
   });
 
   final String text;
@@ -74,6 +76,8 @@ class ReadEntity {
   final Timestamp? nullableTimestamp;
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
+  final DateTime updatedAt;
+  final DateTime updatedAt2;
 
   Map<String, dynamic> toJson() {
     return {
@@ -105,6 +109,8 @@ class ReadEntity {
       'nullableTimestamp': nullableTimestamp,
       'documentReference': documentReference,
       'nullableDocumentReference': nullableDocumentReference,
+      'updatedAt': updatedAt,
+      'updatedAt2': updatedAt2,
     };
   }
 
@@ -147,7 +153,9 @@ class ReadEntity {
         timestamp: json['timestamp'] as Timestamp,
         nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
         documentReference: json['documentReference'] as DocumentReference<Object?>,
-        nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?);
+        nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?,
+        updatedAt: useServerTimestampSealedTimestampConverter.fromJson(json['updatedAt'] as Object),
+        updatedAt2: _TimestampConverter().fromJson(json['updatedAt2'] as Object));
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
@@ -187,6 +195,8 @@ class ReadEntity {
     Timestamp? nullableTimestamp,
     DocumentReference<Object?>? documentReference,
     DocumentReference<Object?>? nullableDocumentReference,
+    DateTime? updatedAt,
+    DateTime? updatedAt2,
   }) {
     return ReadEntity(
       text: text ?? this.text,
@@ -218,6 +228,8 @@ class ReadEntity {
       documentReference: documentReference ?? this.documentReference,
       nullableDocumentReference:
           nullableDocumentReference ?? this.nullableDocumentReference,
+      updatedAt: updatedAt ?? this.updatedAt,
+      updatedAt2: updatedAt2 ?? this.updatedAt2,
     );
   }
 }
