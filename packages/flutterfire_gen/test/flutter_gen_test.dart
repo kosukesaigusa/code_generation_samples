@@ -11,6 +11,9 @@ void main() {
     'text': 'text',
     'nullableText': null,
     'integer': 40,
+    'nullableInteger': null,
+    'doubleNumber': 3.14,
+    'nullableDoubleNumber': null,
     'isBool': true,
     'nullableIsBool': null,
     'texts': ['a', 'b', 'c'],
@@ -19,12 +22,21 @@ void main() {
       'text': 'text',
       'nullableText': null,
       'integer': 40,
+      'nullableInteger': null,
+      'doubleNumber': 3.14,
+      'nullableDoubleNumber': null,
       'isBool': true,
       'nullableIsBool': null,
       'texts': ['a', 'b', 'c'],
       'nullableTexts': null,
-      'map': <String, dynamic>{},
       'geoPoint': const GeoPoint(0, 0),
+      'nullableGeoPoint': null,
+      'dateTime': DateTime.now(),
+      'nullableDateTime': null,
+      'timestamp': Timestamp.now(),
+      'nullableTimestamp': null,
+      'documentReference': fakeDb.collection('a').doc('b'),
+      'nullableDocumentReference': null,
     },
     'nullableMap': null,
     'stringMap': <String, String>{},
@@ -37,8 +49,12 @@ void main() {
     'nullableMapList': null,
     'geoPoint': const GeoPoint(0, 0),
     'nullableGeoPoint': null,
-    // 'dateTime': DateTime.now(),
-    // 'nullableDateTime': FieldValue.serverTimestamp(),
+    'dateTime': DateTime.now(),
+    'nullableDateTime': null,
+    'timestamp': Timestamp.now(),
+    'nullableTimestamp': null,
+    'documentReference': fakeDb.collection('a').doc('b'),
+    'nullableDocumentReference': null,
     // 'foo': const Foo('foo'),
   };
   final query = EntityQuery();
@@ -90,6 +106,41 @@ void main() {
       expect(
         result,
         "integer: json['integer'] as int",
+      );
+    });
+
+    test('parse int?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableInteger',
+        typeNameString: 'int?',
+        defaultValueString: '0',
+      );
+      expect(
+        result,
+        "nullableInteger: json['nullableInteger'] as int? ?? 0",
+      );
+    });
+
+    test('parse double', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'doubleNumber',
+        typeNameString: 'double',
+      );
+      expect(
+        result,
+        "doubleNumber: json['doubleNumber'] as double",
+      );
+    });
+
+    test('parse double?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableDoubleNumber',
+        typeNameString: 'double?',
+        defaultValueString: '0.0',
+      );
+      expect(
+        result,
+        "nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 0.0",
       );
     });
 
@@ -366,6 +417,72 @@ void main() {
       expect(
         result,
         "nullableGeoPoint: json['nullableGeoPoint'] as GeoPoint? ?? GeoPoint(0, 0)",
+      );
+    });
+
+    test('parse DateTime', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'dateTime',
+        typeNameString: 'DateTime',
+      );
+      expect(
+        result,
+        "dateTime: (json['dateTime'] as Timestamp).toDate()",
+      );
+    });
+
+    test('parse DateTime?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableDateTime',
+        typeNameString: 'DateTime?',
+      );
+      expect(
+        result,
+        "nullableDateTime: (json['nullableDateTime'] as Timestamp?)?.toDate()",
+      );
+    });
+
+    test('parse Timestamp', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'timestamp',
+        typeNameString: 'Timestamp',
+      );
+      expect(
+        result,
+        "timestamp: json['timestamp'] as Timestamp",
+      );
+    });
+
+    test('parse Timestamp?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableTimestamp',
+        typeNameString: 'Timestamp?',
+      );
+      expect(
+        result,
+        "nullableTimestamp: json['nullableTimestamp'] as Timestamp?",
+      );
+    });
+
+    test('parse DocumentReference<Object?>', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'documentReference',
+        typeNameString: 'DocumentReference<Object?>',
+      );
+      expect(
+        result,
+        "documentReference: json['documentReference'] as DocumentReference<Object?>",
+      );
+    });
+
+    test('parse DocumentReference<Object?>?', () {
+      final result = template.fromJsonEachField(
+        fieldNameString: 'nullableDocumentReference',
+        typeNameString: 'DocumentReference<Object?>?',
+      );
+      expect(
+        result,
+        "nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?",
       );
     });
   });

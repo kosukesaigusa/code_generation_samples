@@ -117,6 +117,15 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
       }
     }
 
+    final dateTimeMatch = RegExp(r'^DateTime\??$').firstMatch(typeNameString);
+    if (dateTimeMatch != null) {
+      if (typeNameString.endsWith('?')) {
+        return '($effectiveParsedKey as Timestamp?)?.toDate()';
+      } else {
+        return '($effectiveParsedKey as Timestamp).toDate()';
+      }
+    }
+
     return '$effectiveParsedKey as $typeNameString$defaultValueExpression';
   }
 

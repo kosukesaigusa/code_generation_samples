@@ -14,6 +14,9 @@ class Entity {
     required this.text,
     this.nullableText,
     required this.integer,
+    this.nullableInteger,
+    required this.doubleNumber,
+    this.nullableDoubleNumber,
     required this.isBool,
     this.nullableIsBool,
     required this.texts,
@@ -30,12 +33,23 @@ class Entity {
     this.nullableMapList,
     required this.geoPoint,
     this.nullableGeoPoint,
+    required this.dateTime,
+    this.nullableDateTime,
+    required this.timestamp,
+    this.nullableTimestamp,
+    required this.documentReference,
+    this.nullableDocumentReference,
   });
 
   final String text;
   @Default('defaultText')
   final String? nullableText;
   final int integer;
+  @Default(0)
+  final int? nullableInteger;
+  final double doubleNumber;
+  @Default(0.0)
+  final double? nullableDoubleNumber;
   final bool isBool;
   final bool? nullableIsBool;
   final List<String> texts;
@@ -59,6 +73,12 @@ class Entity {
   final GeoPoint geoPoint;
   @Default(GeoPoint(0, 0))
   final GeoPoint? nullableGeoPoint;
+  final DateTime dateTime;
+  final DateTime? nullableDateTime;
+  final Timestamp timestamp;
+  final Timestamp? nullableTimestamp;
+  final DocumentReference<Object?> documentReference;
+  final DocumentReference<Object?>? nullableDocumentReference;
 }
 
 class Foo {
