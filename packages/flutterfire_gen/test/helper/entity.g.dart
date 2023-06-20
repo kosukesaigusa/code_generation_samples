@@ -157,9 +157,9 @@ class ReadEntity {
         nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
         documentReference: json['documentReference'] as DocumentReference<Object?>,
         nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?,
-        createdAt: _TimestampConverter().fromJson(json['createdAt'] as Object),
-        updatedAt: useServerTimestampSealedTimestampConverter.fromJson(json['updatedAt'] as Object),
-        nullableIntegerWithJsonConverter: _NullableIntegerJsonConverter().fromJson(json['nullableIntegerWithJsonConverter'] as int?));
+        createdAt: (json['createdAt'] as Timestamp).toDate(),
+        updatedAt: (json['updatedAt'] as Timestamp).toDate(),
+        nullableIntegerWithJsonConverter: json['nullableIntegerWithJsonConverter'] as int?);
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {

@@ -53,8 +53,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         final interfaceTypes = (objectType.element! as ClassElement)
             .allSupertypes
             .where((t) => jsonConverterTypeChecker.isExactlyType(t));
-        // TODO: length が 2 以外の場合があり得ないのなら、そのように書き換えたい
-        if (interfaceTypes.isNotEmpty) {
+        if (interfaceTypes.length == 2) {
           final typeArguments = interfaceTypes.first.typeArguments;
           final clientType = typeArguments[0];
           final firestoreType = typeArguments[1];
@@ -99,7 +98,6 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
     final pattern = RegExp('@(.*)');
     final match = pattern.firstMatch(source);
     if (match != null) {
-      // jsonConverterStrings[fieldName] = match.group(1)!;
       jsonConverterConfigs[fieldName] = JsonConverterConfig(
         jsonConverterString: match.group(1)!,
         clientTypeString: clientType.getDisplayString(withNullability: true),
