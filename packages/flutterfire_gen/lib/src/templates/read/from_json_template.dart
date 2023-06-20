@@ -39,7 +39,7 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
 
   ///
   String _parseFields() {
-    return fields.entries.map((entry) {
+    return '${fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
       final defaultValueString = defaultValueStrings[fieldNameString];
@@ -50,7 +50,7 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
         defaultValueString: defaultValueString,
         jsonConverterConfig: jsonConverterConfig,
       );
-    }).join(',\n');
+    }).join(',\n')},\n';
   }
 
   String _parseType(
@@ -61,11 +61,15 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     JsonConverterConfig? jsonConverterConfig,
     String parsedKey = 'e',
   }) {
-    // TODO: nullable の場合のデフォルト値の取扱を考える
     if (jsonConverterConfig != null) {
-      return '${jsonConverterConfig.jsonConverterString}'
-          ".fromJson(json['$fieldNameString']"
+      final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
+          "fromJson(json['$fieldNameString']"
           ' as ${jsonConverterConfig.firestoreTypeString})';
+      if (defaultValueString != null) {
+        return "json['$fieldNameString'] == null ? $defaultValueString : $fromJsonString";
+      } else {
+        return fromJsonString;
+      }
     }
     final defaultValueExpression = (isFirstLoop && defaultValueString != null)
         ? ' ?? $defaultValueString'

@@ -44,9 +44,8 @@ class ReadEntity {
     required this.nullableTimestamp,
     required this.documentReference,
     required this.nullableDocumentReference,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.nullableIntegerWithJsonConverter,
+    required this.foo,
+    required this.nullableFoo,
   });
 
   final String text;
@@ -77,9 +76,8 @@ class ReadEntity {
   final Timestamp? nullableTimestamp;
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int? nullableIntegerWithJsonConverter;
+  final Foo foo;
+  final Foo? nullableFoo;
 
   Map<String, dynamic> toJson() {
     return {
@@ -111,55 +109,77 @@ class ReadEntity {
       'nullableTimestamp': nullableTimestamp,
       'documentReference': documentReference,
       'nullableDocumentReference': nullableDocumentReference,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
-      'nullableIntegerWithJsonConverter': nullableIntegerWithJsonConverter,
+      'foo': foo,
+      'nullableFoo': nullableFoo,
     };
   }
 
   factory ReadEntity.fromJson(Map<String, dynamic> json) {
     return ReadEntity(
-        text: json['text'] as String,
-        nullableText: json['nullableText'] as String? ?? 'defaultText',
-        integer: json['integer'] as int,
-        nullableInteger: json['nullableInteger'] as int? ?? 0,
-        doubleNumber: json['doubleNumber'] as double,
-        nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 0.0,
-        isBool: json['isBool'] as bool,
-        nullableIsBool: json['nullableIsBool'] as bool?,
-        texts:
-            (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
-        nullableTexts: (json['nullableTexts'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-            const <String>[],
-        map: json['map'] as Map<String, dynamic>,
-        nullableMap: json['nullableMap'] as Map<String, dynamic>? ??
-            const <String, dynamic>{},
-        stringMap: (json['stringMap'] as Map<String, dynamic>)
-            .map((k, v) => MapEntry(k, v as String)),
-        nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)
-                ?.map((k, v) => MapEntry(k, v as String)) ??
-            const <String, String>{},
-        nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) => MapEntry(
-            k,
-            (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))),
-        nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)
-                ?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ??
-            const <String, Map<String, int>>{},
-        listMap: (json['listMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())),
-        nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ?? const <String, List<int>>{},
-        mapList: (json['mapList'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList(),
-        nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? const <Map<String, int>>[],
-        geoPoint: json['geoPoint'] as GeoPoint,
-        nullableGeoPoint: json['nullableGeoPoint'] as GeoPoint? ?? const GeoPoint(0, 0),
-        dateTime: (json['dateTime'] as Timestamp).toDate(),
-        nullableDateTime: (json['nullableDateTime'] as Timestamp?)?.toDate(),
-        timestamp: json['timestamp'] as Timestamp,
-        nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
-        documentReference: json['documentReference'] as DocumentReference<Object?>,
-        nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?,
-        createdAt: (json['createdAt'] as Timestamp).toDate(),
-        updatedAt: (json['updatedAt'] as Timestamp).toDate(),
-        nullableIntegerWithJsonConverter: json['nullableIntegerWithJsonConverter'] as int?);
+      text: json['text'] as String,
+      nullableText: json['nullableText'] as String? ?? 'defaultText',
+      integer: json['integer'] as int,
+      nullableInteger: json['nullableInteger'] as int? ?? 0,
+      doubleNumber: json['doubleNumber'] as double,
+      nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 0.0,
+      isBool: json['isBool'] as bool,
+      nullableIsBool: json['nullableIsBool'] as bool?,
+      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
+      nullableTexts: (json['nullableTexts'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      map: json['map'] as Map<String, dynamic>,
+      nullableMap: json['nullableMap'] as Map<String, dynamic>? ??
+          const <String, dynamic>{},
+      stringMap: (json['stringMap'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, v as String)),
+      nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)
+              ?.map((k, v) => MapEntry(k, v as String)) ??
+          const <String, String>{},
+      nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) =>
+          MapEntry(
+              k,
+              (v as Map<String, dynamic>)
+                  .map((k, v) => MapEntry(k, v as int)))),
+      nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)
+              ?.map((k, v) => MapEntry(
+                  k,
+                  (v as Map<String, dynamic>)
+                      .map((k, v) => MapEntry(k, v as int)))) ??
+          const <String, Map<String, int>>{},
+      listMap: (json['listMap'] as Map<String, dynamic>).map((k, v) =>
+          MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())),
+      nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map(
+              (k, v) => MapEntry(
+                  k, (v as List<dynamic>).map((e) => e as int).toList())) ??
+          const <String, List<int>>{},
+      mapList: (json['mapList'] as List<dynamic>)
+          .map((e) =>
+              (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))
+          .toList(),
+      nullableMapList: (json['nullableMapList'] as List<dynamic>?)
+              ?.map((e) => (e as Map<String, dynamic>)
+                  .map((k, v) => MapEntry(k, v as int)))
+              .toList() ??
+          const <Map<String, int>>[],
+      geoPoint: json['geoPoint'] as GeoPoint,
+      nullableGeoPoint:
+          json['nullableGeoPoint'] as GeoPoint? ?? const GeoPoint(0, 0),
+      dateTime: (json['dateTime'] as Timestamp).toDate(),
+      nullableDateTime: (json['nullableDateTime'] as Timestamp?)?.toDate(),
+      timestamp: json['timestamp'] as Timestamp,
+      nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
+      documentReference:
+          json['documentReference'] as DocumentReference<Object?>,
+      nullableDocumentReference:
+          json['nullableDocumentReference'] as DocumentReference<Object?>?,
+      foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>),
+      nullableFoo: json['nullableFoo'] == null
+          ? const Foo('defaultBar')
+          : _nullableFooJsonConverter
+              .fromJson(json['nullableFoo'] as Map<String, dynamic>),
+    );
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
@@ -199,9 +219,8 @@ class ReadEntity {
     Timestamp? nullableTimestamp,
     DocumentReference<Object?>? documentReference,
     DocumentReference<Object?>? nullableDocumentReference,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    int? nullableIntegerWithJsonConverter,
+    Foo? foo,
+    Foo? nullableFoo,
   }) {
     return ReadEntity(
       text: text ?? this.text,
@@ -233,10 +252,8 @@ class ReadEntity {
       documentReference: documentReference ?? this.documentReference,
       nullableDocumentReference:
           nullableDocumentReference ?? this.nullableDocumentReference,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      nullableIntegerWithJsonConverter: nullableIntegerWithJsonConverter ??
-          this.nullableIntegerWithJsonConverter,
+      foo: foo ?? this.foo,
+      nullableFoo: nullableFoo ?? this.nullableFoo,
     );
   }
 }

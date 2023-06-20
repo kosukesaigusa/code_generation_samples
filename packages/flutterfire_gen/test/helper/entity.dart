@@ -40,9 +40,8 @@ class Entity {
     this.nullableTimestamp,
     required this.documentReference,
     this.nullableDocumentReference,
-    required this.createdAt,
-    required this.updatedAt,
-    this.nullableIntegerWithJsonConverter = 5,
+    required this.foo,
+    this.nullableFoo = const Foo('defaultBar'),
   });
 
   final String text;
@@ -83,12 +82,10 @@ class Entity {
   final Timestamp? nullableTimestamp;
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
-  @_TimestampConverter()
-  final DateTime createdAt;
-  @useServerTimestampSealedTimestampConverter
-  final DateTime updatedAt;
-  @_NullableIntegerJsonConverter()
-  final int? nullableIntegerWithJsonConverter;
+  @_FooJsonConverter()
+  final Foo foo;
+  @_nullableFooJsonConverter
+  final Foo? nullableFoo;
 }
 
 class Foo {
@@ -97,40 +94,41 @@ class Foo {
   final String bar;
 }
 
-///
-const useServerTimestampSealedTimestampConverter =
-    _TimestampConverter(useServerTimestamp: true);
-
-class _TimestampConverter implements JsonConverter<DateTime, Object> {
-  const _TimestampConverter({this.useServerTimestamp = false});
-
-  final bool useServerTimestamp;
+class _FooJsonConverter implements JsonConverter<Foo, Map<String, dynamic>> {
+  const _FooJsonConverter();
 
   @override
-  DateTime fromJson(Object json) {
-    final timestamp = json as Timestamp;
-    return timestamp.toDate();
+  Foo fromJson(Map<String, dynamic> json) {
+    final bar = json['bar'] as String;
+    return Foo(bar);
   }
 
   @override
-  Object toJson(DateTime dateTime) {
-    if (useServerTimestamp) {
-      return FieldValue.serverTimestamp();
-    }
-    return Timestamp.fromDate(dateTime);
+  Map<String, dynamic> toJson(Foo foo) {
+    return <String, dynamic>{'bar': foo.bar};
   }
 }
 
-class _NullableIntegerJsonConverter implements JsonConverter<int?, int?> {
-  const _NullableIntegerJsonConverter();
+const _nullableFooJsonConverter = _NullableFooJsonConverter();
+
+class _NullableFooJsonConverter
+    implements JsonConverter<Foo?, Map<String, dynamic>> {
+  const _NullableFooJsonConverter();
 
   @override
-  int? fromJson(int? json) {
-    return json;
+  Foo? fromJson(Map<String, dynamic> json) {
+    final bar = json['bar'] as String?;
+    if (bar == null) {
+      return null;
+    }
+    return Foo(bar);
   }
 
   @override
-  int? toJson(int? nullableInteger) {
-    return nullableInteger;
+  Map<String, dynamic> toJson(Foo? foo) {
+    if (foo == null) {
+      return <String, dynamic>{'bar': 'defaultBar'};
+    }
+    return <String, dynamic>{'bar': foo.bar};
   }
 }

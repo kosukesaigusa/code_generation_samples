@@ -24,12 +24,26 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void visitConstructorElement(ConstructorElement element) {
     final returnType = element.returnType.toString();
     className = returnType;
+    _parseParameters(element.parameters);
   }
 
   @override
   void visitFieldElement(FieldElement element) {
     fields[element.name] = element.type.toString();
     _parseAnnotations(element);
+  }
+
+  /// Parses default values of constructor parameters.
+  void _parseParameters(List<ParameterElement> parameters) {
+    for (final parameter in parameters) {
+      if (parameter.isOptional) {
+        final fieldName = parameter.name;
+        final defaultValueCode = parameter.defaultValueCode;
+        if (defaultValueCode != null) {
+          defaultValueStrings[fieldName] = defaultValueCode;
+        }
+      }
+    }
   }
 
   /// Parses annotations and json converters.
@@ -53,8 +67,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         final interfaceTypes = (objectType.element! as ClassElement)
             .allSupertypes
             .where((t) => jsonConverterTypeChecker.isExactlyType(t));
-        if (interfaceTypes.length == 2) {
-          final typeArguments = interfaceTypes.first.typeArguments;
+        final typeArguments = interfaceTypes.first.typeArguments;
+        if (typeArguments.length == 2) {
           final clientType = typeArguments[0];
           final firestoreType = typeArguments[1];
           parseJsonConverterAnnotation(

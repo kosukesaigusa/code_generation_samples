@@ -55,7 +55,8 @@ void main() {
     'nullableTimestamp': null,
     'documentReference': fakeDb.collection('a').doc('b'),
     'nullableDocumentReference': null,
-    // 'foo': const Foo('foo'),
+    'foo': const Foo('bar'),
+    'nullableFoo': null,
   };
   final query = EntityQuery();
 
