@@ -72,8 +72,8 @@ void main() {
     final template = FromJsonTemplate(
       readClassName: '',
       fields: {},
-      defaultValues: {},
-      jsonConverters: {},
+      defaultValueStrings: {},
+      jsonConverterStrings: {},
     );
 
     test('parse String', () {

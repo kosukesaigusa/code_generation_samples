@@ -8,8 +8,8 @@ class FromJsonTemplate {
   FromJsonTemplate({
     required this.readClassName,
     required this.fields,
-    required this.defaultValues,
-    required this.jsonConverters,
+    required this.defaultValueStrings,
+    required this.jsonConverterStrings,
   });
 
   ///
@@ -19,10 +19,10 @@ class FromJsonTemplate {
   final Map<String, dynamic> fields;
 
   ///
-  final Map<String, String> defaultValues;
+  final Map<String, String> defaultValueStrings;
 
   ///
-  final Map<String, String> jsonConverters;
+  final Map<String, String> jsonConverterStrings;
 
   @override
   String toString() {
@@ -40,8 +40,8 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
-      final defaultValueString = defaultValues[fieldNameString];
-      final jsonConverterString = jsonConverters[fieldNameString];
+      final defaultValueString = defaultValueStrings[fieldNameString];
+      final jsonConverterString = jsonConverterStrings[fieldNameString];
       return fromJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,

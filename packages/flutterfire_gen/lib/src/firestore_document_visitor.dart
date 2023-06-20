@@ -15,10 +15,10 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   final Map<String, dynamic> fields = {};
 
   /// Default value strings of each field.
-  final Map<String, String> defaultValues = {};
+  final Map<String, String> defaultValueStrings = {};
 
   /// [JsonConverter] strings of each field.
-  final Map<String, String> jsonConverters = {};
+  final Map<String, String> jsonConverterStrings = {};
 
   @override
   void visitConstructorElement(ConstructorElement element) {
@@ -68,9 +68,9 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         !res.trimLeft().startsWith('const') &&
         (res.contains('(') || res.contains('[') || res.contains('{'));
     if (needsConstModifier) {
-      defaultValues[fieldName] = 'const $res';
+      defaultValueStrings[fieldName] = 'const $res';
     } else {
-      defaultValues[fieldName] = res;
+      defaultValueStrings[fieldName] = res;
     }
   }
 
@@ -83,7 +83,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
     final pattern = RegExp('@(.*)');
     final match = pattern.firstMatch(source);
     if (match != null) {
-      jsonConverters[fieldName] = match.group(1)!;
+      jsonConverterStrings[fieldName] = match.group(1)!;
     }
   }
 }
