@@ -1,5 +1,5 @@
+import '../../config.dart';
 import '../../firestore_document_visitor.dart';
-import '../../flutterfire_gen.dart';
 import 'copy_with_template.dart';
 import 'from_document_snapshot_template.dart';
 import 'from_json_template.dart';

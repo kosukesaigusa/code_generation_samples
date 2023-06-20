@@ -6,6 +6,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
+import 'config.dart';
+
 /// A [SimpleElementVisitor] to visit [FirestoreDocument] annotated class.
 class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// A name of visited [FirestoreDocument] annotated class.
@@ -120,23 +122,4 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
       );
     }
   }
-}
-
-///
-class JsonConverterConfig {
-  ///
-  const JsonConverterConfig({
-    required this.jsonConverterString,
-    required this.clientTypeString,
-    required this.firestoreTypeString,
-  });
-
-  ///
-  final String jsonConverterString;
-
-  ///
-  final String clientTypeString;
-
-  ///
-  final String firestoreTypeString;
 }

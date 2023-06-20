@@ -2,7 +2,7 @@
 
 import 'package:meta/meta.dart';
 
-import '../../firestore_document_visitor.dart';
+import '../../config.dart';
 
 ///
 class FromJsonTemplate {

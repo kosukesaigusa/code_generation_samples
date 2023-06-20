@@ -1,4 +1,4 @@
-import '../flutterfire_gen.dart';
+import '../config.dart';
 
 /// Returns Query class template.
 String queryClassTemplate({required FirestoreDocumentConfig config}) {

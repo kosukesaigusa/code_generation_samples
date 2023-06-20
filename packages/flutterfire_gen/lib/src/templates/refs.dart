@@ -1,4 +1,4 @@
-import '../flutterfire_gen.dart';
+import '../config.dart';
 
 // ignore: comment_references
 /// Returns [CollectionReference] and [DocumentReference] template.
