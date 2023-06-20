@@ -44,8 +44,9 @@ class ReadEntity {
     required this.nullableTimestamp,
     required this.documentReference,
     required this.nullableDocumentReference,
+    required this.createdAt,
     required this.updatedAt,
-    required this.updatedAt2,
+    required this.nullableIntegerWithJsonConverter,
   });
 
   final String text;
@@ -76,8 +77,9 @@ class ReadEntity {
   final Timestamp? nullableTimestamp;
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
+  final DateTime createdAt;
   final DateTime updatedAt;
-  final DateTime updatedAt2;
+  final int? nullableIntegerWithJsonConverter;
 
   Map<String, dynamic> toJson() {
     return {
@@ -109,8 +111,9 @@ class ReadEntity {
       'nullableTimestamp': nullableTimestamp,
       'documentReference': documentReference,
       'nullableDocumentReference': nullableDocumentReference,
+      'createdAt': createdAt,
       'updatedAt': updatedAt,
-      'updatedAt2': updatedAt2,
+      'nullableIntegerWithJsonConverter': nullableIntegerWithJsonConverter,
     };
   }
 
@@ -154,8 +157,9 @@ class ReadEntity {
         nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
         documentReference: json['documentReference'] as DocumentReference<Object?>,
         nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?,
+        createdAt: _TimestampConverter().fromJson(json['createdAt'] as Object),
         updatedAt: useServerTimestampSealedTimestampConverter.fromJson(json['updatedAt'] as Object),
-        updatedAt2: _TimestampConverter().fromJson(json['updatedAt2'] as Object));
+        nullableIntegerWithJsonConverter: _NullableIntegerJsonConverter().fromJson(json['nullableIntegerWithJsonConverter'] as int?));
   }
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
@@ -195,8 +199,9 @@ class ReadEntity {
     Timestamp? nullableTimestamp,
     DocumentReference<Object?>? documentReference,
     DocumentReference<Object?>? nullableDocumentReference,
+    DateTime? createdAt,
     DateTime? updatedAt,
-    DateTime? updatedAt2,
+    int? nullableIntegerWithJsonConverter,
   }) {
     return ReadEntity(
       text: text ?? this.text,
@@ -228,8 +233,10 @@ class ReadEntity {
       documentReference: documentReference ?? this.documentReference,
       nullableDocumentReference:
           nullableDocumentReference ?? this.nullableDocumentReference,
+      createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      updatedAt2: updatedAt2 ?? this.updatedAt2,
+      nullableIntegerWithJsonConverter: nullableIntegerWithJsonConverter ??
+          this.nullableIntegerWithJsonConverter,
     );
   }
 }

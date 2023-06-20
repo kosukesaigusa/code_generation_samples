@@ -73,7 +73,7 @@ void main() {
       readClassName: '',
       fields: {},
       defaultValueStrings: {},
-      jsonConverterStrings: {},
+      jsonConverterConfigs: {},
     );
 
     test('parse String', () {

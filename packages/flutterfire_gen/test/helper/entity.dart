@@ -40,8 +40,9 @@ class Entity {
     this.nullableTimestamp,
     required this.documentReference,
     this.nullableDocumentReference,
+    required this.createdAt,
     required this.updatedAt,
-    required this.updatedAt2,
+    this.nullableIntegerWithJsonConverter = 5,
   });
 
   final String text;
@@ -82,10 +83,12 @@ class Entity {
   final Timestamp? nullableTimestamp;
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
+  @_TimestampConverter()
+  final DateTime createdAt;
   @useServerTimestampSealedTimestampConverter
   final DateTime updatedAt;
-  @_TimestampConverter()
-  final DateTime updatedAt2;
+  @_NullableIntegerJsonConverter()
+  final int? nullableIntegerWithJsonConverter;
 }
 
 class Foo {
@@ -115,5 +118,19 @@ class _TimestampConverter implements JsonConverter<DateTime, Object> {
       return FieldValue.serverTimestamp();
     }
     return Timestamp.fromDate(dateTime);
+  }
+}
+
+class _NullableIntegerJsonConverter implements JsonConverter<int?, int?> {
+  const _NullableIntegerJsonConverter();
+
+  @override
+  int? fromJson(int? json) {
+    return json;
+  }
+
+  @override
+  int? toJson(int? nullableInteger) {
+    return nullableInteger;
   }
 }

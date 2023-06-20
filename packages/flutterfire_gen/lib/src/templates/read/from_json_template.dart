@@ -2,6 +2,8 @@
 
 import 'package:meta/meta.dart';
 
+import '../../firestore_document_visitor.dart';
+
 ///
 class FromJsonTemplate {
   ///
@@ -9,7 +11,7 @@ class FromJsonTemplate {
     required this.readClassName,
     required this.fields,
     required this.defaultValueStrings,
-    required this.jsonConverterStrings,
+    required this.jsonConverterConfigs,
   });
 
   ///
@@ -22,7 +24,7 @@ class FromJsonTemplate {
   final Map<String, String> defaultValueStrings;
 
   ///
-  final Map<String, String> jsonConverterStrings;
+  final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
   @override
   String toString() {
@@ -41,12 +43,12 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
       final defaultValueString = defaultValueStrings[fieldNameString];
-      final jsonConverterString = jsonConverterStrings[fieldNameString];
+      final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
       return fromJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
-        jsonConverterString: jsonConverterString,
+        jsonConverterConfig: jsonConverterConfig,
       );
     }).join(',\n');
   }
@@ -56,12 +58,14 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     String typeNameString, {
     required bool isFirstLoop,
     String? defaultValueString,
-    String? jsonConverterString,
+    JsonConverterConfig? jsonConverterConfig,
     String parsedKey = 'e',
   }) {
     // TODO: nullable の場合のデフォルト値の取扱を考える
-    if ((jsonConverterString ?? '').isNotEmpty) {
-      return "$jsonConverterString.fromJson(json['$fieldNameString'] as Object)";
+    if (jsonConverterConfig != null) {
+      return '${jsonConverterConfig.jsonConverterString}'
+          ".fromJson(json['$fieldNameString']"
+          ' as ${jsonConverterConfig.firestoreTypeString})';
     }
     final defaultValueExpression = (isFirstLoop && defaultValueString != null)
         ? ' ?? $defaultValueString'
@@ -146,13 +150,13 @@ factory $readClassName.fromJson(Map<String, dynamic> json) {
     required String fieldNameString,
     required String typeNameString,
     String? defaultValueString,
-    String? jsonConverterString,
+    JsonConverterConfig? jsonConverterConfig,
   }) {
     return '$fieldNameString: ${_parseType(
       fieldNameString,
       typeNameString,
       defaultValueString: defaultValueString,
-      jsonConverterString: jsonConverterString,
+      jsonConverterConfig: jsonConverterConfig,
       isFirstLoop: true,
     )}';
   }

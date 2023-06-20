@@ -18,7 +18,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   final Map<String, String> defaultValueStrings = {};
 
   /// [JsonConverter] strings of each field.
-  final Map<String, String> jsonConverterStrings = {};
+  final Map<String, JsonConverterConfig> jsonConverterConfigs = {};
 
   @override
   void visitConstructorElement(ConstructorElement element) {
@@ -50,7 +50,21 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
           objectType: objectType,
         );
       } else if (jsonConverterTypeChecker.isAssignableFromType(objectType)) {
-        parseJsonConverterAnnotation(fieldName: fieldName, source: source);
+        final interfaceTypes = (objectType.element! as ClassElement)
+            .allSupertypes
+            .where((t) => jsonConverterTypeChecker.isExactlyType(t));
+        // TODO: length が 2 以外の場合があり得ないのなら、そのように書き換えたい
+        if (interfaceTypes.isNotEmpty) {
+          final typeArguments = interfaceTypes.first.typeArguments;
+          final clientType = typeArguments[0];
+          final firestoreType = typeArguments[1];
+          parseJsonConverterAnnotation(
+            fieldName: fieldName,
+            source: source,
+            clientType: clientType,
+            firestoreType: firestoreType,
+          );
+        }
       }
     }
   }
@@ -79,11 +93,38 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void parseJsonConverterAnnotation({
     required String fieldName,
     required String source,
+    required DartType clientType,
+    required DartType firestoreType,
   }) {
     final pattern = RegExp('@(.*)');
     final match = pattern.firstMatch(source);
     if (match != null) {
-      jsonConverterStrings[fieldName] = match.group(1)!;
+      // jsonConverterStrings[fieldName] = match.group(1)!;
+      jsonConverterConfigs[fieldName] = JsonConverterConfig(
+        jsonConverterString: match.group(1)!,
+        clientTypeString: clientType.getDisplayString(withNullability: true),
+        firestoreTypeString:
+            firestoreType.getDisplayString(withNullability: true),
+      );
     }
   }
+}
+
+///
+class JsonConverterConfig {
+  ///
+  const JsonConverterConfig({
+    required this.jsonConverterString,
+    required this.clientTypeString,
+    required this.firestoreTypeString,
+  });
+
+  ///
+  final String jsonConverterString;
+
+  ///
+  final String clientTypeString;
+
+  ///
+  final String firestoreTypeString;
 }
