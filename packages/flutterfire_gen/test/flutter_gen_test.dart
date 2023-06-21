@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutterfire_gen/src/config.dart';
 import 'package:flutterfire_gen/src/templates/read/from_json_template.dart';
 
 import 'helper/entity.dart';
@@ -71,7 +72,12 @@ void main() {
 
   group('test fromJsonTemplate', () {
     final template = FromJsonTemplate(
-      readClassName: '',
+      config: FirestoreDocumentConfig(
+        useFakeFirebaseFirestore: true,
+        baseClassName: '',
+        collectionName: '',
+        documentName: '',
+      ),
       fields: {},
       defaultValueStrings: {},
       jsonConverterConfigs: {},

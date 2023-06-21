@@ -23,6 +23,7 @@ class JsonConverterConfig {
 class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({
+    // TODO: default false で visibleForTesting にする？
     required this.useFakeFirebaseFirestore,
     required this.baseClassName,
     required this.collectionName,
@@ -52,6 +53,12 @@ class FirestoreDocumentConfig {
 
   ///
   String get writeClassName => 'Write$baseClassName';
+
+  ///
+  String get documentIdFieldName => '${documentName}Id';
+
+  ///
+  String get documentReferenceFieldName => '${documentName}Reference';
 
   ///
   String get readCollectionReferenceName =>

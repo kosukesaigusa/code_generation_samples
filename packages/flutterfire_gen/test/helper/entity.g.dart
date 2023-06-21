@@ -15,7 +15,9 @@ part of 'entity.dart';
 final fakeDb = FakeFirebaseFirestore();
 
 class ReadEntity {
-  const ReadEntity({
+  const ReadEntity._({
+    required this.entityId,
+    required this.entityReference,
     required this.text,
     required this.nullableText,
     required this.integer,
@@ -48,6 +50,8 @@ class ReadEntity {
     required this.nullableFoo,
   });
 
+  final String entityId;
+  final DocumentReference<ReadEntity> entityReference;
   final String text;
   final String? nullableText;
   final int integer;
@@ -79,43 +83,10 @@ class ReadEntity {
   final Foo foo;
   final Foo? nullableFoo;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'text': text,
-      'nullableText': nullableText,
-      'integer': integer,
-      'nullableInteger': nullableInteger,
-      'doubleNumber': doubleNumber,
-      'nullableDoubleNumber': nullableDoubleNumber,
-      'isBool': isBool,
-      'nullableIsBool': nullableIsBool,
-      'texts': texts,
-      'nullableTexts': nullableTexts,
-      'map': map,
-      'nullableMap': nullableMap,
-      'stringMap': stringMap,
-      'nullableStringMap': nullableStringMap,
-      'nestedMap': nestedMap,
-      'nullableNestedMap': nullableNestedMap,
-      'listMap': listMap,
-      'nullableListMap': nullableListMap,
-      'mapList': mapList,
-      'nullableMapList': nullableMapList,
-      'geoPoint': geoPoint,
-      'nullableGeoPoint': nullableGeoPoint,
-      'dateTime': dateTime,
-      'nullableDateTime': nullableDateTime,
-      'timestamp': timestamp,
-      'nullableTimestamp': nullableTimestamp,
-      'documentReference': documentReference,
-      'nullableDocumentReference': nullableDocumentReference,
-      'foo': foo,
-      'nullableFoo': nullableFoo,
-    };
-  }
-
-  factory ReadEntity.fromJson(Map<String, dynamic> json) {
-    return ReadEntity(
+  factory ReadEntity._fromJson(Map<String, dynamic> json) {
+    return ReadEntity._(
+      entityId: json['entityId'] as String,
+      entityReference: json['entityReference'] as DocumentReference<ReadEntity>,
       text: json['text'] as String,
       nullableText: json['nullableText'] as String? ?? 'defaultText',
       integer: json['integer'] as int,
@@ -184,13 +155,16 @@ class ReadEntity {
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadEntity.fromJson(<String, dynamic>{
+    return ReadEntity._fromJson(<String, dynamic>{
       ...data,
       'entityId': ds.id,
+      'entityReference': readEntityDocumentReference(entityId: ds.id),
     });
   }
 
   ReadEntity copyWith({
+    String? entityId,
+    DocumentReference<ReadEntity>? entityReference,
     String? text,
     String? nullableText,
     int? integer,
@@ -222,7 +196,9 @@ class ReadEntity {
     Foo? foo,
     Foo? nullableFoo,
   }) {
-    return ReadEntity(
+    return ReadEntity._(
+      entityId: entityId ?? this.entityId,
+      entityReference: entityReference ?? this.entityReference,
       text: text ?? this.text,
       nullableText: nullableText ?? this.nullableText,
       integer: integer ?? this.integer,
@@ -262,7 +238,7 @@ class ReadEntity {
 final readEntityCollectionReference =
     fakeDb.collection('entities').withConverter(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
-          toFirestore: (obj, _) => obj.toJson(),
+          toFirestore: (obj, _) => throw UnimplementedError(),
         );
 
 /// A [DocumentReference] to entity document to read.

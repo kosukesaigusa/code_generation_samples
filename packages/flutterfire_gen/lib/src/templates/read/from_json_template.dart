@@ -8,14 +8,14 @@ import '../../config.dart';
 class FromJsonTemplate {
   ///
   FromJsonTemplate({
-    required this.readClassName,
+    required this.config,
     required this.fields,
     required this.defaultValueStrings,
     required this.jsonConverterConfigs,
   });
 
   ///
-  final String readClassName;
+  final FirestoreDocumentConfig config;
 
   ///
   final Map<String, dynamic> fields;
@@ -29,8 +29,10 @@ class FromJsonTemplate {
   @override
   String toString() {
     return '''
-factory $readClassName.fromJson(Map<String, dynamic> json) {
-    return $readClassName(
+factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
+    return ${config.readClassName}._(
+      ${config.documentIdFieldName}: json['${config.documentIdFieldName}'] as String,
+      ${config.documentReferenceFieldName}: json['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>,
       ${_parseFields()}
     );
   }
