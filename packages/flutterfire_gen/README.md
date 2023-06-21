@@ -4,6 +4,8 @@
 
 fromJsonEachField
 
+### parse basic types
+
 | fieldNameString               | typeNameString                                  | defaultValueString                           | expected                                                                                                                                                                                                                                      |
 | ----------------------------- | ----------------------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `'text'`                      | `'String'`                                      | `null`                                       | `"json['text'] as String"`                                                                                                                                                                                                                    |
@@ -42,3 +44,10 @@ fromJsonEachField
 | `'nullableTimestamp'`         | `'Timestamp?'`                                  | `null`                                       | `"nullableTimestamp: json['nullableTimestamp'] as Timestamp?"`                                                                                                                                                                                |
 | `'documentReference'`         | `'DocumentReference<Object?>'`                  | `null`                                       | `"documentReference: json['documentReference'] as DocumentReference<Object?>"`                                                                                                                                                                |
 | `'nullableDocumentReference'` | `'DocumentReference<Object?>?'`                 | `null`                                       | `"nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?>?"`                                                                                                                                               |
+
+### parse with json converters
+
+| fieldNameString | typeNameString | defaultValueString          | jsonConverterString           | clientTypeString | firestoreTypeString      | expected                                                                                                                                                 |
+| --------------- | -------------- | --------------------------- | ----------------------------- | ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `'foo'`         | `'Foo'`        | `null`                      | `'_FooJsonConverter()'`       | `'Foo'`          | `'Map<String, dynamic>'` | `"foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>)"`                                                                               |
+| `'nullableFoo'` | `'Foo?'`       | `"const Foo('defaultBar')"` | `'_nullableFooJsonConverter'` | `'Foo?'`         | `'Map<String, dynamic>'` | `"nullableFoo: json['nullableFoo'] == null ? const Foo('defaultBar') : _nullableFooJsonConverter.fromJson(json['nullableFoo'] as Map<String, dynamic>)"` |
