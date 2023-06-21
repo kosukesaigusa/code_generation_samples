@@ -495,5 +495,52 @@ void main() {
         );
       });
     });
+
+    group('parse with json converters', () {
+      final template = FromJsonTemplate(
+        config: FirestoreDocumentConfig(
+          useFakeFirebaseFirestore: true,
+          baseClassName: '',
+          collectionName: '',
+          documentName: '',
+        ),
+        fields: {},
+        defaultValueStrings: {},
+        jsonConverterConfigs: {},
+      );
+
+      test('convert Map<String, dynamic> to Foo', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'foo',
+          typeNameString: 'Foo',
+          jsonConverterConfig: const JsonConverterConfig(
+            jsonConverterString: '_FooJsonConverter()',
+            clientTypeString: 'Foo',
+            firestoreTypeString: 'Map<String, dynamic>',
+          ),
+        );
+        expect(
+          result,
+          "foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>)",
+        );
+      });
+
+      test('convert Map<String, dynamic> to Foo?', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'nullableFoo',
+          typeNameString: 'Foo?',
+          defaultValueString: "const Foo('defaultBar')",
+          jsonConverterConfig: const JsonConverterConfig(
+            jsonConverterString: '_nullableFooJsonConverter',
+            clientTypeString: 'Foo?',
+            firestoreTypeString: 'Map<String, dynamic>',
+          ),
+        );
+        expect(
+          result,
+          "nullableFoo: json['nullableFoo'] == null ? const Foo('defaultBar') : _nullableFooJsonConverter.fromJson(json['nullableFoo'] as Map<String, dynamic>)",
+        );
+      });
+    });
   });
 }

@@ -41,7 +41,8 @@ class Entity {
     required this.documentReference,
     this.nullableDocumentReference,
     required this.foo,
-    this.nullableFoo = const Foo('defaultBar'),
+    this.nullableFooWithDefaultAnnotation,
+    this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
   });
 
   final String text;
@@ -84,8 +85,11 @@ class Entity {
   final DocumentReference<Object?>? nullableDocumentReference;
   @_FooJsonConverter()
   final Foo foo;
+  @Default(Foo('defaultBar'))
   @_nullableFooJsonConverter
-  final Foo? nullableFoo;
+  final Foo? nullableFooWithDefaultAnnotation;
+  @_nullableFooJsonConverter
+  final Foo? nullableFooWithDefaultValueInConstructor;
 }
 
 class Foo {

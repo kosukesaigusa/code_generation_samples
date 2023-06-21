@@ -47,7 +47,8 @@ class ReadEntity {
     required this.documentReference,
     required this.nullableDocumentReference,
     required this.foo,
-    required this.nullableFoo,
+    required this.nullableFooWithDefaultAnnotation,
+    required this.nullableFooWithDefaultValueInConstructor,
   });
 
   final String entityId;
@@ -81,7 +82,8 @@ class ReadEntity {
   final DocumentReference<Object?> documentReference;
   final DocumentReference<Object?>? nullableDocumentReference;
   final Foo foo;
-  final Foo? nullableFoo;
+  final Foo? nullableFooWithDefaultAnnotation;
+  final Foo? nullableFooWithDefaultValueInConstructor;
 
   factory ReadEntity._fromJson(Map<String, dynamic> json) {
     return ReadEntity._(
@@ -146,10 +148,18 @@ class ReadEntity {
       nullableDocumentReference:
           json['nullableDocumentReference'] as DocumentReference<Object?>?,
       foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>),
-      nullableFoo: json['nullableFoo'] == null
-          ? const Foo('defaultBar')
-          : _nullableFooJsonConverter
-              .fromJson(json['nullableFoo'] as Map<String, dynamic>),
+      nullableFooWithDefaultAnnotation:
+          json['nullableFooWithDefaultAnnotation'] == null
+              ? const Foo('defaultBar')
+              : _nullableFooJsonConverter.fromJson(
+                  json['nullableFooWithDefaultAnnotation']
+                      as Map<String, dynamic>),
+      nullableFooWithDefaultValueInConstructor:
+          json['nullableFooWithDefaultValueInConstructor'] == null
+              ? const Foo('defaultBar')
+              : _nullableFooJsonConverter.fromJson(
+                  json['nullableFooWithDefaultValueInConstructor']
+                      as Map<String, dynamic>),
     );
   }
 
@@ -194,7 +204,8 @@ class ReadEntity {
     DocumentReference<Object?>? documentReference,
     DocumentReference<Object?>? nullableDocumentReference,
     Foo? foo,
-    Foo? nullableFoo,
+    Foo? nullableFooWithDefaultAnnotation,
+    Foo? nullableFooWithDefaultValueInConstructor,
   }) {
     return ReadEntity._(
       entityId: entityId ?? this.entityId,
@@ -229,7 +240,11 @@ class ReadEntity {
       nullableDocumentReference:
           nullableDocumentReference ?? this.nullableDocumentReference,
       foo: foo ?? this.foo,
-      nullableFoo: nullableFoo ?? this.nullableFoo,
+      nullableFooWithDefaultAnnotation: nullableFooWithDefaultAnnotation ??
+          this.nullableFooWithDefaultAnnotation,
+      nullableFooWithDefaultValueInConstructor:
+          nullableFooWithDefaultValueInConstructor ??
+              this.nullableFooWithDefaultValueInConstructor,
     );
   }
 }
