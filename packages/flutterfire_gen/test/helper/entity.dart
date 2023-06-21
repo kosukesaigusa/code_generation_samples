@@ -13,26 +13,37 @@ part 'entity.g.dart';
 class Entity {
   Entity({
     required this.text,
+    required this.textWithDefault,
     this.nullableText,
     required this.integer,
+    required this.integerWithDefault,
     this.nullableInteger,
     required this.doubleNumber,
+    required this.doubleNumberWithDefault,
     this.nullableDoubleNumber,
     required this.isBool,
+    required this.isBoolWithDefault,
     this.nullableIsBool,
     required this.texts,
+    required this.textsWithDefault,
     this.nullableTexts,
     required this.map,
+    required this.mapWithDefault,
     this.nullableMap,
     required this.stringMap,
+    required this.stringMapWithDefault,
     this.nullableStringMap,
     required this.nestedMap,
+    required this.nestedMapWithDefault,
     this.nullableNestedMap,
     required this.listMap,
+    required this.listMapWithDefault,
     this.nullableListMap,
     required this.mapList,
+    required this.mapListWithDefault,
     this.nullableMapList,
     required this.geoPoint,
+    required this.geoPointWithDefault,
     this.nullableGeoPoint,
     required this.dateTime,
     this.nullableDateTime,
@@ -41,53 +52,124 @@ class Entity {
     required this.documentReference,
     this.nullableDocumentReference,
     required this.foo,
+    required this.fooWithDefault,
     this.nullableFooWithDefaultAnnotation,
     this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
   });
 
   final String text;
+
+  @Default('requiredWithDefault')
+  final String textWithDefault;
+
   @Default('defaultText')
   final String? nullableText;
+
   final int integer;
+
+  @Default(0)
+  final int integerWithDefault;
+
   @Default(0)
   final int? nullableInteger;
+
   final double doubleNumber;
-  @Default(0.0)
+
+  @Default(3.14)
+  final double doubleNumberWithDefault;
+
+  @Default(3.14)
   final double? nullableDoubleNumber;
+
   final bool isBool;
+
+  @Default(false)
+  final bool isBoolWithDefault;
+
+  @Default(false)
   final bool? nullableIsBool;
+
   final List<String> texts;
+
+  @Default(<String>['requiredWithDefault'])
+  final List<String> textsWithDefault;
+
   @Default(<String>[])
   final List<String>? nullableTexts;
+
   final Map<String, dynamic> map;
+
+  @Default(<String, dynamic>{})
+  final Map<String, dynamic> mapWithDefault;
+
   @Default(<String, dynamic>{})
   final Map<String, dynamic>? nullableMap;
+
   final Map<String, String> stringMap;
+
+  @Default(<String, String>{})
+  final Map<String, String> stringMapWithDefault;
+
   @Default(<String, String>{})
   final Map<String, String>? nullableStringMap;
+
   final Map<String, Map<String, int>> nestedMap;
+
+  @Default(<String, Map<String, int>>{'requiredWithDefault': <String, int>{}})
+  final Map<String, Map<String, int>> nestedMapWithDefault;
+
   @Default(<String, Map<String, int>>{})
   final Map<String, Map<String, int>>? nullableNestedMap;
+
   final Map<String, List<int>> listMap;
+
+  @Default(<String, List<int>>{'requiredWithDefault': <int>[]})
+  final Map<String, List<int>> listMapWithDefault;
+
   @Default(<String, List<int>>{})
   final Map<String, List<int>>? nullableListMap;
+
   final List<Map<String, int>> mapList;
+
+  @Default(<Map<String, int>>[
+    <String, int>{'requiredWithDefault': 0}
+  ])
+  final List<Map<String, int>> mapListWithDefault;
+
   @Default(<Map<String, int>>[])
   final List<Map<String, int>>? nullableMapList;
+
   final GeoPoint geoPoint;
+
+  @Default(GeoPoint(0, 0))
+  final GeoPoint geoPointWithDefault;
+
   @Default(GeoPoint(0, 0))
   final GeoPoint? nullableGeoPoint;
+
   final DateTime dateTime;
+
   final DateTime? nullableDateTime;
+
   final Timestamp timestamp;
+
   final Timestamp? nullableTimestamp;
+
   final DocumentReference<Object?> documentReference;
+
   final DocumentReference<Object?>? nullableDocumentReference;
+
   @_FooJsonConverter()
   final Foo foo;
+
+  @Default(Foo('requiredWithDefault'))
+  @_FooJsonConverter()
+  final Foo fooWithDefault;
+
   @Default(Foo('defaultBar'))
   @_nullableFooJsonConverter
   final Foo? nullableFooWithDefaultAnnotation;
+
   @_nullableFooJsonConverter
   final Foo? nullableFooWithDefaultValueInConstructor;
 }

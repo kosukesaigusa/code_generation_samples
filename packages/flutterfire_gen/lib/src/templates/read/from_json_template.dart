@@ -3,6 +3,7 @@
 import 'package:meta/meta.dart';
 
 import '../../config.dart';
+import '../../utils/string.dart';
 
 ///
 class FromJsonTemplate {
@@ -63,6 +64,10 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
     JsonConverterConfig? jsonConverterConfig,
     String parsedKey = 'e',
   }) {
+    final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
+    final defaultValueExpression =
+        (isFirstLoop && hasDefaultValue) ? ' ?? $defaultValueString' : '';
+
     if (jsonConverterConfig != null) {
       final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
           "fromJson(json['$fieldNameString']"
@@ -73,9 +78,7 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
         return fromJsonString;
       }
     }
-    final defaultValueExpression = (isFirstLoop && defaultValueString != null)
-        ? ' ?? $defaultValueString'
-        : '';
+
     final effectiveParsedKey =
         isFirstLoop ? "json['$fieldNameString']" : parsedKey;
 
@@ -101,7 +104,11 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
         defaultValueString: defaultValueString,
         isFirstLoop: false,
       );
-      return '($effectiveParsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
+      if (defaultValueExpression.isEmpty) {
+        return '($effectiveParsedKey as List<dynamic>).map((e) => $parsedListItemType).toList()';
+      } else {
+        return '($effectiveParsedKey as List<dynamic>?)?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
+      }
     }
 
     final nullableMapMatch =
@@ -125,7 +132,11 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
     if (mapMatch != null) {
       final mapValueType = mapMatch.group(1)!;
       if (mapValueType == 'dynamic') {
-        return '$effectiveParsedKey as Map<String, dynamic>$defaultValueExpression';
+        if (defaultValueExpression.isEmpty) {
+          return '$effectiveParsedKey as Map<String, dynamic>$defaultValueExpression';
+        } else {
+          return '$effectiveParsedKey as Map<String, dynamic>?$defaultValueExpression';
+        }
       } else {
         final parsedMapValueType = _parseType(
           fieldNameString,
@@ -134,7 +145,11 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
           isFirstLoop: false,
           parsedKey: 'v',
         );
-        return '($effectiveParsedKey as Map<String, dynamic>).map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
+        if (defaultValueExpression.isEmpty) {
+          return '($effectiveParsedKey as Map<String, dynamic>).map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
+        } else {
+          return '($effectiveParsedKey as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
+        }
       }
     }
 
@@ -147,7 +162,11 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
       }
     }
 
-    return '$effectiveParsedKey as $typeNameString$defaultValueExpression';
+    if (defaultValueExpression.isEmpty) {
+      return '$effectiveParsedKey as $typeNameString$defaultValueExpression';
+    } else {
+      return '$effectiveParsedKey as ${typeNameString.ensureNullable()}$defaultValueExpression';
+    }
   }
 
   ///
