@@ -95,6 +95,18 @@ void main() {
         );
       });
 
+      test('parse String with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'textWithDefault',
+          typeNameString: 'String',
+          defaultValueString: "'defaultText'",
+        );
+        expect(
+          result,
+          "textWithDefault: json['textWithDefault'] as String? ?? 'defaultText'",
+        );
+      });
+
       test('parse String?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableText',
@@ -115,6 +127,18 @@ void main() {
         expect(
           result,
           "integer: json['integer'] as int",
+        );
+      });
+
+      test('parse int with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'integerWithDefault',
+          typeNameString: 'int',
+          defaultValueString: '0',
+        );
+        expect(
+          result,
+          "integerWithDefault: json['integerWithDefault'] as int? ?? 0",
         );
       });
 
@@ -141,15 +165,27 @@ void main() {
         );
       });
 
+      test('parse double with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'doubleWithDefault',
+          typeNameString: 'double',
+          defaultValueString: '3.14',
+        );
+        expect(
+          result,
+          "doubleWithDefault: json['doubleWithDefault'] as double? ?? 3.14",
+        );
+      });
+
       test('parse double?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableDoubleNumber',
           typeNameString: 'double?',
-          defaultValueString: '0.0',
+          defaultValueString: '3.14',
         );
         expect(
           result,
-          "nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 0.0",
+          "nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 3.14",
         );
       });
 
@@ -161,6 +197,18 @@ void main() {
         expect(
           result,
           "isBool: json['isBool'] as bool",
+        );
+      });
+
+      test('parse bool with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'isBoolWithDefault',
+          typeNameString: 'bool',
+          defaultValueString: 'false',
+        );
+        expect(
+          result,
+          "isBoolWithDefault: json['isBoolWithDefault'] as bool? ?? false",
         );
       });
 
@@ -187,6 +235,18 @@ void main() {
         );
       });
 
+      test('parse List<String> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'textsWithDefault',
+          typeNameString: 'List<String>',
+          defaultValueString: "<String>['requiredWithDefault']",
+        );
+        expect(
+          result,
+          "textsWithDefault: (json['textsWithDefault'] as List<dynamic>?)?.map((e) => e as String).toList() ?? <String>['requiredWithDefault']",
+        );
+      });
+
       test('parse List<String>?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableTexts',
@@ -207,6 +267,18 @@ void main() {
         expect(
           result,
           "map: json['map'] as Map<String, dynamic>",
+        );
+      });
+
+      test('parse Map<String, dynamic> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'mapWithDefault',
+          typeNameString: 'Map<String, dynamic>',
+          defaultValueString: '<String, dynamic>{}',
+        );
+        expect(
+          result,
+          "mapWithDefault: json['mapWithDefault'] as Map<String, dynamic>? ?? <String, dynamic>{}",
         );
       });
 
@@ -233,15 +305,27 @@ void main() {
         );
       });
 
-      test('parse Map<String, String>?', () {
+      test('parse Map<String, String> with default value', () {
         final result = template.fromJsonEachField(
-          fieldNameString: 'nullableStringMap',
-          typeNameString: 'Map<String, string>?',
+          fieldNameString: 'stringMapWithDefault',
+          typeNameString: 'Map<String, String>',
           defaultValueString: '<String, String>{}',
         );
         expect(
           result,
-          "nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as string)) ?? <String, String>{}",
+          "stringMapWithDefault: (json['stringMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as String)) ?? <String, String>{}",
+        );
+      });
+
+      test('parse Map<String, String>?', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'nullableStringMap',
+          typeNameString: 'Map<String, String>?',
+          defaultValueString: '<String, String>{}',
+        );
+        expect(
+          result,
+          "nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, v as String)) ?? <String, String>{}",
         );
       });
 
@@ -253,6 +337,19 @@ void main() {
         expect(
           result,
           "nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))",
+        );
+      });
+
+      test('parse Map<String, Map<String, int>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'nestedMapWithDefault',
+          typeNameString: 'Map<String, Map<String, int>>',
+          defaultValueString:
+              "<String, Map<String, int>>{'requiredWithDefault': <String, int>{}}",
+        );
+        expect(
+          result,
+          "nestedMapWithDefault: (json['nestedMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? <String, Map<String, int>>{'requiredWithDefault': <String, int>{}}",
         );
       });
 
@@ -279,6 +376,19 @@ void main() {
         );
       });
 
+      test('parse Map<String, List<int>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'listMapWithDefault',
+          typeNameString: 'Map<String, List<int>>',
+          defaultValueString:
+              "<String, List<int>>{'requiredWithDefault': <int>[]}",
+        );
+        expect(
+          result,
+          "listMapWithDefault: (json['listMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())) ?? <String, List<int>>{'requiredWithDefault': <int>[]}",
+        );
+      });
+
       test('parse Map<String, List<int>>?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableListMap',
@@ -302,15 +412,28 @@ void main() {
         );
       });
 
+      test('parse List<Map<String, int>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'mapListWithDefault',
+          typeNameString: 'List<Map<String, int>>',
+          defaultValueString:
+              "<Map<String, int>>[<String, int>{'requiredWithDefault': 0}]",
+        );
+        expect(
+          result,
+          "mapListWithDefault: (json['mapListWithDefault'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? <Map<String, int>>[<String, int>{'requiredWithDefault': 0}]",
+        );
+      });
+
       test('parse List<Map<String, int>>?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableMapList',
           typeNameString: 'List<Map<String, int>>?',
-          defaultValueString: 'Map<String, int>>[]',
+          defaultValueString: '<Map<String, int>>[]',
         );
         expect(
           result,
-          "nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? Map<String, int>>[]",
+          "nullableMapList: (json['nullableMapList'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? <Map<String, int>>[]",
         );
       });
 
@@ -322,6 +445,18 @@ void main() {
         expect(
           result,
           "nestedMapMap: (json['nestedMapMap'] as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))",
+        );
+      });
+
+      test('parse Map<String, Map<String, int>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'nestedMapMapWithDefault',
+          typeNameString: 'Map<String, Map<String, int>>',
+          defaultValueString: '<String, Map<String, int>>{}',
+        );
+        expect(
+          result,
+          "nestedMapMapWithDefault: (json['nestedMapMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))) ?? <String, Map<String, int>>{}",
         );
       });
 
@@ -348,6 +483,18 @@ void main() {
         );
       });
 
+      test('parse List<Map<String, int>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'nestedListMapWithDefault',
+          typeNameString: 'List<Map<String, int>>',
+          defaultValueString: '<Map<String, int>>[]',
+        );
+        expect(
+          result,
+          "nestedListMapWithDefault: (json['nestedListMapWithDefault'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))).toList() ?? <Map<String, int>>[]",
+        );
+      });
+
       test('parse List<Map<String, int>>?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableNestedListMap',
@@ -371,15 +518,29 @@ void main() {
         );
       });
 
+      test(
+          'parse Map<String, Map<String, Map<String, int>>> with default value',
+          () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'mapNestedMapWithDefault',
+          typeNameString: 'Map<String, Map<String, Map<String, int>>>',
+          defaultValueString: '<String, Map<String, Map<String, int>>>{}',
+        );
+        expect(
+          result,
+          "mapNestedMapWithDefault: (json['mapNestedMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))))) ?? <String, Map<String, Map<String, int>>>{}",
+        );
+      });
+
       test('parse Map<String, Map<String, Map<String, int>>>?', () {
         final result = template.fromJsonEachField(
           fieldNameString: 'nullableMapNestedMap',
           typeNameString: 'Map<String, Map<String, Map<String, int>>>?',
-          defaultValueString: '<String, Map<String, Map<String, int>>{}',
+          defaultValueString: '<String, Map<String, Map<String, int>>>{}',
         );
         expect(
           result,
-          "nullableMapNestedMap: (json['nullableMapNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))))) ?? <String, Map<String, Map<String, int>>{}",
+          "nullableMapNestedMap: (json['nullableMapNestedMap'] as Map<String, dynamic>?)?.map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))))) ?? <String, Map<String, Map<String, int>>>{}",
         );
       });
 
@@ -391,6 +552,18 @@ void main() {
         expect(
           result,
           "listMapMap: (json['listMapMap'] as List<dynamic>).map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))).toList()",
+        );
+      });
+
+      test('parse List<Map<String, Map<String, int>>> with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'listMapMapWithDefault',
+          typeNameString: 'List<Map<String, Map<String, int>>>',
+          defaultValueString: '<Map<String, Map<String, int>>>[]',
+        );
+        expect(
+          result,
+          "listMapMapWithDefault: (json['listMapMapWithDefault'] as List<dynamic>?)?.map((e) => (e as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int))))).toList() ?? <Map<String, Map<String, int>>>[]",
         );
       });
 
@@ -414,6 +587,18 @@ void main() {
         expect(
           result,
           "geoPoint: json['geoPoint'] as GeoPoint",
+        );
+      });
+
+      test('parse GeoPoint with default value', () {
+        final result = template.fromJsonEachField(
+          fieldNameString: 'geoPointWithDefault',
+          typeNameString: 'GeoPoint',
+          defaultValueString: 'GeoPoint(0, 0)',
+        );
+        expect(
+          result,
+          "geoPointWithDefault: json['geoPointWithDefault'] as GeoPoint? ?? GeoPoint(0, 0)",
         );
       });
 
