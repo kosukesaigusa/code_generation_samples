@@ -23,7 +23,6 @@ class JsonConverterConfig {
 class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({
-    // TODO: default false で visibleForTesting にする？
     required this.useFakeFirebaseFirestore,
     required this.baseClassName,
     required this.collectionName,
