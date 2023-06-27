@@ -16,7 +16,7 @@ factory ${config.readClassName}.fromDocumentSnapshot(DocumentSnapshot ds) {
     return ${config.readClassName}._fromJson(<String, dynamic>{
       ...data,
       '${config.documentIdFieldName}': ds.id,
-      '${config.documentReferenceFieldName}': ${config.readDocumentReferenceName}(entityId: ds.id),
+      '${config.documentReferenceFieldName}': ${config.readDocumentReferenceName}(${config.documentIdFieldName}: ds.id),
     });
   }
 ''';
