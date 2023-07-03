@@ -50,7 +50,10 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
   }) {
     const matcher = TypeChecker.fromRuntime(FirestoreDocument);
     final firestoreDocumentAnnotation = element.metadata.where((meta) {
-      final obj = meta.computeConstantValue()!;
+      final obj = meta.computeConstantValue();
+      if (obj == null) {
+        return false;
+      }
       return matcher.isExactlyType(obj.type!);
     }).firstOrNull;
 
