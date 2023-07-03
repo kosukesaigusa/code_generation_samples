@@ -3,7 +3,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'entity.g.dart';
+part 'entity.flutterfire_gen.dart';
 
 @FirestoreDocument(
   useFakeFirebaseFirestore: true,
