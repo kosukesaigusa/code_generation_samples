@@ -2,23 +2,23 @@
 targets:
   $default:
     builders:
+      flutterfire_gen:
+        enabled: true
+        generate_for:
+          exclude:
+            - test
+            - example
+          include:
+            - test/helper/*
       source_gen|combining_builder:
         options:
           ignore_for_file:
-          - lines_longer_than_80_chars
-          # Only for the JSON literal output file
-          - text_direction_code_point_in_literal
-
-      flutterfire_gen:
-        generate_for:
-        - example/*
-        - test/helper/*
+            - "type=lint"
 
 builders:
   flutterfire_gen:
     import: "package:flutterfire_gen/builder.dart"
-    builder_factories: ["flutterfireGen"]
-    build_extensions: {".dart": ["flutterfire_gen.g.part"]}
+    builder_factories: ["flutterfireGenBuilder"]
+    build_extensions: {".dart": [".flutterfire_gen.dart"]}
     auto_apply: dependents
-    build_to: cache
-    applies_builders: ["source_gen|combining_builder"]
+    build_to: source
