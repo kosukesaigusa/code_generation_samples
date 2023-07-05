@@ -1,3 +1,4 @@
+import 'flutterfire_gen.dart';
 import 'utils/string.dart';
 
 ///
@@ -24,19 +25,25 @@ class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({
     required this.useFakeFirebaseFirestore,
+    required this.path,
     required this.baseClassName,
-    required this.collectionName,
     required this.documentName,
-  });
+  }) : firestorePathSegments = parseFirestorePath(path);
 
   ///
   final bool useFakeFirebaseFirestore;
 
   ///
+  final String path;
+
+  ///
+  final List<FirestorePathSegment> firestorePathSegments;
+
+  ///
   final String baseClassName;
 
   ///
-  final String collectionName;
+  String get collectionName => firestorePathSegments.last.collectionName;
 
   ///
   final String documentName;
@@ -51,7 +58,10 @@ class FirestoreDocumentConfig {
   String get readClassName => 'Read$baseClassName';
 
   ///
-  String get writeClassName => 'Write$baseClassName';
+  String get createClassName => 'Create$baseClassName';
+
+  ///
+  String get updateClassName => 'Update$baseClassName';
 
   ///
   String get documentIdFieldName => '${documentName}Id';
@@ -66,4 +76,20 @@ class FirestoreDocumentConfig {
   ///
   String get readDocumentReferenceName =>
       'read${baseClassName}DocumentReference';
+
+  ///
+  String get createCollectionReferenceName =>
+      'create${baseClassName}CollectionReference';
+
+  ///
+  String get createDocumentReferenceName =>
+      'create${baseClassName}DocumentReference';
+
+  ///
+  String get updateCollectionReferenceName =>
+      'update${baseClassName}CollectionReference';
+
+  ///
+  String get updateDocumentReferenceName =>
+      'update${baseClassName}DocumentReference';
 }

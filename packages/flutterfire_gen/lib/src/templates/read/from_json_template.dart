@@ -53,7 +53,7 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
         defaultValueString: defaultValueString,
         jsonConverterConfig: jsonConverterConfig,
       );
-    }).join(',\n')},\n';
+    }).join(',\n')},';
   }
 
   String _parseType(

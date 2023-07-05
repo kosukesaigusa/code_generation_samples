@@ -226,7 +226,10 @@ class ReadEntity {
     return ReadEntity._fromJson(<String, dynamic>{
       ...data,
       'entityId': ds.id,
-      'entityReference': readEntityDocumentReference(entityId: ds.id),
+      'entityReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
   }
 
@@ -395,8 +398,9 @@ class EntityQuery {
     required String entityId,
     GetOptions? options,
   }) async {
-    final ds =
-        await readEntityDocumentReference(entityId: entityId).get(options);
+    final ds = await readEntityDocumentReference(
+      entityId: entityId,
+    ).get(options);
     return ds.data();
   }
 
@@ -406,8 +410,9 @@ class EntityQuery {
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
   }) async {
-    var streamDs = readEntityDocumentReference(entityId: entityId)
-        .snapshots(includeMetadataChanges: includeMetadataChanges);
+    var streamDs = readEntityDocumentReference(
+      entityId: entityId,
+    ).snapshots(includeMetadataChanges: includeMetadataChanges);
     if (excludePendingWrites) {
       streamDs = streamDs.where((ds) => !ds.metadata.hasPendingWrites);
     }

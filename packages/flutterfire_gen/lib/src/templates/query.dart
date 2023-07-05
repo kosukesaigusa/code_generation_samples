@@ -1,17 +1,28 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import '../config.dart';
 
 /// Returns Query class template.
-String queryClassTemplate({required FirestoreDocumentConfig config}) {
-  return '''
+class QueryClassTemplate {
+  /// Creates a [QueryClassTemplate].
+  const QueryClassTemplate({required this.config});
+
+  ///
+  final FirestoreDocumentConfig config;
+
+  @override
+  String toString() {
+    return '''
 /// A query manager to execute query against [${config.baseClassName}].
 class ${config.baseClassName}Query {
   /// Fetches [${config.readClassName}] documents.
   Future<List<${config.readClassName}>> fetchDocuments({
+    ${_parentDocumentIdArguments()}
     GetOptions? options,
     Query<${config.readClassName}>? Function(Query<${config.readClassName}> query)? queryBuilder,
     int Function(${config.readClassName} lhs, ${config.readClassName} rhs)? compare,
   }) async {
-    Query<${config.readClassName}> query = read${config.baseClassName}CollectionReference;
+    Query<${config.readClassName}> query = ${_collectionReference()}
     if (queryBuilder != null) {
       query = queryBuilder(query)!;
     }
@@ -25,12 +36,13 @@ class ${config.baseClassName}Query {
 
   /// Subscribes [${config.baseClassName}] documents.
   Stream<List<${config.readClassName}>> subscribeDocuments({
+    ${_parentDocumentIdArguments()}
     Query<${config.readClassName}>? Function(Query<${config.readClassName}> query)? queryBuilder,
     int Function(${config.readClassName} lhs, ${config.readClassName} rhs)? compare,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
   }) {
-    Query<${config.readClassName}> query = read${config.baseClassName}CollectionReference;
+    Query<${config.readClassName}> query = ${_collectionReference()}
     if (queryBuilder != null) {
       query = queryBuilder(query)!;
     }
@@ -50,21 +62,29 @@ class ${config.baseClassName}Query {
 
   /// Fetches [${config.readClassName}] document.
   Future<${config.readClassName}?> fetchDocument({
+    ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
     GetOptions? options,
   }) async {
     final ds =
-        await read${config.baseClassName}DocumentReference(${config.documentName}Id: ${config.documentName}Id).get(options);
+        await read${config.baseClassName}DocumentReference(
+          ${_parentDocumentIdParameters()}
+          ${config.documentName}Id: ${config.documentName}Id,
+        ).get(options);
     return ds.data();
   }
 
   /// Subscribes [${config.baseClassName}] document.
   Future<Stream<${config.readClassName}?>> subscribeDocument({
+    ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
   }) async {
-    var streamDs = read${config.baseClassName}DocumentReference(${config.documentName}Id: ${config.documentName}Id)
+    var streamDs = read${config.baseClassName}DocumentReference(
+      ${_parentDocumentIdParameters()}
+      ${config.documentName}Id: ${config.documentName}Id,
+    )
         .snapshots(includeMetadataChanges: includeMetadataChanges);
     if (excludePendingWrites) {
       streamDs = streamDs.where((ds) => !ds.metadata.hasPendingWrites);
@@ -73,4 +93,31 @@ class ${config.baseClassName}Query {
   }
 }
 ''';
+  }
+
+  String _parentDocumentIdArguments() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>();
+    return documentIds.isNotEmpty
+        ? "${documentIds.map((documentId) => 'required String $documentId').join(',\n')},"
+        : '';
+  }
+
+  String _parentDocumentIdParameters() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>();
+    return documentIds.isNotEmpty
+        ? "${documentIds.map((documentId) => '$documentId: $documentId').join(',\n')},"
+        : '';
+  }
+
+  String _collectionReference() {
+    if (config.firestorePathSegments.length > 1) {
+      return 'read${config.baseClassName}CollectionReference(${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: $documentId').join(',')});';
+    } else {
+      return 'read${config.baseClassName}CollectionReference;';
+    }
+  }
 }

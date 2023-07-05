@@ -75,8 +75,8 @@ void main() {
       final template = FromJsonTemplate(
         config: FirestoreDocumentConfig(
           useFakeFirebaseFirestore: true,
+          path: 'entities',
           baseClassName: '',
-          collectionName: '',
           documentName: '',
         ),
         fields: {},
@@ -685,8 +685,8 @@ void main() {
       final template = FromJsonTemplate(
         config: FirestoreDocumentConfig(
           useFakeFirebaseFirestore: true,
+          path: 'entities',
           baseClassName: '',
-          collectionName: '',
           documentName: '',
         ),
         fields: {},

@@ -7,7 +7,7 @@ part 'entity.flutterfire_gen.dart';
 
 @FirestoreDocument(
   useFakeFirebaseFirestore: true,
-  collectionName: 'entities',
+  path: 'entities',
   documentName: 'entity',
 )
 class Entity {
