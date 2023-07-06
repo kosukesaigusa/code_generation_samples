@@ -9,11 +9,15 @@ class ReadAppUserPost {
     required this.appUserPostId,
     required this.appUserPostReference,
     required this.content,
+    required this.numbers,
+    required this.updatedAt,
   });
 
   final String appUserPostId;
   final DocumentReference<ReadAppUserPost> appUserPostReference;
   final String content;
+  final List<int> numbers;
+  final DateTime? updatedAt;
 
   factory ReadAppUserPost._fromJson(Map<String, dynamic> json) {
     return ReadAppUserPost._(
@@ -21,6 +25,10 @@ class ReadAppUserPost {
       appUserPostReference:
           json['appUserPostReference'] as DocumentReference<ReadAppUserPost>,
       content: json['content'] as String? ?? '',
+      numbers:
+          (json['numbers'] as List<dynamic>?)?.map((e) => e as int).toList() ??
+              const <int>[],
+      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -40,11 +48,15 @@ class ReadAppUserPost {
     String? appUserPostId,
     DocumentReference<ReadAppUserPost>? appUserPostReference,
     String? content,
+    List<int>? numbers,
+    DateTime? updatedAt,
   }) {
     return ReadAppUserPost._(
       appUserPostId: appUserPostId ?? this.appUserPostId,
       appUserPostReference: appUserPostReference ?? this.appUserPostReference,
       content: content ?? this.content,
+      numbers: numbers ?? this.numbers,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

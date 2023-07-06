@@ -8,8 +8,18 @@ part 'app_user_post.flutterfire_gen.dart';
   documentName: 'appUserPost',
 )
 class AppUserPost {
-  AppUserPost({required this.content});
+  AppUserPost({
+    required this.content,
+    required this.numbers,
+    this.updatedAt,
+  });
 
   @Default('')
   final String content;
+
+  @Default(<int>[])
+  final List<int> numbers;
+
+  // 書き込み時は常に自動でサーバ時間のつもり、そういう JsonConverter を指定するべきか
+  final DateTime? updatedAt;
 }
