@@ -1,1 +1,1 @@
-# flutterfire_gen
+# flutterfire_gen_annotation
