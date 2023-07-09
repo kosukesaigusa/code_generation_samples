@@ -7,6 +7,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'config.dart';
 import 'firestore_document_visitor.dart';
+import 'templates/create/create_class_template.dart';
 import 'templates/query.dart';
 import 'templates/read/read_class_template.dart';
 import 'templates/refs_template.dart';
@@ -34,6 +35,9 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     final buffer = StringBuffer()
       ..writeln(
         ReadClassTemplate(config: config, visitor: visitor, fields: fields),
+      )
+      ..writeln(
+        CreateClassTemplate(config: config, visitor: visitor, fields: fields),
       )
       ..writeln(RefsTemplate(config: config))
       ..writeln(QueryClassTemplate(config: config));
@@ -186,9 +190,9 @@ List<FirestorePathSegment> parseFirestorePath(String path) {
 
   // TODO: 上記の正規表現にあてはまらない入力のときに適切にエラーをスローする
   // TODO: このくらいのチェックで良いのか悩む...
-  if (matches.length.isEven) {
-    throw ArgumentError('Invalid Firestore path: $path');
-  }
+  // if (matches.length.isEven) {
+  //   throw ArgumentError('Invalid Firestore path: $path');
+  // }
 
   // TODO: データの持ち方は本当にこれで良いか検討する
   // TODO: CollectionDocumentName 型 or FirestorePath 型に toString は不要か考える
