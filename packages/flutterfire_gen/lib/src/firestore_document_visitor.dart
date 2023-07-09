@@ -19,6 +19,9 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// Default value strings of each field.
   final Map<String, String> defaultValueStrings = {};
 
+  /// A set of strings of FieldValue allowed fields.
+  final Set<String> fieldValueAllowedFields = {};
+
   /// [JsonConverter] strings of each field.
   final Map<String, JsonConverterConfig> jsonConverterConfigs = {};
 
@@ -52,6 +55,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void _parseAnnotations(FieldElement element) {
     const defaultTypeChecker = TypeChecker.fromRuntime(Default);
     const jsonConverterTypeChecker = TypeChecker.fromRuntime(JsonConverter);
+    const allowFieldValueTypeChecker = TypeChecker.fromRuntime(AllowFieldValue);
 
     final metadata = element.metadata;
     for (final meta in metadata) {
@@ -65,7 +69,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
           source: source,
           objectType: objectType,
         );
-      } else if (jsonConverterTypeChecker.isAssignableFromType(objectType)) {
+      }
+      if (jsonConverterTypeChecker.isAssignableFromType(objectType)) {
         final interfaceTypes = (objectType.element! as ClassElement)
             .allSupertypes
             .where((t) => jsonConverterTypeChecker.isExactlyType(t));
@@ -80,6 +85,9 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
             firestoreType: firestoreType,
           );
         }
+      }
+      if (allowFieldValueTypeChecker.isExactlyType(objectType)) {
+        fieldValueAllowedFields.add(fieldName);
       }
     }
   }

@@ -56,6 +56,16 @@ class ReadAppUserPostLike {
   }
 }
 
+class CreateAppUserPostLike {
+  const CreateAppUserPostLike({
+    required this.likedByAppUserId,
+    this.likedAt,
+  });
+
+  final String likedByAppUserId;
+  final DateTime? likedAt;
+}
+
 /// A [CollectionReference] to appUserPostLikes collection to read.
 CollectionReference<ReadAppUserPostLike>
     readAppUserPostLikeCollectionReference({

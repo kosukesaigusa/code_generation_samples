@@ -33,7 +33,7 @@ import 'package:json_annotation/json_annotation.dart';
 /// 一律で FieldValue も入力できるようにラップする必要はない。オプションという認識
 ///
 class CreateAppUserPost {
-  CreateAppUserPost({
+  const CreateAppUserPost({
     required this.text,
     this.nullableText,
     this.nullableTextWithDefault,

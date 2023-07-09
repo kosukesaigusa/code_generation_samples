@@ -335,6 +335,104 @@ class ReadEntity {
   }
 }
 
+class CreateEntity {
+  const CreateEntity({
+    required this.text,
+    this.textWithDefault = 'requiredWithDefault',
+    this.nullableText = 'defaultText',
+    required this.integer,
+    this.integerWithDefault = 0,
+    this.nullableInteger = 0,
+    required this.doubleNumber,
+    this.doubleNumberWithDefault = 3.14,
+    this.nullableDoubleNumber = 3.14,
+    required this.isBool,
+    this.isBoolWithDefault = false,
+    this.nullableIsBool = false,
+    required this.texts,
+    this.textsWithDefault = const <String>['requiredWithDefault'],
+    this.nullableTexts = const <String>[],
+    required this.map,
+    this.mapWithDefault = const <String, dynamic>{},
+    this.nullableMap = const <String, dynamic>{},
+    required this.stringMap,
+    this.stringMapWithDefault = const <String, String>{},
+    this.nullableStringMap = const <String, String>{},
+    required this.nestedMap,
+    this.nestedMapWithDefault = const <String, Map<String, int>>{
+      'requiredWithDefault': <String, int>{}
+    },
+    this.nullableNestedMap = const <String, Map<String, int>>{},
+    required this.listMap,
+    this.listMapWithDefault = const <String, List<int>>{
+      'requiredWithDefault': <int>[]
+    },
+    this.nullableListMap = const <String, List<int>>{},
+    required this.mapList,
+    this.mapListWithDefault = const <Map<String, int>>[
+      <String, int>{'requiredWithDefault': 0}
+    ],
+    this.nullableMapList = const <Map<String, int>>[],
+    required this.geoPoint,
+    this.geoPointWithDefault = const GeoPoint(0, 0),
+    this.nullableGeoPoint = const GeoPoint(0, 0),
+    required this.dateTime,
+    this.nullableDateTime,
+    required this.timestamp,
+    this.nullableTimestamp,
+    required this.documentReference,
+    this.nullableDocumentReference,
+    required this.foo,
+    this.fooWithDefault = const Foo('requiredWithDefault'),
+    this.nullableFooWithDefaultAnnotation = const Foo('defaultBar'),
+    this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
+  });
+
+  final String text;
+  final String textWithDefault;
+  final String? nullableText;
+  final int integer;
+  final int integerWithDefault;
+  final int? nullableInteger;
+  final double doubleNumber;
+  final double doubleNumberWithDefault;
+  final double? nullableDoubleNumber;
+  final bool isBool;
+  final bool isBoolWithDefault;
+  final bool? nullableIsBool;
+  final List<String> texts;
+  final List<String> textsWithDefault;
+  final List<String>? nullableTexts;
+  final Map<String, dynamic> map;
+  final Map<String, dynamic> mapWithDefault;
+  final Map<String, dynamic>? nullableMap;
+  final Map<String, String> stringMap;
+  final Map<String, String> stringMapWithDefault;
+  final Map<String, String>? nullableStringMap;
+  final Map<String, Map<String, int>> nestedMap;
+  final Map<String, Map<String, int>> nestedMapWithDefault;
+  final Map<String, Map<String, int>>? nullableNestedMap;
+  final Map<String, List<int>> listMap;
+  final Map<String, List<int>> listMapWithDefault;
+  final Map<String, List<int>>? nullableListMap;
+  final List<Map<String, int>> mapList;
+  final List<Map<String, int>> mapListWithDefault;
+  final List<Map<String, int>>? nullableMapList;
+  final GeoPoint geoPoint;
+  final GeoPoint geoPointWithDefault;
+  final GeoPoint? nullableGeoPoint;
+  final DateTime dateTime;
+  final DateTime? nullableDateTime;
+  final Timestamp timestamp;
+  final Timestamp? nullableTimestamp;
+  final DocumentReference<Object?> documentReference;
+  final DocumentReference<Object?>? nullableDocumentReference;
+  final Foo foo;
+  final Foo fooWithDefault;
+  final Foo? nullableFooWithDefaultAnnotation;
+  final Foo? nullableFooWithDefaultValueInConstructor;
+}
+
 /// A [CollectionReference] to entities collection to read.
 final readEntityCollectionReference =
     fakeDb.collection('entities').withConverter(

@@ -61,6 +61,18 @@ class ReadAppUserPost {
   }
 }
 
+class CreateAppUserPost {
+  const CreateAppUserPost({
+    this.content = '',
+    this.numbers = const <int>[],
+    this.updatedAt,
+  });
+
+  final String content;
+  final List<int> numbers;
+  final DateTime? updatedAt;
+}
+
 /// A [CollectionReference] to appUserPosts collection to read.
 CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference({
   required String appUserId,

@@ -10,12 +10,20 @@ class ReadAppUser {
     required this.appUserReference,
     required this.name,
     required this.imageUrl,
+    required this.nullableTextWithDefault,
+    required this.nullableTextWithoutDefault,
+    required this.fieldValueAllowedInt,
+    required this.fieldValueAllowedNullableInt,
   });
 
   final String appUserId;
   final DocumentReference<ReadAppUser> appUserReference;
   final String name;
   final String imageUrl;
+  final String? nullableTextWithDefault;
+  final String? nullableTextWithoutDefault;
+  final int fieldValueAllowedInt;
+  final int? fieldValueAllowedNullableInt;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
     return ReadAppUser._(
@@ -24,6 +32,11 @@ class ReadAppUser {
           json['appUserReference'] as DocumentReference<ReadAppUser>,
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String? ?? '',
+      nullableTextWithDefault: json['nullableTextWithDefault'] as String? ?? '',
+      nullableTextWithoutDefault: json['nullableTextWithoutDefault'] as String?,
+      fieldValueAllowedInt: json['fieldValueAllowedInt'] as int,
+      fieldValueAllowedNullableInt:
+          json['fieldValueAllowedNullableInt'] as int?,
     );
   }
 
@@ -44,14 +57,43 @@ class ReadAppUser {
     DocumentReference<ReadAppUser>? appUserReference,
     String? name,
     String? imageUrl,
+    String? nullableTextWithDefault,
+    String? nullableTextWithoutDefault,
+    int? fieldValueAllowedInt,
+    int? fieldValueAllowedNullableInt,
   }) {
     return ReadAppUser._(
       appUserId: appUserId ?? this.appUserId,
       appUserReference: appUserReference ?? this.appUserReference,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
+      nullableTextWithDefault:
+          nullableTextWithDefault ?? this.nullableTextWithDefault,
+      nullableTextWithoutDefault:
+          nullableTextWithoutDefault ?? this.nullableTextWithoutDefault,
+      fieldValueAllowedInt: fieldValueAllowedInt ?? this.fieldValueAllowedInt,
+      fieldValueAllowedNullableInt:
+          fieldValueAllowedNullableInt ?? this.fieldValueAllowedNullableInt,
     );
   }
+}
+
+class CreateAppUser {
+  const CreateAppUser({
+    required this.name,
+    this.imageUrl = '',
+    this.nullableTextWithDefault = '',
+    this.nullableTextWithoutDefault,
+    required this.fieldValueAllowedInt,
+    this.fieldValueAllowedNullableInt,
+  });
+
+  final String name;
+  final String imageUrl;
+  final String? nullableTextWithDefault;
+  final String? nullableTextWithoutDefault;
+  final FirestoreData<int> fieldValueAllowedInt;
+  final FirestoreData<int>? fieldValueAllowedNullableInt;
 }
 
 /// A [CollectionReference] to appUsers collection to read.

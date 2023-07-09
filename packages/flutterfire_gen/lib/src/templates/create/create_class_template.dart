@@ -26,7 +26,7 @@ class ${config.createClassName} {
     ${_parseConstructorFields()}
   });
 
-  ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n')}
+  ${_parseFields()}
 }
 ''';
   }
@@ -62,5 +62,26 @@ class ${config.createClassName} {
       return 'this.$fieldNameString';
     }
     return 'required this.$fieldNameString';
+  }
+
+  String _parseFields() {
+    return fields.entries.map((entry) {
+      final fieldNameString = entry.key;
+      final typeNameString = entry.value as String;
+      final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
+      final isFieldValueAllowed =
+          visitor.fieldValueAllowedFields.contains(entry.key);
+
+      if (isFieldValueAllowed) {
+        if (nullableTypeMatch != null) {
+          final type = nullableTypeMatch.group(1)!;
+          return 'final FirestoreData<$type>? $fieldNameString;';
+        } else {
+          return 'final FirestoreData<$typeNameString> $fieldNameString;';
+        }
+      } else {
+        return 'final $typeNameString $fieldNameString;';
+      }
+    }).join('\n');
   }
 }
