@@ -24,6 +24,7 @@ class ReadClassTemplate {
 
   @override
   String toString() {
+    // TODO: fakeDb は別のところで生成するべき。
     return '''
 ${config.useFakeFirebaseFirestore ? 'final fakeDb = FakeFirebaseFirestore();' : ''}
 
