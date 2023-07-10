@@ -1,6 +1,8 @@
 import '../../config.dart';
 import '../../firestore_document_visitor.dart';
+import 'to_json_template.dart';
 
+///
 class CreateClassTemplate {
   ///
   const CreateClassTemplate({
@@ -28,7 +30,12 @@ class ${config.createClassName} {
 
   ${_parseFields()}
 
-  ${_toJson()}
+  ${ToJsonTemplate(
+      fields: fields,
+      defaultValueStrings: visitor.defaultValueStrings,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
+      fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+    )}
 }
 ''';
   }
@@ -93,49 +100,5 @@ class ${config.createClassName} {
         return 'final $typeNameString $fieldNameString;';
       }
     }).join('\n');
-  }
-
-  String _toJson() {
-    final defaultValueStrings = visitor.defaultValueStrings;
-    final jsonConverterConfigs = visitor.jsonConverterConfigs;
-    return '''
-Map<String, dynamic> toJson() {
-  return {
-    ${fields.entries.map((entry) {
-      final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
-      final defaultValueString = defaultValueStrings[fieldNameString];
-      final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
-      final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
-      final isNullableType = nullableTypeMatch != null;
-      final isFieldValueAllowed =
-          visitor.fieldValueAllowedFields.contains(entry.key);
-      final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
-      if (jsonConverterConfig != null) {
-        if (hasDefaultValue && isNullableType) {
-          return "'$fieldNameString': $fieldNameString == null "
-              "? $defaultValueString "
-              ": ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),";
-        }
-        return "'$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString),";
-      }
-      // TODO: FieldValue と nullable, defalutValue などの組み合わせパターン
-      if (isFieldValueAllowed) {
-        if (isNullableType) {
-          if (hasDefaultValue) {
-            return "'$fieldNameString': $fieldNameString?.value ?? $defaultValueString,";
-          }
-          return "'$fieldNameString': $fieldNameString?.value,";
-        }
-        return "'$fieldNameString': $fieldNameString.value,";
-      }
-      if (isNullableType && hasDefaultValue) {
-        return "'$fieldNameString': $fieldNameString ?? $defaultValueString,";
-      }
-      return "'$fieldNameString': $fieldNameString,";
-    }).join('\n')}
-  };
-}
-''';
   }
 }
