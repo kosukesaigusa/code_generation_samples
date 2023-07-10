@@ -16,8 +16,11 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// Fields of visited [FirestoreDocument] annotated class.
   final Map<String, dynamic> fields = {};
 
-  /// Default value strings of each field.
-  final Map<String, String> defaultValueStrings = {};
+  /// Default value strings of each field when read Cloud Firestore documents.
+  final Map<String, String> fromJsonDefaultValueStrings = {};
+
+  /// Default value strings of each field when create Cloud Firestore documents.
+  final Map<String, String> toJsonDefaultValueStrings = {};
 
   /// A set of strings of FieldValue allowed fields.
   final Set<String> fieldValueAllowedFields = {};
@@ -29,7 +32,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void visitConstructorElement(ConstructorElement element) {
     final returnType = element.returnType.toString();
     className = returnType;
-    _parseParameters(element.parameters);
+    _parseConstructorParameters(element.parameters);
   }
 
   @override
@@ -39,13 +42,19 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   }
 
   /// Parses default values of constructor parameters.
-  void _parseParameters(List<ParameterElement> parameters) {
+  void _parseConstructorParameters(List<ParameterElement> parameters) {
     for (final parameter in parameters) {
       if (parameter.isOptional) {
         final fieldName = parameter.name;
         final defaultValueCode = parameter.defaultValueCode;
         if (defaultValueCode != null) {
-          defaultValueStrings[fieldName] = defaultValueCode;
+          // TODO: コンストラクタパラメータでデフォルト値を渡した場合は
+          // toJson, fromJson が共通になるのは仕様として納得感があるかどうか、
+          // その場合は、アノテーションにおいても toJson, fromJson をいっしょくたに
+          // あつかうような概念が必要になりそうかを確認する。必要ならそのように
+          // リファクタする。
+          fromJsonDefaultValueStrings[fieldName] = defaultValueCode;
+          toJsonDefaultValueStrings[fieldName] = defaultValueCode;
         }
       }
     }
@@ -63,7 +72,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
       final source = meta.toSource();
       final object = meta.computeConstantValue()!;
       final objectType = object.type!;
-      if (defaultTypeChecker.isExactlyType(objectType)) {
+      if (defaultTypeChecker.isAssignableFromType(objectType)) {
         parseDefaultAnnotation(
           fieldName: fieldName,
           source: source,
@@ -97,17 +106,27 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void parseDefaultAnnotation({
     required String fieldName,
     required String source,
-    // TODO: objectType は受け取らなくても良い方法があれば試してみる
     required DartType objectType,
   }) {
-    final res = source.substring('@Default('.length, source.length - 1);
+    final defaultTypeString =
+        objectType.getDisplayString(withNullability: false);
+    final res =
+        source.substring('@$defaultTypeString('.length, source.length - 1);
     final needsConstModifier = !objectType.isDartCoreString &&
         !res.trimLeft().startsWith('const') &&
         (res.contains('(') || res.contains('[') || res.contains('{'));
     if (needsConstModifier) {
-      defaultValueStrings[fieldName] = 'const $res';
+      if (defaultTypeString == 'FromJsonDefault') {
+        fromJsonDefaultValueStrings[fieldName] = 'const $res';
+      } else if (defaultTypeString == 'ToJsonDefault') {
+        toJsonDefaultValueStrings[fieldName] = 'const $res';
+      }
     } else {
-      defaultValueStrings[fieldName] = res;
+      if (defaultTypeString == 'FromJsonDefault') {
+        fromJsonDefaultValueStrings[fieldName] = res;
+      } else if (defaultTypeString == 'ToJsonDefault') {
+        toJsonDefaultValueStrings[fieldName] = res;
+      }
     }
   }
 

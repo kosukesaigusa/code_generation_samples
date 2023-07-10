@@ -57,7 +57,7 @@ class ReadAppUser {
 class CreateAppUser {
   const CreateAppUser({
     required this.name,
-    this.imageUrl = '',
+    required this.imageUrl,
   });
 
   final String name;

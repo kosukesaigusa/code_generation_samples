@@ -218,12 +218,8 @@ class ReadEntity {
               .fromJson(json['fooWithDefault'] as Map<String, dynamic>),
       nullableFoo: _nullableFooJsonConverter
           .fromJson(json['nullableFoo'] as Map<String, dynamic>),
-      nullableFooWithDefaultAnnotation:
-          json['nullableFooWithDefaultAnnotation'] == null
-              ? const Foo('defaultBar')
-              : _FooJsonConverter().fromJson(
-                  json['nullableFooWithDefaultAnnotation']
-                      as Map<String, dynamic>),
+      nullableFooWithDefaultAnnotation: _FooJsonConverter().fromJson(
+          json['nullableFooWithDefaultAnnotation'] as Map<String, dynamic>),
       nullableFooWithDefaultValueInConstructor:
           json['nullableFooWithDefaultValueInConstructor'] == null
               ? const Foo('defaultBar')
@@ -234,8 +230,7 @@ class ReadEntity {
       fieldValueAllowedNullableInt:
           json['fieldValueAllowedNullableInt'] as int?,
       fieldValueAllowedNullableIntWithDefaultAnnotation:
-          json['fieldValueAllowedNullableIntWithDefaultAnnotation'] as int? ??
-              0,
+          json['fieldValueAllowedNullableIntWithDefaultAnnotation'] as int?,
       fieldValueAllowedNullableIntWithDefaultInConstructor:
           json['fieldValueAllowedNullableIntWithDefaultInConstructor']
                   as int? ??
@@ -375,44 +370,38 @@ class ReadEntity {
 class CreateEntity {
   const CreateEntity({
     required this.text,
-    this.textWithDefault = 'requiredWithDefault',
-    this.nullableText = 'defaultText',
+    required this.textWithDefault,
+    this.nullableText,
     required this.integer,
-    this.integerWithDefault = 0,
-    this.nullableInteger = 0,
+    required this.integerWithDefault,
+    this.nullableInteger,
     required this.doubleNumber,
-    this.doubleNumberWithDefault = 3.14,
-    this.nullableDoubleNumber = 3.14,
+    required this.doubleNumberWithDefault,
+    this.nullableDoubleNumber,
     required this.isBool,
-    this.isBoolWithDefault = false,
-    this.nullableIsBool = false,
+    required this.isBoolWithDefault,
+    this.nullableIsBool,
     required this.texts,
-    this.textsWithDefault = const <String>['requiredWithDefault'],
-    this.nullableTexts = const <String>[],
+    required this.textsWithDefault,
+    this.nullableTexts,
     required this.map,
-    this.mapWithDefault = const <String, dynamic>{},
-    this.nullableMap = const <String, dynamic>{},
+    required this.mapWithDefault,
+    this.nullableMap,
     required this.stringMap,
-    this.stringMapWithDefault = const <String, String>{},
-    this.nullableStringMap = const <String, String>{},
+    required this.stringMapWithDefault,
+    this.nullableStringMap,
     required this.nestedMap,
-    this.nestedMapWithDefault = const <String, Map<String, int>>{
-      'requiredWithDefault': <String, int>{}
-    },
-    this.nullableNestedMap = const <String, Map<String, int>>{},
+    required this.nestedMapWithDefault,
+    this.nullableNestedMap,
     required this.listMap,
-    this.listMapWithDefault = const <String, List<int>>{
-      'requiredWithDefault': <int>[]
-    },
-    this.nullableListMap = const <String, List<int>>{},
+    required this.listMapWithDefault,
+    this.nullableListMap,
     required this.mapList,
-    this.mapListWithDefault = const <Map<String, int>>[
-      <String, int>{'requiredWithDefault': 0}
-    ],
-    this.nullableMapList = const <Map<String, int>>[],
+    required this.mapListWithDefault,
+    this.nullableMapList,
     required this.geoPoint,
-    this.geoPointWithDefault = const GeoPoint(0, 0),
-    this.nullableGeoPoint = const GeoPoint(0, 0),
+    required this.geoPointWithDefault,
+    this.nullableGeoPoint,
     required this.dateTime,
     this.nullableDateTime,
     required this.timestamp,
@@ -420,7 +409,7 @@ class CreateEntity {
     required this.documentReference,
     this.nullableDocumentReference,
     required this.foo,
-    this.fooWithDefault = const Foo('requiredWithDefault'),
+    required this.fooWithDefault,
     this.nullableFoo,
     this.nullableFooWithDefaultAnnotation = const Foo('defaultBar'),
     this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
@@ -486,16 +475,16 @@ class CreateEntity {
     return {
       'text': text,
       'textWithDefault': textWithDefault,
-      'nullableText': nullableText ?? 'defaultText',
+      'nullableText': nullableText,
       'integer': integer,
       'integerWithDefault': integerWithDefault,
-      'nullableInteger': nullableInteger ?? 0,
+      'nullableInteger': nullableInteger,
       'doubleNumber': doubleNumber,
       'doubleNumberWithDefault': doubleNumberWithDefault,
-      'nullableDoubleNumber': nullableDoubleNumber ?? 3.14,
+      'nullableDoubleNumber': nullableDoubleNumber,
       'isBool': isBool,
       'isBoolWithDefault': isBoolWithDefault,
-      'nullableIsBool': nullableIsBool ?? false,
+      'nullableIsBool': nullableIsBool,
       'texts': texts,
       'textsWithDefault': textsWithDefault,
       'nullableTexts': nullableTexts,
@@ -516,7 +505,7 @@ class CreateEntity {
       'nullableMapList': nullableMapList,
       'geoPoint': geoPoint,
       'geoPointWithDefault': geoPointWithDefault,
-      'nullableGeoPoint': nullableGeoPoint ?? const GeoPoint(0, 0),
+      'nullableGeoPoint': nullableGeoPoint,
       'dateTime': dateTime,
       'nullableDateTime': nullableDateTime,
       'timestamp': timestamp,

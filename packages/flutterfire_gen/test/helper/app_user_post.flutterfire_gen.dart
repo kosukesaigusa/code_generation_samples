@@ -63,8 +63,8 @@ class ReadAppUserPost {
 
 class CreateAppUserPost {
   const CreateAppUserPost({
-    this.content = '',
-    this.numbers = const <int>[],
+    required this.content,
+    required this.numbers,
     this.updatedAt,
   });
 

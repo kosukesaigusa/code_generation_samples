@@ -32,7 +32,7 @@ class ${config.createClassName} {
 
   ${ToJsonTemplate(
       fields: fields,
-      defaultValueStrings: visitor.defaultValueStrings,
+      defaultValueStrings: visitor.toJsonDefaultValueStrings,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
     )}
@@ -40,13 +40,13 @@ class ${config.createClassName} {
 ''';
   }
 
+  // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
     return '${fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
 
-      // TODO: 後で CreateDefault にする
-      final defaultValueStrings = visitor.defaultValueStrings;
+      final defaultValueStrings = visitor.toJsonDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
 
@@ -70,7 +70,6 @@ class ${config.createClassName} {
     final isNullable = typeNameString.endsWith('?');
     if (hasDefaultValue || isNullable) {
       if (hasDefaultValue) {
-        // TODO: FieldValue と nullable, defalutValue などの組み合わせパターン
         if (isFieldValueAllowed) {
           return 'this.$fieldNameString = const ActualValue($defaultValueString)';
         }

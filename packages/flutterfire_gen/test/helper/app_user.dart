@@ -15,6 +15,6 @@ class AppUser {
 
   final String name;
 
-  @Default('')
+  @FromJsonDefault('')
   final String imageUrl;
 }

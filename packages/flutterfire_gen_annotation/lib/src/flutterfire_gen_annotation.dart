@@ -42,11 +42,28 @@ class FirestoreDocument {
   static const documentNameNameRegExpSource = r"documentName:\s*'([^']*)'";
 }
 
+///
+sealed class Default {
+  ///
+  const Default();
+}
+
 /// An annotation to give default value if the field is null when calling
-/// fromJson.
-class Default {
-  /// Create a [Default].
-  const Default(this.value);
+/// fromJson to toJson.
+final class FromJsonDefault extends Default {
+  /// Create a [FromJsonDefault].
+  const FromJsonDefault(this.value);
+
+  /// A default value.
+  final dynamic value;
+}
+
+// TODO: fromJsonDefault, toJsonDefault くらいの命名・分類でも良さそう
+/// An annotation to give default value if the field is null when calling
+/// toJson.
+final class ToJsonDefault extends Default {
+  /// Create a [ToJsonDefault].
+  const ToJsonDefault(this.value);
 
   /// A default value.
   final dynamic value;
