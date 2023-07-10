@@ -51,6 +51,7 @@ class ReadEntity {
     required this.nullableDocumentReference,
     required this.foo,
     required this.fooWithDefault,
+    required this.nullableFoo,
     required this.nullableFooWithDefaultAnnotation,
     required this.nullableFooWithDefaultValueInConstructor,
   });
@@ -98,6 +99,7 @@ class ReadEntity {
   final DocumentReference<Object?>? nullableDocumentReference;
   final Foo foo;
   final Foo fooWithDefault;
+  final Foo? nullableFoo;
   final Foo? nullableFooWithDefaultAnnotation;
   final Foo? nullableFooWithDefaultValueInConstructor;
 
@@ -206,6 +208,8 @@ class ReadEntity {
           ? const Foo('requiredWithDefault')
           : _FooJsonConverter()
               .fromJson(json['fooWithDefault'] as Map<String, dynamic>),
+      nullableFoo: _nullableFooJsonConverter
+          .fromJson(json['nullableFoo'] as Map<String, dynamic>),
       nullableFooWithDefaultAnnotation:
           json['nullableFooWithDefaultAnnotation'] == null
               ? const Foo('defaultBar')
@@ -277,6 +281,7 @@ class ReadEntity {
     DocumentReference<Object?>? nullableDocumentReference,
     Foo? foo,
     Foo? fooWithDefault,
+    Foo? nullableFoo,
     Foo? nullableFooWithDefaultAnnotation,
     Foo? nullableFooWithDefaultValueInConstructor,
   }) {
@@ -326,6 +331,7 @@ class ReadEntity {
           nullableDocumentReference ?? this.nullableDocumentReference,
       foo: foo ?? this.foo,
       fooWithDefault: fooWithDefault ?? this.fooWithDefault,
+      nullableFoo: nullableFoo ?? this.nullableFoo,
       nullableFooWithDefaultAnnotation: nullableFooWithDefaultAnnotation ??
           this.nullableFooWithDefaultAnnotation,
       nullableFooWithDefaultValueInConstructor:
@@ -384,6 +390,7 @@ class CreateEntity {
     this.nullableDocumentReference,
     required this.foo,
     this.fooWithDefault = const Foo('requiredWithDefault'),
+    this.nullableFoo,
     this.nullableFooWithDefaultAnnotation = const Foo('defaultBar'),
     this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
   });
@@ -429,8 +436,65 @@ class CreateEntity {
   final DocumentReference<Object?>? nullableDocumentReference;
   final Foo foo;
   final Foo fooWithDefault;
+  final Foo? nullableFoo;
   final Foo? nullableFooWithDefaultAnnotation;
   final Foo? nullableFooWithDefaultValueInConstructor;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'textWithDefault': textWithDefault,
+      'nullableText': nullableText ?? 'defaultText',
+      'integer': integer,
+      'integerWithDefault': integerWithDefault,
+      'nullableInteger': nullableInteger ?? 0,
+      'doubleNumber': doubleNumber,
+      'doubleNumberWithDefault': doubleNumberWithDefault,
+      'nullableDoubleNumber': nullableDoubleNumber ?? 3.14,
+      'isBool': isBool,
+      'isBoolWithDefault': isBoolWithDefault,
+      'nullableIsBool': nullableIsBool ?? false,
+      'texts': texts,
+      'textsWithDefault': textsWithDefault,
+      'nullableTexts': nullableTexts,
+      'map': map,
+      'mapWithDefault': mapWithDefault,
+      'nullableMap': nullableMap,
+      'stringMap': stringMap,
+      'stringMapWithDefault': stringMapWithDefault,
+      'nullableStringMap': nullableStringMap,
+      'nestedMap': nestedMap,
+      'nestedMapWithDefault': nestedMapWithDefault,
+      'nullableNestedMap': nullableNestedMap,
+      'listMap': listMap,
+      'listMapWithDefault': listMapWithDefault,
+      'nullableListMap': nullableListMap,
+      'mapList': mapList,
+      'mapListWithDefault': mapListWithDefault,
+      'nullableMapList': nullableMapList,
+      'geoPoint': geoPoint,
+      'geoPointWithDefault': geoPointWithDefault,
+      'nullableGeoPoint': nullableGeoPoint ?? const GeoPoint(0, 0),
+      'dateTime': dateTime,
+      'nullableDateTime': nullableDateTime,
+      'timestamp': timestamp,
+      'nullableTimestamp': nullableTimestamp,
+      'documentReference': documentReference,
+      'nullableDocumentReference': nullableDocumentReference,
+      'foo': _FooJsonConverter().toJson(foo),
+      'fooWithDefault': _FooJsonConverter().toJson(fooWithDefault),
+      'nullableFoo': _nullableFooJsonConverter.toJson(nullableFoo),
+      'nullableFooWithDefaultAnnotation': nullableFooWithDefaultAnnotation ==
+              null
+          ? const Foo('defaultBar')
+          : _nullableFooJsonConverter.toJson(nullableFooWithDefaultAnnotation!),
+      'nullableFooWithDefaultValueInConstructor':
+          nullableFooWithDefaultValueInConstructor == null
+              ? const Foo('defaultBar')
+              : _nullableFooJsonConverter
+                  .toJson(nullableFooWithDefaultValueInConstructor!),
+    };
+  }
 }
 
 /// A [CollectionReference] to entities collection to read.

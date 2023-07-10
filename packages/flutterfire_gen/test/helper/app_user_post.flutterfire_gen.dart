@@ -71,6 +71,14 @@ class CreateAppUserPost {
   final String content;
   final List<int> numbers;
   final DateTime? updatedAt;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'content': content,
+      'numbers': numbers,
+      'updatedAt': updatedAt,
+    };
+  }
 }
 
 /// A [CollectionReference] to appUserPosts collection to read.

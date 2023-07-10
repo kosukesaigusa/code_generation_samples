@@ -64,6 +64,13 @@ class CreateAppUserPostLike {
 
   final String likedByAppUserId;
   final DateTime? likedAt;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'likedByAppUserId': likedByAppUserId,
+      'likedAt': likedAt,
+    };
+  }
 }
 
 /// A [CollectionReference] to appUserPostLikes collection to read.
