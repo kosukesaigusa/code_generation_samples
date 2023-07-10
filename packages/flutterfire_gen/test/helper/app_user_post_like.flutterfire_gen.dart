@@ -73,6 +73,23 @@ class CreateAppUserPostLike {
   }
 }
 
+class UpdateAppUserPostLike {
+  const UpdateAppUserPostLike({
+    this.likedByAppUserId,
+    this.likedAt,
+  });
+
+  final String? likedByAppUserId;
+  final DateTime? likedAt;
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (likedByAppUserId != null) 'likedByAppUserId': likedByAppUserId,
+      if (likedAt != null) 'likedAt': likedAt,
+    };
+  }
+}
+
 /// A [CollectionReference] to appUserPostLikes collection to read.
 CollectionReference<ReadAppUserPostLike>
     readAppUserPostLikeCollectionReference({
@@ -126,6 +143,34 @@ DocumentReference<CreateAppUserPostLike>
   required String appUserPostLikeId,
 }) =>
         createAppUserPostLikeCollectionReference(
+                appUserId: appUserId, appUserPostId: appUserPostId)
+            .doc(appUserPostLikeId);
+
+/// A [CollectionReference] to appUserPostLikes collection to update.
+CollectionReference<UpdateAppUserPostLike>
+    updateAppUserPostLikeCollectionReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+        FirebaseFirestore.instance
+            .collection('appUsers')
+            .doc(appUserId)
+            .collection('appUserPosts')
+            .doc(appUserPostId)
+            .collection('appUserPostLikes')
+            .withConverter<UpdateAppUserPostLike>(
+              fromFirestore: (ds, _) => throw UnimplementedError(),
+              toFirestore: (obj, _) => obj.toJson(),
+            );
+
+/// A [DocumentReference] to appUserPostLike document to update.
+DocumentReference<UpdateAppUserPostLike>
+    updateAppUserPostLikeDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+  required String appUserPostLikeId,
+}) =>
+        updateAppUserPostLikeCollectionReference(
                 appUserId: appUserId, appUserPostId: appUserPostId)
             .doc(appUserPostLikeId);
 

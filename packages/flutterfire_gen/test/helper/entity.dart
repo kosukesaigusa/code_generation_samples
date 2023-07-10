@@ -66,9 +66,13 @@ class Entity {
   final String text;
 
   @ReadDefault('requiredWithDefault')
+  @CreateDefault('createDefault')
+  @UpdateDefault('updateDefault')
   final String textWithDefault;
 
   @ReadDefault('defaultText')
+  @CreateDefault('createDefault')
+  @UpdateDefault('updateDefault')
   final String? nullableText;
 
   final int integer;

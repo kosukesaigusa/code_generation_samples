@@ -71,6 +71,23 @@ class CreateAppUser {
   }
 }
 
+class UpdateAppUser {
+  const UpdateAppUser({
+    this.name,
+    this.imageUrl,
+  });
+
+  final String? name;
+  final String? imageUrl;
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (imageUrl != null) 'imageUrl': imageUrl,
+    };
+  }
+}
+
 /// A [CollectionReference] to appUsers collection to read.
 final readAppUserCollectionReference = FirebaseFirestore.instance
     .collection('appUsers')
@@ -98,6 +115,20 @@ DocumentReference<CreateAppUser> createAppUserDocumentReference({
   required String appUserId,
 }) =>
     createAppUserCollectionReference.doc(appUserId);
+
+/// A [CollectionReference] to appUsers collection to update.
+final updateAppUserCollectionReference = FirebaseFirestore.instance
+    .collection('appUsers')
+    .withConverter<UpdateAppUser>(
+      fromFirestore: (ds, _) => throw UnimplementedError(),
+      toFirestore: (obj, _) => obj.toJson(),
+    );
+
+/// A [DocumentReference] to appUser document to update.
+DocumentReference<UpdateAppUser> updateAppUserDocumentReference({
+  required String appUserId,
+}) =>
+    updateAppUserCollectionReference.doc(appUserId);
 
 /// A query manager to execute query against [AppUser].
 class AppUserQuery {

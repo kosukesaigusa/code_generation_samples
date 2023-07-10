@@ -18,13 +18,14 @@ ${_collectionReferenceTemplate(ReferenceClassType.read)}
 ${_documentReferenceTemplate(ReferenceClassType.read)}
 ${_collectionReferenceTemplate(ReferenceClassType.create)}
 ${_documentReferenceTemplate(ReferenceClassType.create)}
+${_collectionReferenceTemplate(ReferenceClassType.update)}
+${_documentReferenceTemplate(ReferenceClassType.update)}
 ''';
   }
 
   String _collectionReferenceTemplate(ReferenceClassType referenceClassType) {
     final buffer = StringBuffer()
       ..writeln(
-        // TODO: 文言を read, create, update で変える必要がある
         '/// A [CollectionReference] to ${config.collectionName} collection to ${referenceClassType.name}.',
       )
       ..write(_collectionReference(referenceClassType))

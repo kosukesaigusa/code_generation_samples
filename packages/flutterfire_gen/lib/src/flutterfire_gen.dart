@@ -11,6 +11,7 @@ import 'templates/create/create_class_template.dart';
 import 'templates/query.dart';
 import 'templates/read/read_class_template.dart';
 import 'templates/refs_template.dart';
+import 'templates/update/update_class_template.dart';
 
 /// A generator for [FirestoreDocument] annotation.
 class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
@@ -38,6 +39,9 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       )
       ..writeln(
         CreateClassTemplate(config: config, visitor: visitor, fields: fields),
+      )
+      ..writeln(
+        UpdateClassTemplate(config: config, visitor: visitor, fields: fields),
       )
       ..writeln(RefsTemplate(config: config))
       ..writeln(QueryClassTemplate(config: config));

@@ -81,6 +81,26 @@ class CreateAppUserPost {
   }
 }
 
+class UpdateAppUserPost {
+  const UpdateAppUserPost({
+    this.content,
+    this.numbers,
+    this.updatedAt,
+  });
+
+  final String? content;
+  final List<int>? numbers;
+  final DateTime? updatedAt;
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (content != null) 'content': content,
+      if (numbers != null) 'numbers': numbers,
+      if (updatedAt != null) 'updatedAt': updatedAt,
+    };
+  }
+}
+
 /// A [CollectionReference] to appUserPosts collection to read.
 CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference({
   required String appUserId,
@@ -120,6 +140,27 @@ DocumentReference<CreateAppUserPost> createAppUserPostDocumentReference({
   required String appUserPostId,
 }) =>
     createAppUserPostCollectionReference(appUserId: appUserId)
+        .doc(appUserPostId);
+
+/// A [CollectionReference] to appUserPosts collection to update.
+CollectionReference<UpdateAppUserPost> updateAppUserPostCollectionReference({
+  required String appUserId,
+}) =>
+    FirebaseFirestore.instance
+        .collection('appUsers')
+        .doc(appUserId)
+        .collection('appUserPosts')
+        .withConverter<UpdateAppUserPost>(
+          fromFirestore: (ds, _) => throw UnimplementedError(),
+          toFirestore: (obj, _) => obj.toJson(),
+        );
+
+/// A [DocumentReference] to appUserPost document to update.
+DocumentReference<UpdateAppUserPost> updateAppUserPostDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+    updateAppUserPostCollectionReference(appUserId: appUserId)
         .doc(appUserPostId);
 
 /// A query manager to execute query against [AppUserPost].

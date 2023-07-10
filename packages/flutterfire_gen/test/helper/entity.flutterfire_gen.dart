@@ -370,8 +370,8 @@ class ReadEntity {
 class CreateEntity {
   const CreateEntity({
     required this.text,
-    required this.textWithDefault,
-    this.nullableText,
+    this.textWithDefault = 'createDefault',
+    this.nullableText = 'createDefault',
     required this.integer,
     required this.integerWithDefault,
     this.nullableInteger,
@@ -475,7 +475,7 @@ class CreateEntity {
     return {
       'text': text,
       'textWithDefault': textWithDefault,
-      'nullableText': nullableText,
+      'nullableText': nullableText ?? 'createDefault',
       'integer': integer,
       'integerWithDefault': integerWithDefault,
       'nullableInteger': nullableInteger,
@@ -534,6 +534,180 @@ class CreateEntity {
   }
 }
 
+class UpdateEntity {
+  const UpdateEntity({
+    this.text,
+    this.textWithDefault = 'updateDefault',
+    this.nullableText = 'updateDefault',
+    this.integer,
+    this.integerWithDefault,
+    this.nullableInteger,
+    this.doubleNumber,
+    this.doubleNumberWithDefault,
+    this.nullableDoubleNumber,
+    this.isBool,
+    this.isBoolWithDefault,
+    this.nullableIsBool,
+    this.texts,
+    this.textsWithDefault,
+    this.nullableTexts,
+    this.map,
+    this.mapWithDefault,
+    this.nullableMap,
+    this.stringMap,
+    this.stringMapWithDefault,
+    this.nullableStringMap,
+    this.nestedMap,
+    this.nestedMapWithDefault,
+    this.nullableNestedMap,
+    this.listMap,
+    this.listMapWithDefault,
+    this.nullableListMap,
+    this.mapList,
+    this.mapListWithDefault,
+    this.nullableMapList,
+    this.geoPoint,
+    this.geoPointWithDefault,
+    this.nullableGeoPoint,
+    this.dateTime,
+    this.nullableDateTime,
+    this.timestamp,
+    this.nullableTimestamp,
+    this.documentReference,
+    this.nullableDocumentReference,
+    this.foo,
+    this.fooWithDefault,
+    this.nullableFoo,
+    this.nullableFooWithDefaultAnnotation,
+    this.nullableFooWithDefaultValueInConstructor,
+    this.fieldValueAllowedInt,
+    this.fieldValueAllowedNullableInt,
+    this.fieldValueAllowedNullableIntWithDefaultAnnotation,
+    this.fieldValueAllowedNullableIntWithDefaultInConstructor,
+  });
+
+  final String? text;
+  final String? textWithDefault;
+  final String? nullableText;
+  final int? integer;
+  final int? integerWithDefault;
+  final int? nullableInteger;
+  final double? doubleNumber;
+  final double? doubleNumberWithDefault;
+  final double? nullableDoubleNumber;
+  final bool? isBool;
+  final bool? isBoolWithDefault;
+  final bool? nullableIsBool;
+  final List<String>? texts;
+  final List<String>? textsWithDefault;
+  final List<String>? nullableTexts;
+  final Map<String, dynamic>? map;
+  final Map<String, dynamic>? mapWithDefault;
+  final Map<String, dynamic>? nullableMap;
+  final Map<String, String>? stringMap;
+  final Map<String, String>? stringMapWithDefault;
+  final Map<String, String>? nullableStringMap;
+  final Map<String, Map<String, int>>? nestedMap;
+  final Map<String, Map<String, int>>? nestedMapWithDefault;
+  final Map<String, Map<String, int>>? nullableNestedMap;
+  final Map<String, List<int>>? listMap;
+  final Map<String, List<int>>? listMapWithDefault;
+  final Map<String, List<int>>? nullableListMap;
+  final List<Map<String, int>>? mapList;
+  final List<Map<String, int>>? mapListWithDefault;
+  final List<Map<String, int>>? nullableMapList;
+  final GeoPoint? geoPoint;
+  final GeoPoint? geoPointWithDefault;
+  final GeoPoint? nullableGeoPoint;
+  final DateTime? dateTime;
+  final DateTime? nullableDateTime;
+  final Timestamp? timestamp;
+  final Timestamp? nullableTimestamp;
+  final DocumentReference<Object?>? documentReference;
+  final DocumentReference<Object?>? nullableDocumentReference;
+  final Foo? foo;
+  final Foo? fooWithDefault;
+  final Foo? nullableFoo;
+  final Foo? nullableFooWithDefaultAnnotation;
+  final Foo? nullableFooWithDefaultValueInConstructor;
+  final FirestoreData<int>? fieldValueAllowedInt;
+  final FirestoreData<int?>? fieldValueAllowedNullableInt;
+  final FirestoreData<int?>? fieldValueAllowedNullableIntWithDefaultAnnotation;
+  final FirestoreData<int?>?
+      fieldValueAllowedNullableIntWithDefaultInConstructor;
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (text != null) 'text': text,
+      'textWithDefault': textWithDefault ?? 'updateDefault',
+      'nullableText': nullableText ?? 'updateDefault',
+      if (integer != null) 'integer': integer,
+      if (integerWithDefault != null) 'integerWithDefault': integerWithDefault,
+      if (nullableInteger != null) 'nullableInteger': nullableInteger,
+      if (doubleNumber != null) 'doubleNumber': doubleNumber,
+      if (doubleNumberWithDefault != null)
+        'doubleNumberWithDefault': doubleNumberWithDefault,
+      if (nullableDoubleNumber != null)
+        'nullableDoubleNumber': nullableDoubleNumber,
+      if (isBool != null) 'isBool': isBool,
+      if (isBoolWithDefault != null) 'isBoolWithDefault': isBoolWithDefault,
+      if (nullableIsBool != null) 'nullableIsBool': nullableIsBool,
+      if (texts != null) 'texts': texts,
+      if (textsWithDefault != null) 'textsWithDefault': textsWithDefault,
+      if (nullableTexts != null) 'nullableTexts': nullableTexts,
+      if (map != null) 'map': map,
+      if (mapWithDefault != null) 'mapWithDefault': mapWithDefault,
+      if (nullableMap != null) 'nullableMap': nullableMap,
+      if (stringMap != null) 'stringMap': stringMap,
+      if (stringMapWithDefault != null)
+        'stringMapWithDefault': stringMapWithDefault,
+      if (nullableStringMap != null) 'nullableStringMap': nullableStringMap,
+      if (nestedMap != null) 'nestedMap': nestedMap,
+      if (nestedMapWithDefault != null)
+        'nestedMapWithDefault': nestedMapWithDefault,
+      if (nullableNestedMap != null) 'nullableNestedMap': nullableNestedMap,
+      if (listMap != null) 'listMap': listMap,
+      if (listMapWithDefault != null) 'listMapWithDefault': listMapWithDefault,
+      if (nullableListMap != null) 'nullableListMap': nullableListMap,
+      if (mapList != null) 'mapList': mapList,
+      if (mapListWithDefault != null) 'mapListWithDefault': mapListWithDefault,
+      if (nullableMapList != null) 'nullableMapList': nullableMapList,
+      if (geoPoint != null) 'geoPoint': geoPoint,
+      if (geoPointWithDefault != null)
+        'geoPointWithDefault': geoPointWithDefault,
+      if (nullableGeoPoint != null) 'nullableGeoPoint': nullableGeoPoint,
+      if (dateTime != null) 'dateTime': dateTime,
+      if (nullableDateTime != null) 'nullableDateTime': nullableDateTime,
+      if (timestamp != null) 'timestamp': timestamp,
+      if (nullableTimestamp != null) 'nullableTimestamp': nullableTimestamp,
+      if (documentReference != null) 'documentReference': documentReference,
+      if (nullableDocumentReference != null)
+        'nullableDocumentReference': nullableDocumentReference,
+      if (foo != null) 'foo': _FooJsonConverter().toJson(foo!),
+      if (fooWithDefault != null)
+        'fooWithDefault': _FooJsonConverter().toJson(fooWithDefault!),
+      if (nullableFoo != null)
+        'nullableFoo': _nullableFooJsonConverter.toJson(nullableFoo!),
+      if (nullableFooWithDefaultAnnotation != null)
+        'nullableFooWithDefaultAnnotation':
+            _FooJsonConverter().toJson(nullableFooWithDefaultAnnotation!),
+      if (nullableFooWithDefaultValueInConstructor != null)
+        'nullableFooWithDefaultValueInConstructor': _FooJsonConverter()
+            .toJson(nullableFooWithDefaultValueInConstructor!),
+      if (fieldValueAllowedInt != null)
+        'fieldValueAllowedInt': fieldValueAllowedInt!.value,
+      if (fieldValueAllowedNullableInt != null)
+        'fieldValueAllowedNullableInt': fieldValueAllowedNullableInt!.value,
+      if (fieldValueAllowedNullableIntWithDefaultAnnotation != null)
+        'fieldValueAllowedNullableIntWithDefaultAnnotation':
+            fieldValueAllowedNullableIntWithDefaultAnnotation!.value,
+      if (fieldValueAllowedNullableIntWithDefaultInConstructor != null)
+        'fieldValueAllowedNullableIntWithDefaultInConstructor':
+            fieldValueAllowedNullableIntWithDefaultInConstructor!.value,
+    };
+  }
+}
+
 /// A [CollectionReference] to entities collection to read.
 final readEntityCollectionReference =
     fakeDb.collection('entities').withConverter<ReadEntity>(
@@ -559,6 +733,19 @@ DocumentReference<CreateEntity> createEntityDocumentReference({
   required String entityId,
 }) =>
     createEntityCollectionReference.doc(entityId);
+
+/// A [CollectionReference] to entities collection to update.
+final updateEntityCollectionReference =
+    fakeDb.collection('entities').withConverter<UpdateEntity>(
+          fromFirestore: (ds, _) => throw UnimplementedError(),
+          toFirestore: (obj, _) => obj.toJson(),
+        );
+
+/// A [DocumentReference] to entity document to update.
+DocumentReference<UpdateEntity> updateEntityDocumentReference({
+  required String entityId,
+}) =>
+    updateEntityCollectionReference.doc(entityId);
 
 /// A query manager to execute query against [Entity].
 class EntityQuery {
