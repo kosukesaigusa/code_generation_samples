@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutterfire_gen/src/templates/create/create.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -56,6 +57,10 @@ class Entity {
     this.nullableFoo,
     this.nullableFooWithDefaultAnnotation,
     this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
+    required this.fieldValueAllowedInt,
+    this.fieldValueAllowedNullableInt,
+    this.fieldValueAllowedNullableIntWithDefaultAnnotation,
+    this.fieldValueAllowedNullableIntWithDefaultInConstructor = 0,
   });
 
   final String text;
@@ -171,11 +176,24 @@ class Entity {
   final Foo? nullableFoo;
 
   @Default(Foo('defaultBar'))
-  @_nullableFooJsonConverter
+  @_FooJsonConverter()
   final Foo? nullableFooWithDefaultAnnotation;
 
-  @_nullableFooJsonConverter
+  @_FooJsonConverter()
   final Foo? nullableFooWithDefaultValueInConstructor;
+
+  @AllowFieldValue()
+  final int fieldValueAllowedInt;
+
+  @AllowFieldValue()
+  final int? fieldValueAllowedNullableInt;
+
+  @AllowFieldValue()
+  @Default(0)
+  final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
+
+  @AllowFieldValue()
+  final int? fieldValueAllowedNullableIntWithDefaultInConstructor;
 }
 
 class Foo {

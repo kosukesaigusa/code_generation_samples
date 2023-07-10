@@ -10,32 +10,12 @@ class ReadAppUser {
     required this.appUserReference,
     required this.name,
     required this.imageUrl,
-    required this.nullableTextWithDefault,
-    required this.nullableTextWithoutDefault,
-    required this.fieldValueAllowedInt,
-    required this.fieldValueAllowedNullableInt,
-    required this.fieldValueAllowedNullableIntWithDefaultAnnotation,
-    required this.fieldValueAllowedNullableIntWithDefaultInConstructor,
-    required this.foo,
-    required this.nullableFoo,
-    required this.nullableFooWithDefaultAnnotation,
-    required this.nullableFooWithDefaultInConstructor,
   });
 
   final String appUserId;
   final DocumentReference<ReadAppUser> appUserReference;
   final String name;
   final String imageUrl;
-  final String? nullableTextWithDefault;
-  final String? nullableTextWithoutDefault;
-  final int fieldValueAllowedInt;
-  final int? fieldValueAllowedNullableInt;
-  final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
-  final int? fieldValueAllowedNullableIntWithDefaultInConstructor;
-  final Foo foo;
-  final Foo? nullableFoo;
-  final Foo? nullableFooWithDefaultAnnotation;
-  final Foo? nullableFooWithDefaultInConstructor;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
     return ReadAppUser._(
@@ -44,33 +24,6 @@ class ReadAppUser {
           json['appUserReference'] as DocumentReference<ReadAppUser>,
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String? ?? '',
-      nullableTextWithDefault: json['nullableTextWithDefault'] as String? ?? '',
-      nullableTextWithoutDefault: json['nullableTextWithoutDefault'] as String?,
-      fieldValueAllowedInt: json['fieldValueAllowedInt'] as int,
-      fieldValueAllowedNullableInt:
-          json['fieldValueAllowedNullableInt'] as int?,
-      fieldValueAllowedNullableIntWithDefaultAnnotation:
-          json['fieldValueAllowedNullableIntWithDefaultAnnotation'] as int? ??
-              0,
-      fieldValueAllowedNullableIntWithDefaultInConstructor:
-          json['fieldValueAllowedNullableIntWithDefaultInConstructor']
-                  as int? ??
-              0,
-      foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>),
-      nullableFoo: _nullableFooJsonConverter
-          .fromJson(json['nullableFoo'] as Map<String, dynamic>),
-      nullableFooWithDefaultAnnotation:
-          json['nullableFooWithDefaultAnnotation'] == null
-              ? const Foo('bar')
-              : _FooJsonConverter().fromJson(
-                  json['nullableFooWithDefaultAnnotation']
-                      as Map<String, dynamic>),
-      nullableFooWithDefaultInConstructor:
-          json['nullableFooWithDefaultInConstructor'] == null
-              ? const Foo('bar')
-              : _FooJsonConverter().fromJson(
-                  json['nullableFooWithDefaultInConstructor']
-                      as Map<String, dynamic>),
     );
   }
 
@@ -91,42 +44,12 @@ class ReadAppUser {
     DocumentReference<ReadAppUser>? appUserReference,
     String? name,
     String? imageUrl,
-    String? nullableTextWithDefault,
-    String? nullableTextWithoutDefault,
-    int? fieldValueAllowedInt,
-    int? fieldValueAllowedNullableInt,
-    int? fieldValueAllowedNullableIntWithDefaultAnnotation,
-    int? fieldValueAllowedNullableIntWithDefaultInConstructor,
-    Foo? foo,
-    Foo? nullableFoo,
-    Foo? nullableFooWithDefaultAnnotation,
-    Foo? nullableFooWithDefaultInConstructor,
   }) {
     return ReadAppUser._(
       appUserId: appUserId ?? this.appUserId,
       appUserReference: appUserReference ?? this.appUserReference,
       name: name ?? this.name,
       imageUrl: imageUrl ?? this.imageUrl,
-      nullableTextWithDefault:
-          nullableTextWithDefault ?? this.nullableTextWithDefault,
-      nullableTextWithoutDefault:
-          nullableTextWithoutDefault ?? this.nullableTextWithoutDefault,
-      fieldValueAllowedInt: fieldValueAllowedInt ?? this.fieldValueAllowedInt,
-      fieldValueAllowedNullableInt:
-          fieldValueAllowedNullableInt ?? this.fieldValueAllowedNullableInt,
-      fieldValueAllowedNullableIntWithDefaultAnnotation:
-          fieldValueAllowedNullableIntWithDefaultAnnotation ??
-              this.fieldValueAllowedNullableIntWithDefaultAnnotation,
-      fieldValueAllowedNullableIntWithDefaultInConstructor:
-          fieldValueAllowedNullableIntWithDefaultInConstructor ??
-              this.fieldValueAllowedNullableIntWithDefaultInConstructor,
-      foo: foo ?? this.foo,
-      nullableFoo: nullableFoo ?? this.nullableFoo,
-      nullableFooWithDefaultAnnotation: nullableFooWithDefaultAnnotation ??
-          this.nullableFooWithDefaultAnnotation,
-      nullableFooWithDefaultInConstructor:
-          nullableFooWithDefaultInConstructor ??
-              this.nullableFooWithDefaultInConstructor,
     );
   }
 }
@@ -135,57 +58,15 @@ class CreateAppUser {
   const CreateAppUser({
     required this.name,
     this.imageUrl = '',
-    this.nullableTextWithDefault = '',
-    this.nullableTextWithoutDefault,
-    required this.fieldValueAllowedInt,
-    this.fieldValueAllowedNullableInt,
-    this.fieldValueAllowedNullableIntWithDefaultAnnotation =
-        const ActualValue(0),
-    this.fieldValueAllowedNullableIntWithDefaultInConstructor =
-        const ActualValue(0),
-    required this.foo,
-    this.nullableFoo,
-    this.nullableFooWithDefaultAnnotation = const Foo('bar'),
-    this.nullableFooWithDefaultInConstructor = const Foo('bar'),
   });
 
   final String name;
   final String imageUrl;
-  final String? nullableTextWithDefault;
-  final String? nullableTextWithoutDefault;
-  final FirestoreData<int> fieldValueAllowedInt;
-  final FirestoreData<int>? fieldValueAllowedNullableInt;
-  final FirestoreData<int>? fieldValueAllowedNullableIntWithDefaultAnnotation;
-  final FirestoreData<int>?
-      fieldValueAllowedNullableIntWithDefaultInConstructor;
-  final Foo foo;
-  final Foo? nullableFoo;
-  final Foo? nullableFooWithDefaultAnnotation;
-  final Foo? nullableFooWithDefaultInConstructor;
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'imageUrl': imageUrl,
-      'nullableTextWithDefault': nullableTextWithDefault ?? '',
-      'nullableTextWithoutDefault': nullableTextWithoutDefault,
-      'fieldValueAllowedInt': fieldValueAllowedInt.value,
-      'fieldValueAllowedNullableInt': fieldValueAllowedNullableInt?.value,
-      'fieldValueAllowedNullableIntWithDefaultAnnotation':
-          fieldValueAllowedNullableIntWithDefaultAnnotation?.value ?? 0,
-      'fieldValueAllowedNullableIntWithDefaultInConstructor':
-          fieldValueAllowedNullableIntWithDefaultInConstructor?.value ?? 0,
-      'foo': _FooJsonConverter().toJson(foo),
-      'nullableFoo': _nullableFooJsonConverter.toJson(nullableFoo),
-      'nullableFooWithDefaultAnnotation':
-          nullableFooWithDefaultAnnotation == null
-              ? const Foo('bar')
-              : _FooJsonConverter().toJson(nullableFooWithDefaultAnnotation!),
-      'nullableFooWithDefaultInConstructor':
-          nullableFooWithDefaultInConstructor == null
-              ? const Foo('bar')
-              : _FooJsonConverter()
-                  .toJson(nullableFooWithDefaultInConstructor!),
     };
   }
 }

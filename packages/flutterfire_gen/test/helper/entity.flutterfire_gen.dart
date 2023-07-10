@@ -54,6 +54,10 @@ class ReadEntity {
     required this.nullableFoo,
     required this.nullableFooWithDefaultAnnotation,
     required this.nullableFooWithDefaultValueInConstructor,
+    required this.fieldValueAllowedInt,
+    required this.fieldValueAllowedNullableInt,
+    required this.fieldValueAllowedNullableIntWithDefaultAnnotation,
+    required this.fieldValueAllowedNullableIntWithDefaultInConstructor,
   });
 
   final String entityId;
@@ -102,6 +106,10 @@ class ReadEntity {
   final Foo? nullableFoo;
   final Foo? nullableFooWithDefaultAnnotation;
   final Foo? nullableFooWithDefaultValueInConstructor;
+  final int fieldValueAllowedInt;
+  final int? fieldValueAllowedNullableInt;
+  final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
+  final int? fieldValueAllowedNullableIntWithDefaultInConstructor;
 
   factory ReadEntity._fromJson(Map<String, dynamic> json) {
     return ReadEntity._(
@@ -213,15 +221,25 @@ class ReadEntity {
       nullableFooWithDefaultAnnotation:
           json['nullableFooWithDefaultAnnotation'] == null
               ? const Foo('defaultBar')
-              : _nullableFooJsonConverter.fromJson(
+              : _FooJsonConverter().fromJson(
                   json['nullableFooWithDefaultAnnotation']
                       as Map<String, dynamic>),
       nullableFooWithDefaultValueInConstructor:
           json['nullableFooWithDefaultValueInConstructor'] == null
               ? const Foo('defaultBar')
-              : _nullableFooJsonConverter.fromJson(
+              : _FooJsonConverter().fromJson(
                   json['nullableFooWithDefaultValueInConstructor']
                       as Map<String, dynamic>),
+      fieldValueAllowedInt: json['fieldValueAllowedInt'] as int,
+      fieldValueAllowedNullableInt:
+          json['fieldValueAllowedNullableInt'] as int?,
+      fieldValueAllowedNullableIntWithDefaultAnnotation:
+          json['fieldValueAllowedNullableIntWithDefaultAnnotation'] as int? ??
+              0,
+      fieldValueAllowedNullableIntWithDefaultInConstructor:
+          json['fieldValueAllowedNullableIntWithDefaultInConstructor']
+                  as int? ??
+              0,
     );
   }
 
@@ -284,6 +302,10 @@ class ReadEntity {
     Foo? nullableFoo,
     Foo? nullableFooWithDefaultAnnotation,
     Foo? nullableFooWithDefaultValueInConstructor,
+    int? fieldValueAllowedInt,
+    int? fieldValueAllowedNullableInt,
+    int? fieldValueAllowedNullableIntWithDefaultAnnotation,
+    int? fieldValueAllowedNullableIntWithDefaultInConstructor,
   }) {
     return ReadEntity._(
       entityId: entityId ?? this.entityId,
@@ -337,6 +359,15 @@ class ReadEntity {
       nullableFooWithDefaultValueInConstructor:
           nullableFooWithDefaultValueInConstructor ??
               this.nullableFooWithDefaultValueInConstructor,
+      fieldValueAllowedInt: fieldValueAllowedInt ?? this.fieldValueAllowedInt,
+      fieldValueAllowedNullableInt:
+          fieldValueAllowedNullableInt ?? this.fieldValueAllowedNullableInt,
+      fieldValueAllowedNullableIntWithDefaultAnnotation:
+          fieldValueAllowedNullableIntWithDefaultAnnotation ??
+              this.fieldValueAllowedNullableIntWithDefaultAnnotation,
+      fieldValueAllowedNullableIntWithDefaultInConstructor:
+          fieldValueAllowedNullableIntWithDefaultInConstructor ??
+              this.fieldValueAllowedNullableIntWithDefaultInConstructor,
     );
   }
 }
@@ -393,6 +424,12 @@ class CreateEntity {
     this.nullableFoo,
     this.nullableFooWithDefaultAnnotation = const Foo('defaultBar'),
     this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
+    required this.fieldValueAllowedInt,
+    this.fieldValueAllowedNullableInt,
+    this.fieldValueAllowedNullableIntWithDefaultAnnotation =
+        const ActualValue(0),
+    this.fieldValueAllowedNullableIntWithDefaultInConstructor =
+        const ActualValue(0),
   });
 
   final String text;
@@ -439,6 +476,11 @@ class CreateEntity {
   final Foo? nullableFoo;
   final Foo? nullableFooWithDefaultAnnotation;
   final Foo? nullableFooWithDefaultValueInConstructor;
+  final FirestoreData<int> fieldValueAllowedInt;
+  final FirestoreData<int>? fieldValueAllowedNullableInt;
+  final FirestoreData<int>? fieldValueAllowedNullableIntWithDefaultAnnotation;
+  final FirestoreData<int>?
+      fieldValueAllowedNullableIntWithDefaultInConstructor;
 
   Map<String, dynamic> toJson() {
     return {
@@ -484,15 +526,21 @@ class CreateEntity {
       'foo': _FooJsonConverter().toJson(foo),
       'fooWithDefault': _FooJsonConverter().toJson(fooWithDefault),
       'nullableFoo': _nullableFooJsonConverter.toJson(nullableFoo),
-      'nullableFooWithDefaultAnnotation': nullableFooWithDefaultAnnotation ==
-              null
-          ? const Foo('defaultBar')
-          : _nullableFooJsonConverter.toJson(nullableFooWithDefaultAnnotation!),
+      'nullableFooWithDefaultAnnotation':
+          nullableFooWithDefaultAnnotation == null
+              ? const Foo('defaultBar')
+              : _FooJsonConverter().toJson(nullableFooWithDefaultAnnotation!),
       'nullableFooWithDefaultValueInConstructor':
           nullableFooWithDefaultValueInConstructor == null
               ? const Foo('defaultBar')
-              : _nullableFooJsonConverter
+              : _FooJsonConverter()
                   .toJson(nullableFooWithDefaultValueInConstructor!),
+      'fieldValueAllowedInt': fieldValueAllowedInt.value,
+      'fieldValueAllowedNullableInt': fieldValueAllowedNullableInt?.value,
+      'fieldValueAllowedNullableIntWithDefaultAnnotation':
+          fieldValueAllowedNullableIntWithDefaultAnnotation?.value ?? 0,
+      'fieldValueAllowedNullableIntWithDefaultInConstructor':
+          fieldValueAllowedNullableIntWithDefaultInConstructor?.value ?? 0,
     };
   }
 }
