@@ -72,17 +72,32 @@ class CreateAppUser {
 }
 
 /// A [CollectionReference] to appUsers collection to read.
-final readAppUserCollectionReference =
-    FirebaseFirestore.instance.collection('appUsers').withConverter(
-          fromFirestore: (ds, _) => ReadAppUser.fromDocumentSnapshot(ds),
-          toFirestore: (obj, _) => throw UnimplementedError(),
-        );
+final readAppUserCollectionReference = FirebaseFirestore.instance
+    .collection('appUsers')
+    .withConverter<ReadAppUser>(
+      fromFirestore: (ds, _) => ReadAppUser.fromDocumentSnapshot(ds),
+      toFirestore: (obj, _) => throw UnimplementedError(),
+    );
 
 /// A [DocumentReference] to appUser document to read.
 DocumentReference<ReadAppUser> readAppUserDocumentReference({
   required String appUserId,
 }) =>
     readAppUserCollectionReference.doc(appUserId);
+
+/// A [CollectionReference] to appUsers collection to create.
+final createAppUserCollectionReference = FirebaseFirestore.instance
+    .collection('appUsers')
+    .withConverter<CreateAppUser>(
+      fromFirestore: (ds, _) => throw UnimplementedError(),
+      toFirestore: (obj, _) => obj.toJson(),
+    );
+
+/// A [DocumentReference] to appUser document to create.
+DocumentReference<CreateAppUser> createAppUserDocumentReference({
+  required String appUserId,
+}) =>
+    createAppUserCollectionReference.doc(appUserId);
 
 /// A query manager to execute query against [AppUser].
 class AppUserQuery {

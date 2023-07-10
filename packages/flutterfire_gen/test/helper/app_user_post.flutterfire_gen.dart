@@ -89,7 +89,7 @@ CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference({
         .collection('appUsers')
         .doc(appUserId)
         .collection('appUserPosts')
-        .withConverter(
+        .withConverter<ReadAppUserPost>(
           fromFirestore: (ds, _) => ReadAppUserPost.fromDocumentSnapshot(ds),
           toFirestore: (obj, _) => throw UnimplementedError(),
         );
@@ -100,6 +100,27 @@ DocumentReference<ReadAppUserPost> readAppUserPostDocumentReference({
   required String appUserPostId,
 }) =>
     readAppUserPostCollectionReference(appUserId: appUserId).doc(appUserPostId);
+
+/// A [CollectionReference] to appUserPosts collection to create.
+CollectionReference<CreateAppUserPost> createAppUserPostCollectionReference({
+  required String appUserId,
+}) =>
+    FirebaseFirestore.instance
+        .collection('appUsers')
+        .doc(appUserId)
+        .collection('appUserPosts')
+        .withConverter<CreateAppUserPost>(
+          fromFirestore: (ds, _) => throw UnimplementedError(),
+          toFirestore: (obj, _) => obj.toJson(),
+        );
+
+/// A [DocumentReference] to appUserPost document to create.
+DocumentReference<CreateAppUserPost> createAppUserPostDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+    createAppUserPostCollectionReference(appUserId: appUserId)
+        .doc(appUserPostId);
 
 /// A query manager to execute query against [AppUserPost].
 class AppUserPostQuery {

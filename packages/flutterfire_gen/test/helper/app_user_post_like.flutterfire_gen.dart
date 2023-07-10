@@ -85,7 +85,7 @@ CollectionReference<ReadAppUserPostLike>
             .collection('appUserPosts')
             .doc(appUserPostId)
             .collection('appUserPostLikes')
-            .withConverter(
+            .withConverter<ReadAppUserPostLike>(
               fromFirestore: (ds, _) =>
                   ReadAppUserPostLike.fromDocumentSnapshot(ds),
               toFirestore: (obj, _) => throw UnimplementedError(),
@@ -100,6 +100,34 @@ DocumentReference<ReadAppUserPostLike> readAppUserPostLikeDocumentReference({
     readAppUserPostLikeCollectionReference(
             appUserId: appUserId, appUserPostId: appUserPostId)
         .doc(appUserPostLikeId);
+
+/// A [CollectionReference] to appUserPostLikes collection to create.
+CollectionReference<CreateAppUserPostLike>
+    createAppUserPostLikeCollectionReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+        FirebaseFirestore.instance
+            .collection('appUsers')
+            .doc(appUserId)
+            .collection('appUserPosts')
+            .doc(appUserPostId)
+            .collection('appUserPostLikes')
+            .withConverter<CreateAppUserPostLike>(
+              fromFirestore: (ds, _) => throw UnimplementedError(),
+              toFirestore: (obj, _) => obj.toJson(),
+            );
+
+/// A [DocumentReference] to appUserPostLike document to create.
+DocumentReference<CreateAppUserPostLike>
+    createAppUserPostLikeDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+  required String appUserPostLikeId,
+}) =>
+        createAppUserPostLikeCollectionReference(
+                appUserId: appUserId, appUserPostId: appUserPostId)
+            .doc(appUserPostLikeId);
 
 /// A query manager to execute query against [AppUserPostLike].
 class AppUserPostLikeQuery {

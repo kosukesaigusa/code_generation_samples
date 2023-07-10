@@ -16,6 +16,8 @@ class RefsTemplate {
     return '''
 ${_collectionReferenceTemplate(ReferenceClassType.read)}
 ${_documentReferenceTemplate(ReferenceClassType.read)}
+${_collectionReferenceTemplate(ReferenceClassType.create)}
+${_documentReferenceTemplate(ReferenceClassType.create)}
 ''';
   }
 
@@ -23,7 +25,7 @@ ${_documentReferenceTemplate(ReferenceClassType.read)}
     final buffer = StringBuffer()
       ..writeln(
         // TODO: 文言を read, create, update で変える必要がある
-        '/// A [CollectionReference] to ${config.collectionName} collection to read.',
+        '/// A [CollectionReference] to ${config.collectionName} collection to ${referenceClassType.name}.',
       )
       ..write(_collectionReference(referenceClassType))
       ..write(_firestoreInstance());
@@ -42,7 +44,7 @@ ${_documentReferenceTemplate(ReferenceClassType.read)}
   String _documentReferenceTemplate(ReferenceClassType referenceClassType) {
     final buffer = StringBuffer()
       ..writeln(
-        '/// A [DocumentReference] to ${config.documentName} document to read.',
+        '/// A [DocumentReference] to ${config.documentName} document to ${referenceClassType.name}.',
       )
       ..writeln(_documentReference(referenceClassType));
 
@@ -71,12 +73,22 @@ CollectionReference<${_className(referenceClassType)}> ${_collectionReferenceNam
     return 'FirebaseFirestore.instance';
   }
 
-  String _withConverterString(ReferenceClassType referenceClassType) => '''
-.withConverter(
+  String _withConverterString(ReferenceClassType referenceClassType) {
+    if (referenceClassType == ReferenceClassType.read) {
+      return '''
+.withConverter<${_className(referenceClassType)}>(
   fromFirestore: (ds, _) => ${_className(referenceClassType)}.fromDocumentSnapshot(ds),
   toFirestore: (obj, _) => throw UnimplementedError(),
 );
 ''';
+    }
+    return '''
+.withConverter<${_className(referenceClassType)}>(
+  fromFirestore: (ds, _) => throw UnimplementedError(),
+  toFirestore: (obj, _) => obj.toJson(),
+);
+''';
+  }
 
   String _documentReference(ReferenceClassType referenceClassType) {
     if (config.firestorePathSegments.isEmpty) {

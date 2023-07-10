@@ -536,7 +536,7 @@ class CreateEntity {
 
 /// A [CollectionReference] to entities collection to read.
 final readEntityCollectionReference =
-    fakeDb.collection('entities').withConverter(
+    fakeDb.collection('entities').withConverter<ReadEntity>(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
           toFirestore: (obj, _) => throw UnimplementedError(),
         );
@@ -546,6 +546,19 @@ DocumentReference<ReadEntity> readEntityDocumentReference({
   required String entityId,
 }) =>
     readEntityCollectionReference.doc(entityId);
+
+/// A [CollectionReference] to entities collection to create.
+final createEntityCollectionReference =
+    fakeDb.collection('entities').withConverter<CreateEntity>(
+          fromFirestore: (ds, _) => throw UnimplementedError(),
+          toFirestore: (obj, _) => obj.toJson(),
+        );
+
+/// A [DocumentReference] to entity document to create.
+DocumentReference<CreateEntity> createEntityDocumentReference({
+  required String entityId,
+}) =>
+    createEntityCollectionReference.doc(entityId);
 
 /// A query manager to execute query against [Entity].
 class EntityQuery {
