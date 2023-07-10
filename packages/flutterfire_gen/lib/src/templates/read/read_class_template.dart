@@ -42,7 +42,7 @@ class ${config.readClassName} {
   ${FromJsonTemplate(
       config: config,
       fields: fields,
-      defaultValueStrings: visitor.fromJsonDefaultValueStrings,
+      defaultValueStrings: visitor.readDefaultValueStrings,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
     )}
 

@@ -14,10 +14,10 @@ class AppUserPost {
     this.updatedAt,
   });
 
-  @FromJsonDefault('')
+  @ReadDefault('')
   final String content;
 
-  @FromJsonDefault(<int>[])
+  @ReadDefault(<int>[])
   final List<int> numbers;
 
   // 書き込み時は常に自動でサーバ時間のつもり、そういう JsonConverter を指定するべきか

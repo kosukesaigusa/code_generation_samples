@@ -16,11 +16,17 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// Fields of visited [FirestoreDocument] annotated class.
   final Map<String, dynamic> fields = {};
 
-  /// Default value strings of each field when read Cloud Firestore documents.
-  final Map<String, String> fromJsonDefaultValueStrings = {};
+  /// Default value strings of each field when reading Cloud Firestore
+  /// documents.
+  final Map<String, String> readDefaultValueStrings = {};
 
-  /// Default value strings of each field when create Cloud Firestore documents.
-  final Map<String, String> toJsonDefaultValueStrings = {};
+  /// Default value strings of each field when creating Cloud Firestore
+  /// documents.
+  final Map<String, String> createDefaultValueStrings = {};
+
+  /// Default value strings of each field when updating Cloud Firestore
+  /// documents.
+  final Map<String, String> updateDefaultValueStrings = {};
 
   /// A set of strings of FieldValue allowed fields.
   final Set<String> fieldValueAllowedFields = {};
@@ -53,8 +59,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
           // その場合は、アノテーションにおいても toJson, fromJson をいっしょくたに
           // あつかうような概念が必要になりそうかを確認する。必要ならそのように
           // リファクタする。
-          fromJsonDefaultValueStrings[fieldName] = defaultValueCode;
-          toJsonDefaultValueStrings[fieldName] = defaultValueCode;
+          readDefaultValueStrings[fieldName] = defaultValueCode;
+          createDefaultValueStrings[fieldName] = defaultValueCode;
         }
       }
     }
@@ -116,16 +122,20 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         !res.trimLeft().startsWith('const') &&
         (res.contains('(') || res.contains('[') || res.contains('{'));
     if (needsConstModifier) {
-      if (defaultTypeString == 'FromJsonDefault') {
-        fromJsonDefaultValueStrings[fieldName] = 'const $res';
-      } else if (defaultTypeString == 'ToJsonDefault') {
-        toJsonDefaultValueStrings[fieldName] = 'const $res';
+      if (defaultTypeString == ReadDefault.typeString) {
+        readDefaultValueStrings[fieldName] = 'const $res';
+      } else if (defaultTypeString == CreateDefault.typeString) {
+        createDefaultValueStrings[fieldName] = 'const $res';
+      } else if (defaultTypeString == UpdateDefault.typeString) {
+        updateDefaultValueStrings[fieldName] = 'const $res';
       }
     } else {
-      if (defaultTypeString == 'FromJsonDefault') {
-        fromJsonDefaultValueStrings[fieldName] = res;
-      } else if (defaultTypeString == 'ToJsonDefault') {
-        toJsonDefaultValueStrings[fieldName] = res;
+      if (defaultTypeString == ReadDefault.typeString) {
+        readDefaultValueStrings[fieldName] = res;
+      } else if (defaultTypeString == CreateDefault.typeString) {
+        createDefaultValueStrings[fieldName] = res;
+      } else if (defaultTypeString == UpdateDefault.typeString) {
+        updateDefaultValueStrings[fieldName] = res;
       }
     }
   }

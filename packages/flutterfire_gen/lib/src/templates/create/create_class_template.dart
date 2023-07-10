@@ -32,7 +32,7 @@ class ${config.createClassName} {
 
   ${ToJsonTemplate(
       fields: fields,
-      defaultValueStrings: visitor.toJsonDefaultValueStrings,
+      defaultValueStrings: visitor.createDefaultValueStrings,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
     )}
@@ -46,7 +46,7 @@ class ${config.createClassName} {
       final fieldNameString = entry.key;
       final typeNameString = entry.value as String;
 
-      final defaultValueStrings = visitor.toJsonDefaultValueStrings;
+      final defaultValueStrings = visitor.createDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
 

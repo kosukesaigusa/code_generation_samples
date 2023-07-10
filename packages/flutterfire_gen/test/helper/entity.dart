@@ -65,94 +65,94 @@ class Entity {
 
   final String text;
 
-  @FromJsonDefault('requiredWithDefault')
+  @ReadDefault('requiredWithDefault')
   final String textWithDefault;
 
-  @FromJsonDefault('defaultText')
+  @ReadDefault('defaultText')
   final String? nullableText;
 
   final int integer;
 
-  @FromJsonDefault(0)
+  @ReadDefault(0)
   final int integerWithDefault;
 
-  @FromJsonDefault(0)
+  @ReadDefault(0)
   final int? nullableInteger;
 
   final double doubleNumber;
 
-  @FromJsonDefault(3.14)
+  @ReadDefault(3.14)
   final double doubleNumberWithDefault;
 
-  @FromJsonDefault(3.14)
+  @ReadDefault(3.14)
   final double? nullableDoubleNumber;
 
   final bool isBool;
 
-  @FromJsonDefault(false)
+  @ReadDefault(false)
   final bool isBoolWithDefault;
 
-  @FromJsonDefault(false)
+  @ReadDefault(false)
   final bool? nullableIsBool;
 
   final List<String> texts;
 
-  @FromJsonDefault(<String>['requiredWithDefault'])
+  @ReadDefault(<String>['requiredWithDefault'])
   final List<String> textsWithDefault;
 
-  @FromJsonDefault(<String>[])
+  @ReadDefault(<String>[])
   final List<String>? nullableTexts;
 
   final Map<String, dynamic> map;
 
-  @FromJsonDefault(<String, dynamic>{})
+  @ReadDefault(<String, dynamic>{})
   final Map<String, dynamic> mapWithDefault;
 
-  @FromJsonDefault(<String, dynamic>{})
+  @ReadDefault(<String, dynamic>{})
   final Map<String, dynamic>? nullableMap;
 
   final Map<String, String> stringMap;
 
-  @FromJsonDefault(<String, String>{})
+  @ReadDefault(<String, String>{})
   final Map<String, String> stringMapWithDefault;
 
-  @FromJsonDefault(<String, String>{})
+  @ReadDefault(<String, String>{})
   final Map<String, String>? nullableStringMap;
 
   final Map<String, Map<String, int>> nestedMap;
 
-  @FromJsonDefault(
+  @ReadDefault(
     <String, Map<String, int>>{'requiredWithDefault': <String, int>{}},
   )
   final Map<String, Map<String, int>> nestedMapWithDefault;
 
-  @FromJsonDefault(<String, Map<String, int>>{})
+  @ReadDefault(<String, Map<String, int>>{})
   final Map<String, Map<String, int>>? nullableNestedMap;
 
   final Map<String, List<int>> listMap;
 
-  @FromJsonDefault(<String, List<int>>{'requiredWithDefault': <int>[]})
+  @ReadDefault(<String, List<int>>{'requiredWithDefault': <int>[]})
   final Map<String, List<int>> listMapWithDefault;
 
-  @FromJsonDefault(<String, List<int>>{})
+  @ReadDefault(<String, List<int>>{})
   final Map<String, List<int>>? nullableListMap;
 
   final List<Map<String, int>> mapList;
 
-  @FromJsonDefault(<Map<String, int>>[
+  @ReadDefault(<Map<String, int>>[
     <String, int>{'requiredWithDefault': 0}
   ])
   final List<Map<String, int>> mapListWithDefault;
 
-  @FromJsonDefault(<Map<String, int>>[])
+  @ReadDefault(<Map<String, int>>[])
   final List<Map<String, int>>? nullableMapList;
 
   final GeoPoint geoPoint;
 
-  @FromJsonDefault(GeoPoint(0, 0))
+  @ReadDefault(GeoPoint(0, 0))
   final GeoPoint geoPointWithDefault;
 
-  @FromJsonDefault(GeoPoint(0, 0))
+  @ReadDefault(GeoPoint(0, 0))
   final GeoPoint? nullableGeoPoint;
 
   final DateTime dateTime;
@@ -170,14 +170,14 @@ class Entity {
   @_FooJsonConverter()
   final Foo foo;
 
-  @FromJsonDefault(Foo('requiredWithDefault'))
+  @ReadDefault(Foo('requiredWithDefault'))
   @_FooJsonConverter()
   final Foo fooWithDefault;
 
   @_nullableFooJsonConverter
   final Foo? nullableFoo;
 
-  @ToJsonDefault(Foo('defaultBar'))
+  @CreateDefault(Foo('defaultBar'))
   @_FooJsonConverter()
   final Foo? nullableFooWithDefaultAnnotation;
 
@@ -191,7 +191,7 @@ class Entity {
   final int? fieldValueAllowedNullableInt;
 
   @AllowFieldValue()
-  @ToJsonDefault(0)
+  @CreateDefault(0)
   final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
 
   @AllowFieldValue()

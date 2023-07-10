@@ -48,25 +48,43 @@ sealed class Default {
   const Default();
 }
 
-/// An annotation to give default value if the field is null when calling
-/// fromJson to toJson.
-final class FromJsonDefault extends Default {
-  /// Create a [FromJsonDefault].
-  const FromJsonDefault(this.value);
+/// An annotation to give default value if the field is null when reading
+/// documents.
+final class ReadDefault extends Default {
+  /// Create a [ReadDefault].
+  const ReadDefault(this.value);
 
   /// A default value.
   final dynamic value;
+
+  ///
+  static const typeString = 'ReadDefault';
 }
 
-// TODO: fromJsonDefault, toJsonDefault くらいの命名・分類でも良さそう
-/// An annotation to give default value if the field is null when calling
-/// toJson.
-final class ToJsonDefault extends Default {
-  /// Create a [ToJsonDefault].
-  const ToJsonDefault(this.value);
+/// An annotation to give default value if the field is null when creating a
+/// document.
+final class CreateDefault extends Default {
+  /// Create a [CreateDefault].
+  const CreateDefault(this.value);
 
   /// A default value.
   final dynamic value;
+
+  ///
+  static const typeString = 'CreateDefault';
+}
+
+/// An annotation to give default value if the field is null when updating a
+/// document.
+final class UpdateDefault extends Default {
+  /// Create a [UpdateDefault].
+  const UpdateDefault(this.value);
+
+  /// A default value.
+  final dynamic value;
+
+  ///
+  static const typeString = 'UpdateDefault';
 }
 
 /// An annotation to accept Cloud Firestore FieldValue input when creating or
