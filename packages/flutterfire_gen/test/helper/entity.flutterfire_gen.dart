@@ -792,7 +792,7 @@ class EntityQuery {
     });
   }
 
-  /// Fetches [ReadEntity] document.
+  /// Fetches a specified [ReadEntity] document.
   Future<ReadEntity?> fetchDocument({
     required String entityId,
     GetOptions? options,
@@ -803,7 +803,7 @@ class EntityQuery {
     return ds.data();
   }
 
-  /// Subscribes [Entity] document.
+  /// Subscribes a specified [Entity] document.
   Future<Stream<ReadEntity?>> subscribeDocument({
     required String entityId,
     bool includeMetadataChanges = false,
@@ -817,4 +817,29 @@ class EntityQuery {
     }
     return streamDs.map((ds) => ds.data());
   }
+
+  /// Creates a [Entity] document.
+  Future<DocumentReference<CreateEntity>> create({
+    required CreateEntity createEntity,
+  }) =>
+      createEntityCollectionReference.add(createEntity);
+
+  /// Sets a [Entity] document.
+  Future<void> set({
+    required String entityId,
+    required CreateEntity createEntity,
+    SetOptions? options,
+  }) =>
+      createEntityDocumentReference(
+        entityId: entityId,
+      ).set(createEntity, options);
+
+  /// Updates a specified [Entity] document.
+  Future<void> update({
+    required String entityId,
+    required UpdateEntity updateEntity,
+  }) =>
+      updateEntityDocumentReference(
+        entityId: entityId,
+      ).update(updateEntity.toJson());
 }

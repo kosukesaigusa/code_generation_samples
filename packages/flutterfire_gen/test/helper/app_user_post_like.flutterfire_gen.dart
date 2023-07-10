@@ -227,7 +227,7 @@ class AppUserPostLikeQuery {
     });
   }
 
-  /// Fetches [ReadAppUserPostLike] document.
+  /// Fetches a specified [ReadAppUserPostLike] document.
   Future<ReadAppUserPostLike?> fetchDocument({
     required String appUserId,
     required String appUserPostId,
@@ -242,7 +242,7 @@ class AppUserPostLikeQuery {
     return ds.data();
   }
 
-  /// Subscribes [AppUserPostLike] document.
+  /// Subscribes a specified [AppUserPostLike] document.
   Future<Stream<ReadAppUserPostLike?>> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
@@ -260,4 +260,41 @@ class AppUserPostLikeQuery {
     }
     return streamDs.map((ds) => ds.data());
   }
+
+  /// Creates a [AppUserPostLike] document.
+  Future<DocumentReference<CreateAppUserPostLike>> create({
+    required String appUserId,
+    required String appUserPostId,
+    required CreateAppUserPostLike createAppUserPostLike,
+  }) =>
+      createAppUserPostLikeCollectionReference(
+              appUserId: appUserId, appUserPostId: appUserPostId)
+          .add(createAppUserPostLike);
+
+  /// Sets a [AppUserPostLike] document.
+  Future<void> set({
+    required String appUserId,
+    required String appUserPostId,
+    required String appUserPostLikeId,
+    required CreateAppUserPostLike createAppUserPostLike,
+    SetOptions? options,
+  }) =>
+      createAppUserPostLikeDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+        appUserPostLikeId: appUserPostLikeId,
+      ).set(createAppUserPostLike, options);
+
+  /// Updates a specified [AppUserPostLike] document.
+  Future<void> update({
+    required String appUserId,
+    required String appUserPostId,
+    required String appUserPostLikeId,
+    required UpdateAppUserPostLike updateAppUserPostLike,
+  }) =>
+      updateAppUserPostLikeDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+        appUserPostLikeId: appUserPostLikeId,
+      ).update(updateAppUserPostLike.toJson());
 }

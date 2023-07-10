@@ -22,7 +22,7 @@ class ${config.baseClassName}Query {
     Query<${config.readClassName}>? Function(Query<${config.readClassName}> query)? queryBuilder,
     int Function(${config.readClassName} lhs, ${config.readClassName} rhs)? compare,
   }) async {
-    Query<${config.readClassName}> query = ${_collectionReference()}
+    Query<${config.readClassName}> query = ${_collectionReference(ReferenceClassType.read)};
     if (queryBuilder != null) {
       query = queryBuilder(query)!;
     }
@@ -42,7 +42,7 @@ class ${config.baseClassName}Query {
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
   }) {
-    Query<${config.readClassName}> query = ${_collectionReference()}
+    Query<${config.readClassName}> query = ${_collectionReference(ReferenceClassType.read)};
     if (queryBuilder != null) {
       query = queryBuilder(query)!;
     }
@@ -60,7 +60,7 @@ class ${config.baseClassName}Query {
     });
   }
 
-  /// Fetches [${config.readClassName}] document.
+  /// Fetches a specified [${config.readClassName}] document.
   Future<${config.readClassName}?> fetchDocument({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
@@ -74,7 +74,7 @@ class ${config.baseClassName}Query {
     return ds.data();
   }
 
-  /// Subscribes [${config.baseClassName}] document.
+  /// Subscribes a specified [${config.baseClassName}] document.
   Future<Stream<${config.readClassName}?>> subscribeDocument({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
@@ -91,6 +91,36 @@ class ${config.baseClassName}Query {
     }
     return streamDs.map((ds) => ds.data());
   }
+
+  /// Creates a [${config.baseClassName}] document.
+  Future<DocumentReference<${config.createClassName}>> create({
+    ${_parentDocumentIdArguments()}
+    required ${config.createClassName} ${config.createClassInstanceName},
+  }) =>
+      ${_collectionReference(ReferenceClassType.create)}.add(${config.createClassInstanceName});
+
+  /// Sets a [${config.baseClassName}] document.
+  Future<void> set({
+    ${_parentDocumentIdArguments()}
+    required String ${config.documentName}Id,
+    required ${config.createClassName} ${config.createClassInstanceName},
+    SetOptions? options,
+  }) =>
+      ${config.createDocumentReferenceName}(
+        ${_parentDocumentIdParameters()}
+        ${config.documentName}Id: ${config.documentName}Id,
+      ).set(${config.createClassInstanceName}, options);
+
+  /// Updates a specified [${config.baseClassName}] document.
+  Future<void> update({
+    ${_parentDocumentIdArguments()}
+    required String ${config.documentName}Id,
+    required ${config.updateClassName} ${config.updateClassInstanceName},
+  }) =>
+      ${config.updateDocumentReferenceName}(
+        ${_parentDocumentIdParameters()}
+        ${config.documentName}Id: ${config.documentName}Id,
+      ).update(${config.updateClassInstanceName}.toJson());
 }
 ''';
   }
@@ -113,11 +143,11 @@ class ${config.baseClassName}Query {
         : '';
   }
 
-  String _collectionReference() {
+  String _collectionReference(ReferenceClassType referenceClassType) {
     if (config.firestorePathSegments.length > 1) {
-      return 'read${config.baseClassName}CollectionReference(${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: $documentId').join(',')});';
+      return '${config.collectionReferenceName(referenceClassType)}(${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: $documentId').join(',')})';
     } else {
-      return 'read${config.baseClassName}CollectionReference;';
+      return config.collectionReferenceName(referenceClassType);
     }
   }
 }

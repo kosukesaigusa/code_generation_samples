@@ -154,16 +154,3 @@ DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(re
     }
   }
 }
-
-///
-enum ReferenceClassType {
-  ///
-  read,
-
-  ///
-  create,
-
-  ///
-  update,
-  ;
-}

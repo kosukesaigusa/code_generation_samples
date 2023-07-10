@@ -69,13 +69,13 @@ class CreateAppUserPost {
   });
 
   final String content;
-  final List<int> numbers;
+  final FirestoreData<List<int>> numbers;
   final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
       'content': content,
-      'numbers': numbers,
+      'numbers': numbers.value,
       'updatedAt': updatedAt,
     };
   }
@@ -89,13 +89,13 @@ class UpdateAppUserPost {
   });
 
   final String? content;
-  final List<int>? numbers;
+  final FirestoreData<List<int>>? numbers;
   final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
       if (content != null) 'content': content,
-      if (numbers != null) 'numbers': numbers,
+      if (numbers != null) 'numbers': numbers!.value,
       if (updatedAt != null) 'updatedAt': updatedAt,
     };
   }
@@ -214,7 +214,7 @@ class AppUserPostQuery {
     });
   }
 
-  /// Fetches [ReadAppUserPost] document.
+  /// Fetches a specified [ReadAppUserPost] document.
   Future<ReadAppUserPost?> fetchDocument({
     required String appUserId,
     required String appUserPostId,
@@ -227,7 +227,7 @@ class AppUserPostQuery {
     return ds.data();
   }
 
-  /// Subscribes [AppUserPost] document.
+  /// Subscribes a specified [AppUserPost] document.
   Future<Stream<ReadAppUserPost?>> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
@@ -243,4 +243,35 @@ class AppUserPostQuery {
     }
     return streamDs.map((ds) => ds.data());
   }
+
+  /// Creates a [AppUserPost] document.
+  Future<DocumentReference<CreateAppUserPost>> create({
+    required String appUserId,
+    required CreateAppUserPost createAppUserPost,
+  }) =>
+      createAppUserPostCollectionReference(appUserId: appUserId)
+          .add(createAppUserPost);
+
+  /// Sets a [AppUserPost] document.
+  Future<void> set({
+    required String appUserId,
+    required String appUserPostId,
+    required CreateAppUserPost createAppUserPost,
+    SetOptions? options,
+  }) =>
+      createAppUserPostDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+      ).set(createAppUserPost, options);
+
+  /// Updates a specified [AppUserPost] document.
+  Future<void> update({
+    required String appUserId,
+    required String appUserPostId,
+    required UpdateAppUserPost updateAppUserPost,
+  }) =>
+      updateAppUserPostDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+      ).update(updateAppUserPost.toJson());
 }

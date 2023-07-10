@@ -16,5 +16,6 @@ class AppUser {
   final String name;
 
   @ReadDefault('')
+  @CreateDefault('')
   final String imageUrl;
 }

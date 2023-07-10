@@ -57,7 +57,7 @@ class ReadAppUser {
 class CreateAppUser {
   const CreateAppUser({
     required this.name,
-    required this.imageUrl,
+    this.imageUrl = '',
   });
 
   final String name;
@@ -175,7 +175,7 @@ class AppUserQuery {
     });
   }
 
-  /// Fetches [ReadAppUser] document.
+  /// Fetches a specified [ReadAppUser] document.
   Future<ReadAppUser?> fetchDocument({
     required String appUserId,
     GetOptions? options,
@@ -186,7 +186,7 @@ class AppUserQuery {
     return ds.data();
   }
 
-  /// Subscribes [AppUser] document.
+  /// Subscribes a specified [AppUser] document.
   Future<Stream<ReadAppUser?>> subscribeDocument({
     required String appUserId,
     bool includeMetadataChanges = false,
@@ -200,4 +200,29 @@ class AppUserQuery {
     }
     return streamDs.map((ds) => ds.data());
   }
+
+  /// Creates a [AppUser] document.
+  Future<DocumentReference<CreateAppUser>> create({
+    required CreateAppUser createAppUser,
+  }) =>
+      createAppUserCollectionReference.add(createAppUser);
+
+  /// Sets a [AppUser] document.
+  Future<void> set({
+    required String appUserId,
+    required CreateAppUser createAppUser,
+    SetOptions? options,
+  }) =>
+      createAppUserDocumentReference(
+        appUserId: appUserId,
+      ).set(createAppUser, options);
+
+  /// Updates a specified [AppUser] document.
+  Future<void> update({
+    required String appUserId,
+    required UpdateAppUser updateAppUser,
+  }) =>
+      updateAppUserDocumentReference(
+        appUserId: appUserId,
+      ).update(updateAppUser.toJson());
 }

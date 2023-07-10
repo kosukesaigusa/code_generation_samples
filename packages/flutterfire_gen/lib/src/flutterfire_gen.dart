@@ -8,7 +8,7 @@ import 'package:source_gen/source_gen.dart';
 import 'config.dart';
 import 'firestore_document_visitor.dart';
 import 'templates/create/create_class_template.dart';
-import 'templates/query.dart';
+import 'templates/query_class_template.dart';
 import 'templates/read/read_class_template.dart';
 import 'templates/refs_template.dart';
 import 'templates/update/update_class_template.dart';

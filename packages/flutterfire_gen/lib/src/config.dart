@@ -64,6 +64,12 @@ class FirestoreDocumentConfig {
   String get updateClassName => 'Update$baseClassName';
 
   ///
+  String get createClassInstanceName => 'create$baseClassName';
+
+  ///
+  String get updateClassInstanceName => 'update$baseClassName';
+
+  ///
   String get documentIdFieldName => '${documentName}Id';
 
   ///
@@ -82,6 +88,10 @@ class FirestoreDocumentConfig {
       'create${baseClassName}CollectionReference';
 
   ///
+  String collectionReferenceName(ReferenceClassType referenceClassType) =>
+      '${referenceClassType.name}${baseClassName}CollectionReference';
+
+  ///
   String get createDocumentReferenceName =>
       'create${baseClassName}DocumentReference';
 
@@ -92,4 +102,17 @@ class FirestoreDocumentConfig {
   ///
   String get updateDocumentReferenceName =>
       'update${baseClassName}DocumentReference';
+}
+
+///
+enum ReferenceClassType {
+  ///
+  read,
+
+  ///
+  create,
+
+  ///
+  update,
+  ;
 }
