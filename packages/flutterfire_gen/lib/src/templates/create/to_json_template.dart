@@ -72,7 +72,6 @@ Map<String, dynamic> toJson() {
       }
       return "'$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString),";
     }
-    // TODO: FieldValue と nullable, defalutValue などの組み合わせパターン
     if (isFieldValueAllowed) {
       if (isNullableType) {
         if (hasDefaultValue) {
