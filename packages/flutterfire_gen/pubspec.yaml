@@ -14,6 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutterfire_gen_annotation: ^0.1.0-dev.1
+  flutterfire_gen_utils: ^0.0.1-dev.2
   json_annotation: ^4.8.1
   meta: ^1.9.1
   source_gen: ^1.4.0

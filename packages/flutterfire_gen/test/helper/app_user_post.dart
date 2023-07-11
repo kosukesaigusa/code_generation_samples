@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
+import 'package:flutterfire_gen_utils/flutterfire_gen_utils.dart';
 
 part 'app_user_post.flutterfire_gen.dart';
 
