@@ -1,3 +1,3 @@
 export 'src/default.dart';
-export 'src/firestore_data.dart';
+export 'src/field_value.dart';
 export 'src/firestore_document.dart';

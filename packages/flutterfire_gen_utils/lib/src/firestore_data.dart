@@ -18,15 +18,7 @@ final class FieldValueData<T> extends FirestoreData<T> {
 }
 
 final class ActualValue<T> extends FirestoreData<T> {
-  const ActualValue(this.value);
+  const ActualValue(this.actualValue);
 
-  @override
-  final T value;
-}
-
-/// An annotation to accept Cloud Firestore FieldValue input when creating or
-/// updating document.
-class AllowFieldValue {
-  ///
-  const AllowFieldValue();
+  final T actualValue;
 }

@@ -1,0 +1,1 @@
+# flutterfire_gen_annotation

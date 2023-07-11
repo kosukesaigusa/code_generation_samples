@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   flutterfire_gen_annotation:
     path: ../../flutterfire_gen_annotation
+  flutterfire_gen_utils:
+    path: ../../flutterfire_gen_utils
   json_annotation: ^4.8.1
 
 dev_dependencies:
@@ -28,3 +30,5 @@ dependency_overrides:
     path: ../
   flutterfire_gen_annotation:
     path: ../../flutterfire_gen_annotation
+  flutterfire_gen_utils:
+    path: ../../flutterfire_gen_utils
