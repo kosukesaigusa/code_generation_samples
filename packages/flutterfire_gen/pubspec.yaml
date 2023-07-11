@@ -13,17 +13,14 @@ dependencies:
   cloud_firestore: ^4.8.2
   flutter:
     sdk: flutter
-  flutterfire_gen_annotation:
-    git:
-      url: https://github.com/KosukeSaigusa/flutterfire_gen.git
-      path: packages/flutterfire_gen_annotation
-      ref: d85f2cf41aabe1dde0c4c17a9f6e852579ac2b6c
+  flutterfire_gen_annotation: ^0.0.1-dev.1
   json_annotation: ^4.8.1
   meta: ^1.9.1
   source_gen: ^1.4.0
 
 dev_dependencies:
   build_runner: ^2.4.6
+  fake_cloud_firestore: ^2.4.1+1
   flutter_test:
     sdk: flutter
   json_serializable: ^6.7.1

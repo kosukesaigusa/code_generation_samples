@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
-import 'package:flutterfire_gen_utils/flutterfire_gen_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'entity.flutterfire_gen.dart';

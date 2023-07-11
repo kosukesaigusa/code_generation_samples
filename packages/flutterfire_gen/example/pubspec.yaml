@@ -1,7 +1,7 @@
 name: example
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.1.0
+version: 0.0.1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -13,8 +13,6 @@ dependencies:
     sdk: flutter
   flutterfire_gen_annotation:
     path: ../../flutterfire_gen_annotation
-  flutterfire_gen_utils:
-    path: ../../flutterfire_gen_utils
   json_annotation: ^4.8.1
 
 dev_dependencies:
@@ -30,5 +28,3 @@ dependency_overrides:
     path: ../
   flutterfire_gen_annotation:
     path: ../../flutterfire_gen_annotation
-  flutterfire_gen_utils:
-    path: ../../flutterfire_gen_utils
