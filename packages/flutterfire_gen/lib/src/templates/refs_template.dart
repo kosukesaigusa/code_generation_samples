@@ -1,4 +1,4 @@
-// ignore_for_file: comment_references
+// ignore_for_file: comment_references, lines_longer_than_80_chars
 
 import '../config.dart';
 

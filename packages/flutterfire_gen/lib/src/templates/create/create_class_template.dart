@@ -1,3 +1,5 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import '../../config.dart';
 import '../../firestore_document_visitor.dart';
 import 'to_json_template.dart';

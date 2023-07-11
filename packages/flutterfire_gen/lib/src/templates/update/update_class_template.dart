@@ -5,6 +5,7 @@ import 'to_json_template.dart';
 
 ///
 class UpdateClassTemplate {
+  /// Creates a [UpdateClassTemplate].
   const UpdateClassTemplate({
     required this.config,
     required this.visitor,
