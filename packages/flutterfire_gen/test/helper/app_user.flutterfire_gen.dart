@@ -225,4 +225,12 @@ class AppUserQuery {
       updateAppUserDocumentReference(
         appUserId: appUserId,
       ).update(updateAppUser.toJson());
+
+  /// Deletes a specified [AppUser] document.
+  Future<void> delete({
+    required String appUserId,
+  }) =>
+      readAppUserDocumentReference(
+        appUserId: appUserId,
+      ).delete();
 }

@@ -297,4 +297,16 @@ class AppUserPostLikeQuery {
         appUserPostId: appUserPostId,
         appUserPostLikeId: appUserPostLikeId,
       ).update(updateAppUserPostLike.toJson());
+
+  /// Deletes a specified [AppUserPostLike] document.
+  Future<void> delete({
+    required String appUserId,
+    required String appUserPostId,
+    required String appUserPostLikeId,
+  }) =>
+      readAppUserPostLikeDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+        appUserPostLikeId: appUserPostLikeId,
+      ).delete();
 }

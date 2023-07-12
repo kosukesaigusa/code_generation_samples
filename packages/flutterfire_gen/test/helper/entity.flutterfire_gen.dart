@@ -842,4 +842,12 @@ class EntityQuery {
       updateEntityDocumentReference(
         entityId: entityId,
       ).update(updateEntity.toJson());
+
+  /// Deletes a specified [Entity] document.
+  Future<void> delete({
+    required String entityId,
+  }) =>
+      readEntityDocumentReference(
+        entityId: entityId,
+      ).delete();
 }

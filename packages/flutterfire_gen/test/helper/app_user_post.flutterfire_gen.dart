@@ -274,4 +274,14 @@ class AppUserPostQuery {
         appUserId: appUserId,
         appUserPostId: appUserPostId,
       ).update(updateAppUserPost.toJson());
+
+  /// Deletes a specified [AppUserPost] document.
+  Future<void> delete({
+    required String appUserId,
+    required String appUserPostId,
+  }) =>
+      readAppUserPostDocumentReference(
+        appUserId: appUserId,
+        appUserPostId: appUserPostId,
+      ).delete();
 }

@@ -121,6 +121,16 @@ class ${config.baseClassName}Query {
         ${_parentDocumentIdParameters()}
         ${config.documentName}Id: ${config.documentName}Id,
       ).update(${config.updateClassInstanceName}.toJson());
+
+  /// Deletes a specified [${config.baseClassName}] document.
+  Future<void> delete({
+    ${_parentDocumentIdArguments()}
+    required String ${config.documentName}Id,
+  }) =>
+      ${config.readDocumentReferenceName}(
+        ${_parentDocumentIdParameters()}
+        ${config.documentName}Id: ${config.documentName}Id,
+      ).delete();
 }
 ''';
   }
