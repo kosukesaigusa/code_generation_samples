@@ -1,3 +1,7 @@
+## 0.0.1-dev.3
+
+* Generate delete document method in Query class.
+
 ## 0.0.1-dev.2
 
 * Fix a bug in build.yaml.
