@@ -92,8 +92,8 @@ class ${config.baseClassName}Query {
     return streamDs.map((ds) => ds.data());
   }
 
-  /// Creates a [${config.baseClassName}] document.
-  Future<DocumentReference<${config.createClassName}>> create({
+  /// Adds a [${config.baseClassName}] document.
+  Future<DocumentReference<${config.createClassName}>> add({
     ${_parentDocumentIdArguments()}
     required ${config.createClassName} ${config.createClassInstanceName},
   }) =>
