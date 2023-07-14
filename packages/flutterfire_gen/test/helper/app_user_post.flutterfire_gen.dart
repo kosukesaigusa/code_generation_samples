@@ -163,6 +163,23 @@ DocumentReference<UpdateAppUserPost> updateAppUserPostDocumentReference({
     updateAppUserPostCollectionReference(appUserId: appUserId)
         .doc(appUserPostId);
 
+/// A [CollectionReference] to appUserPosts collection to delete.
+CollectionReference<Object?> deleteAppUserPostCollectionReference({
+  required String appUserId,
+}) =>
+    FirebaseFirestore.instance
+        .collection('appUsers')
+        .doc(appUserId)
+        .collection('appUserPosts');
+
+/// A [DocumentReference] to appUserPost document to delete.
+DocumentReference<Object?> deleteAppUserPostDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+    deleteAppUserPostCollectionReference(appUserId: appUserId)
+        .doc(appUserPostId);
+
 /// A query manager to execute query against [AppUserPost].
 class AppUserPostQuery {
   /// Fetches [ReadAppUserPost] documents.
@@ -244,8 +261,8 @@ class AppUserPostQuery {
     return streamDs.map((ds) => ds.data());
   }
 
-  /// Creates a [AppUserPost] document.
-  Future<DocumentReference<CreateAppUserPost>> create({
+  /// Adds a [AppUserPost] document.
+  Future<DocumentReference<CreateAppUserPost>> add({
     required String appUserId,
     required CreateAppUserPost createAppUserPost,
   }) =>
@@ -280,7 +297,7 @@ class AppUserPostQuery {
     required String appUserId,
     required String appUserPostId,
   }) =>
-      readAppUserPostDocumentReference(
+      deleteAppUserPostDocumentReference(
         appUserId: appUserId,
         appUserPostId: appUserPostId,
       ).delete();

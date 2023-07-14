@@ -12,15 +12,12 @@ class RefsTemplate {
 
   @override
   String toString() {
-    // TODO: ReferenceClassType.values.map で read, create, update の各クラスに対して実行する
-    return '''
-${_collectionReferenceTemplate(ReferenceClassType.read)}
-${_documentReferenceTemplate(ReferenceClassType.read)}
-${_collectionReferenceTemplate(ReferenceClassType.create)}
-${_documentReferenceTemplate(ReferenceClassType.create)}
-${_collectionReferenceTemplate(ReferenceClassType.update)}
-${_documentReferenceTemplate(ReferenceClassType.update)}
-''';
+    final buffer = StringBuffer();
+    for (final referenceClassType in ReferenceClassType.values) {
+      buffer.writeln(_collectionReferenceTemplate(referenceClassType));
+      buffer.writeln(_documentReferenceTemplate(referenceClassType));
+    }
+    return buffer.toString();
   }
 
   String _collectionReferenceTemplate(ReferenceClassType referenceClassType) {
@@ -38,7 +35,10 @@ ${_documentReferenceTemplate(ReferenceClassType.update)}
         buffer.write('.doc($documentName)');
       }
     }
-    buffer.write(_withConverterString(referenceClassType));
+    if (_needsTyping(referenceClassType)) {
+      buffer.write(_withConverterString(referenceClassType));
+    }
+    buffer.write(';');
     return buffer.toString();
   }
 
@@ -48,7 +48,6 @@ ${_documentReferenceTemplate(ReferenceClassType.update)}
         '/// A [DocumentReference] to ${config.documentName} document to ${referenceClassType.name}.',
       )
       ..writeln(_documentReference(referenceClassType));
-
     return buffer.toString();
   }
 
@@ -61,7 +60,7 @@ ${_documentReferenceTemplate(ReferenceClassType.update)}
       return 'final ${_collectionReferenceName(referenceClassType)} = ';
     }
     return '''
-CollectionReference<${_className(referenceClassType)}> ${_collectionReferenceName(referenceClassType)} ({
+${_collectionReferenceTypeAnnotation(referenceClassType)} ${_collectionReferenceName(referenceClassType)} ({
   ${_documentIdParameters()}
 }) =>
 ''';
@@ -75,20 +74,25 @@ CollectionReference<${_className(referenceClassType)}> ${_collectionReferenceNam
   }
 
   String _withConverterString(ReferenceClassType referenceClassType) {
-    if (referenceClassType == ReferenceClassType.read) {
-      return '''
+    switch (referenceClassType) {
+      case ReferenceClassType.read:
+        return '''
 .withConverter<${_className(referenceClassType)}>(
   fromFirestore: (ds, _) => ${_className(referenceClassType)}.fromDocumentSnapshot(ds),
   toFirestore: (obj, _) => throw UnimplementedError(),
-);
+)
 ''';
-    }
-    return '''
+      case ReferenceClassType.create:
+      case ReferenceClassType.update:
+        return '''
 .withConverter<${_className(referenceClassType)}>(
   fromFirestore: (ds, _) => throw UnimplementedError(),
   toFirestore: (obj, _) => obj.toJson(),
-);
+)
 ''';
+      case ReferenceClassType.delete:
+        throw ArgumentError();
+    }
   }
 
   String _documentReference(ReferenceClassType referenceClassType) {
@@ -98,14 +102,14 @@ CollectionReference<${_className(referenceClassType)}> ${_collectionReferenceNam
     }
     if (config.firestorePathSegments.length == 1) {
       return '''
-DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(referenceClassType)}({
+${_documentReferenceTypeAnnotation(referenceClassType)} ${_documentReferenceName(referenceClassType)}({
   required String ${config.documentName}Id,
 }) =>
     ${_collectionReferenceName(referenceClassType)}.doc(${config.documentName}Id);
 ''';
     }
     return '''
-DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(referenceClassType)}({
+${_documentReferenceTypeAnnotation(referenceClassType)} ${_documentReferenceName(referenceClassType)}({
   ${_documentIdParameters()}
   required String ${config.documentName}Id,
 }) =>
@@ -127,6 +131,8 @@ DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(re
         return config.createClassName;
       case ReferenceClassType.update:
         return config.updateClassName;
+      case ReferenceClassType.delete:
+        return config.deleteClassName;
     }
   }
 
@@ -139,6 +145,8 @@ DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(re
         return config.createCollectionReferenceName;
       case ReferenceClassType.update:
         return config.updateCollectionReferenceName;
+      case ReferenceClassType.delete:
+        return config.deleteCollectionReferenceName;
     }
   }
 
@@ -151,6 +159,33 @@ DocumentReference<${_className(referenceClassType)}> ${_documentReferenceName(re
         return config.createDocumentReferenceName;
       case ReferenceClassType.update:
         return config.updateDocumentReferenceName;
+      case ReferenceClassType.delete:
+        return config.deleteDocumentReferenceName;
+    }
+  }
+
+  /// [CollectionReference] や [DocumentReference] に型をつけるかどうか。
+  /// [ReferenceClassType] によって異なる。
+  bool _needsTyping(ReferenceClassType referenceClassType) =>
+      referenceClassType != ReferenceClassType.delete;
+
+  String _collectionReferenceTypeAnnotation(
+    ReferenceClassType referenceClassType,
+  ) {
+    if (_needsTyping(referenceClassType)) {
+      return 'CollectionReference<${_className(referenceClassType)}>';
+    } else {
+      return 'CollectionReference<Object?>';
+    }
+  }
+
+  String _documentReferenceTypeAnnotation(
+    ReferenceClassType referenceClassType,
+  ) {
+    if (_needsTyping(referenceClassType)) {
+      return 'DocumentReference<${_className(referenceClassType)}>';
+    } else {
+      return 'DocumentReference<Object?>';
     }
   }
 }

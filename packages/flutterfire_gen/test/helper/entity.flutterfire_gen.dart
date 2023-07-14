@@ -747,6 +747,15 @@ DocumentReference<UpdateEntity> updateEntityDocumentReference({
 }) =>
     updateEntityCollectionReference.doc(entityId);
 
+/// A [CollectionReference] to entities collection to delete.
+final deleteEntityCollectionReference = fakeDb.collection('entities');
+
+/// A [DocumentReference] to entity document to delete.
+DocumentReference<Object?> deleteEntityDocumentReference({
+  required String entityId,
+}) =>
+    deleteEntityCollectionReference.doc(entityId);
+
 /// A query manager to execute query against [Entity].
 class EntityQuery {
   /// Fetches [ReadEntity] documents.
@@ -818,8 +827,8 @@ class EntityQuery {
     return streamDs.map((ds) => ds.data());
   }
 
-  /// Creates a [Entity] document.
-  Future<DocumentReference<CreateEntity>> create({
+  /// Adds a [Entity] document.
+  Future<DocumentReference<CreateEntity>> add({
     required CreateEntity createEntity,
   }) =>
       createEntityCollectionReference.add(createEntity);
@@ -847,7 +856,7 @@ class EntityQuery {
   Future<void> delete({
     required String entityId,
   }) =>
-      readEntityDocumentReference(
+      deleteEntityDocumentReference(
         entityId: entityId,
       ).delete();
 }

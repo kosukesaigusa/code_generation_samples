@@ -130,6 +130,16 @@ DocumentReference<UpdateAppUser> updateAppUserDocumentReference({
 }) =>
     updateAppUserCollectionReference.doc(appUserId);
 
+/// A [CollectionReference] to appUsers collection to delete.
+final deleteAppUserCollectionReference =
+    FirebaseFirestore.instance.collection('appUsers');
+
+/// A [DocumentReference] to appUser document to delete.
+DocumentReference<Object?> deleteAppUserDocumentReference({
+  required String appUserId,
+}) =>
+    deleteAppUserCollectionReference.doc(appUserId);
+
 /// A query manager to execute query against [AppUser].
 class AppUserQuery {
   /// Fetches [ReadAppUser] documents.
@@ -201,8 +211,8 @@ class AppUserQuery {
     return streamDs.map((ds) => ds.data());
   }
 
-  /// Creates a [AppUser] document.
-  Future<DocumentReference<CreateAppUser>> create({
+  /// Adds a [AppUser] document.
+  Future<DocumentReference<CreateAppUser>> add({
     required CreateAppUser createAppUser,
   }) =>
       createAppUserCollectionReference.add(createAppUser);
@@ -230,7 +240,7 @@ class AppUserQuery {
   Future<void> delete({
     required String appUserId,
   }) =>
-      readAppUserDocumentReference(
+      deleteAppUserDocumentReference(
         appUserId: appUserId,
       ).delete();
 }

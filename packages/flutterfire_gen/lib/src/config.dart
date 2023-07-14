@@ -64,10 +64,16 @@ class FirestoreDocumentConfig {
   String get updateClassName => 'Update$baseClassName';
 
   ///
+  String get deleteClassName => 'Delete$baseClassName';
+
+  ///
   String get createClassInstanceName => 'create$baseClassName';
 
   ///
   String get updateClassInstanceName => 'update$baseClassName';
+
+  ///
+  String get deleteClassInstanceName => 'delete$baseClassName';
 
   ///
   String get documentIdFieldName => '${documentName}Id';
@@ -102,6 +108,14 @@ class FirestoreDocumentConfig {
   ///
   String get updateDocumentReferenceName =>
       'update${baseClassName}DocumentReference';
+
+  ///
+  String get deleteCollectionReferenceName =>
+      'delete${baseClassName}CollectionReference';
+
+  ///
+  String get deleteDocumentReferenceName =>
+      'delete${baseClassName}DocumentReference';
 }
 
 ///
@@ -114,5 +128,8 @@ enum ReferenceClassType {
 
   ///
   update,
+
+  ///
+  delete,
   ;
 }

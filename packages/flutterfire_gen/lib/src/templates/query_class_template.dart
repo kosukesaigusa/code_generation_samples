@@ -127,7 +127,7 @@ class ${config.baseClassName}Query {
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
   }) =>
-      ${config.readDocumentReferenceName}(
+      ${config.deleteDocumentReferenceName}(
         ${_parentDocumentIdParameters()}
         ${config.documentName}Id: ${config.documentName}Id,
       ).delete();

@@ -174,6 +174,28 @@ DocumentReference<UpdateAppUserPostLike>
                 appUserId: appUserId, appUserPostId: appUserPostId)
             .doc(appUserPostLikeId);
 
+/// A [CollectionReference] to appUserPostLikes collection to delete.
+CollectionReference<Object?> deleteAppUserPostLikeCollectionReference({
+  required String appUserId,
+  required String appUserPostId,
+}) =>
+    FirebaseFirestore.instance
+        .collection('appUsers')
+        .doc(appUserId)
+        .collection('appUserPosts')
+        .doc(appUserPostId)
+        .collection('appUserPostLikes');
+
+/// A [DocumentReference] to appUserPostLike document to delete.
+DocumentReference<Object?> deleteAppUserPostLikeDocumentReference({
+  required String appUserId,
+  required String appUserPostId,
+  required String appUserPostLikeId,
+}) =>
+    deleteAppUserPostLikeCollectionReference(
+            appUserId: appUserId, appUserPostId: appUserPostId)
+        .doc(appUserPostLikeId);
+
 /// A query manager to execute query against [AppUserPostLike].
 class AppUserPostLikeQuery {
   /// Fetches [ReadAppUserPostLike] documents.
@@ -261,8 +283,8 @@ class AppUserPostLikeQuery {
     return streamDs.map((ds) => ds.data());
   }
 
-  /// Creates a [AppUserPostLike] document.
-  Future<DocumentReference<CreateAppUserPostLike>> create({
+  /// Adds a [AppUserPostLike] document.
+  Future<DocumentReference<CreateAppUserPostLike>> add({
     required String appUserId,
     required String appUserPostId,
     required CreateAppUserPostLike createAppUserPostLike,
@@ -304,7 +326,7 @@ class AppUserPostLikeQuery {
     required String appUserPostId,
     required String appUserPostLikeId,
   }) =>
-      readAppUserPostLikeDocumentReference(
+      deleteAppUserPostLikeDocumentReference(
         appUserId: appUserId,
         appUserPostId: appUserPostId,
         appUserPostLikeId: appUserPostLikeId,
