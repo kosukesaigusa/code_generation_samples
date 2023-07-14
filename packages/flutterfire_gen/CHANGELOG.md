@@ -1,3 +1,8 @@
+## version: 0.0.1-dev.4
+
+* Update adding Cloud Firestore document method name.
+* Refactor generating delete Cloud Firestore document related codes.
+
 ## 0.0.1-dev.3
 
 * Generate delete document method in Query class.
