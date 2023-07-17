@@ -1,3 +1,7 @@
+## version: 0.0.1-dev.5
+
+* Fix `subscribeDocument` method template bug.
+
 ## version: 0.0.1-dev.4
 
 * Update adding Cloud Firestore document method name.
