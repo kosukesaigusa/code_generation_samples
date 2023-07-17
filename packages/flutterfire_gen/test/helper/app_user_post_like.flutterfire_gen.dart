@@ -265,13 +265,13 @@ class AppUserPostLikeQuery {
   }
 
   /// Subscribes a specified [AppUserPostLike] document.
-  Future<Stream<ReadAppUserPostLike?>> subscribeDocument({
+  Stream<ReadAppUserPostLike?> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
     required String appUserPostLikeId,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
-  }) async {
+  }) {
     var streamDs = readAppUserPostLikeDocumentReference(
       appUserId: appUserId,
       appUserPostId: appUserPostId,

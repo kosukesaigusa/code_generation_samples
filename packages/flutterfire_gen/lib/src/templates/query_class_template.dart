@@ -75,12 +75,12 @@ class ${config.baseClassName}Query {
   }
 
   /// Subscribes a specified [${config.baseClassName}] document.
-  Future<Stream<${config.readClassName}?>> subscribeDocument({
+  Stream<${config.readClassName}?> subscribeDocument({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
-  }) async {
+  }) {
     var streamDs = read${config.baseClassName}DocumentReference(
       ${_parentDocumentIdParameters()}
       ${config.documentName}Id: ${config.documentName}Id,

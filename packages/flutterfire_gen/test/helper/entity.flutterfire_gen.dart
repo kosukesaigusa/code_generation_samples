@@ -813,11 +813,11 @@ class EntityQuery {
   }
 
   /// Subscribes a specified [Entity] document.
-  Future<Stream<ReadEntity?>> subscribeDocument({
+  Stream<ReadEntity?> subscribeDocument({
     required String entityId,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
-  }) async {
+  }) {
     var streamDs = readEntityDocumentReference(
       entityId: entityId,
     ).snapshots(includeMetadataChanges: includeMetadataChanges);

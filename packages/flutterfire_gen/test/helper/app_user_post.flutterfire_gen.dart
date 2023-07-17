@@ -245,12 +245,12 @@ class AppUserPostQuery {
   }
 
   /// Subscribes a specified [AppUserPost] document.
-  Future<Stream<ReadAppUserPost?>> subscribeDocument({
+  Stream<ReadAppUserPost?> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
-  }) async {
+  }) {
     var streamDs = readAppUserPostDocumentReference(
       appUserId: appUserId,
       appUserPostId: appUserPostId,

@@ -197,11 +197,11 @@ class AppUserQuery {
   }
 
   /// Subscribes a specified [AppUser] document.
-  Future<Stream<ReadAppUser?>> subscribeDocument({
+  Stream<ReadAppUser?> subscribeDocument({
     required String appUserId,
     bool includeMetadataChanges = false,
     bool excludePendingWrites = false,
-  }) async {
+  }) {
     var streamDs = readAppUserDocumentReference(
       appUserId: appUserId,
     ).snapshots(includeMetadataChanges: includeMetadataChanges);
