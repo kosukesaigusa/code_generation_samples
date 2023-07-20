@@ -5,25 +5,28 @@
 part of 'app_user_post.dart';
 
 class ReadAppUserPost {
-  const ReadAppUserPost._({
+  const ReadAppUserPost({
     required this.appUserPostId,
-    required this.appUserPostReference,
+    required this.path,
     required this.content,
     required this.numbers,
     required this.updatedAt,
   });
 
   final String appUserPostId;
-  final DocumentReference<ReadAppUserPost> appUserPostReference;
+
+  final String path;
+
   final String content;
+
   final List<int> numbers;
+
   final DateTime? updatedAt;
 
   factory ReadAppUserPost._fromJson(Map<String, dynamic> json) {
-    return ReadAppUserPost._(
+    return ReadAppUserPost(
       appUserPostId: json['appUserPostId'] as String,
-      appUserPostReference:
-          json['appUserPostReference'] as DocumentReference<ReadAppUserPost>,
+      path: json['path'] as String,
       content: json['content'] as String? ?? '',
       numbers:
           (json['numbers'] as List<dynamic>?)?.map((e) => e as int).toList() ??
@@ -37,27 +40,8 @@ class ReadAppUserPost {
     return ReadAppUserPost._fromJson(<String, dynamic>{
       ...data,
       'appUserPostId': ds.id,
-      'appUserPostReference': ds.reference.parent.doc(ds.id).withConverter(
-            fromFirestore: (ds, _) => ReadAppUserPost.fromDocumentSnapshot(ds),
-            toFirestore: (obj, _) => throw UnimplementedError(),
-          ),
+      'path': ds.reference.path,
     });
-  }
-
-  ReadAppUserPost copyWith({
-    String? appUserPostId,
-    DocumentReference<ReadAppUserPost>? appUserPostReference,
-    String? content,
-    List<int>? numbers,
-    DateTime? updatedAt,
-  }) {
-    return ReadAppUserPost._(
-      appUserPostId: appUserPostId ?? this.appUserPostId,
-      appUserPostReference: appUserPostReference ?? this.appUserPostReference,
-      content: content ?? this.content,
-      numbers: numbers ?? this.numbers,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
   }
 }
 

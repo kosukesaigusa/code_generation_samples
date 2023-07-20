@@ -7,9 +7,9 @@ part of 'entity.dart';
 final fakeDb = FakeFirebaseFirestore();
 
 class ReadEntity {
-  const ReadEntity._({
+  const ReadEntity({
     required this.entityId,
-    required this.entityReference,
+    required this.path,
     required this.text,
     required this.textWithDefault,
     required this.nullableText,
@@ -61,60 +61,109 @@ class ReadEntity {
   });
 
   final String entityId;
-  final DocumentReference<ReadEntity> entityReference;
+
+  final String path;
+
   final String text;
+
   final String textWithDefault;
+
   final String? nullableText;
+
   final int integer;
+
   final int integerWithDefault;
+
   final int? nullableInteger;
+
   final double doubleNumber;
+
   final double doubleNumberWithDefault;
+
   final double? nullableDoubleNumber;
+
   final bool isBool;
+
   final bool isBoolWithDefault;
+
   final bool? nullableIsBool;
+
   final List<String> texts;
+
   final List<String> textsWithDefault;
+
   final List<String>? nullableTexts;
+
   final Map<String, dynamic> map;
+
   final Map<String, dynamic> mapWithDefault;
+
   final Map<String, dynamic>? nullableMap;
+
   final Map<String, String> stringMap;
+
   final Map<String, String> stringMapWithDefault;
+
   final Map<String, String>? nullableStringMap;
+
   final Map<String, Map<String, int>> nestedMap;
+
   final Map<String, Map<String, int>> nestedMapWithDefault;
+
   final Map<String, Map<String, int>>? nullableNestedMap;
+
   final Map<String, List<int>> listMap;
+
   final Map<String, List<int>> listMapWithDefault;
+
   final Map<String, List<int>>? nullableListMap;
+
   final List<Map<String, int>> mapList;
+
   final List<Map<String, int>> mapListWithDefault;
+
   final List<Map<String, int>>? nullableMapList;
+
   final GeoPoint geoPoint;
+
   final GeoPoint geoPointWithDefault;
+
   final GeoPoint? nullableGeoPoint;
+
   final DateTime dateTime;
+
   final DateTime? nullableDateTime;
+
   final Timestamp timestamp;
+
   final Timestamp? nullableTimestamp;
+
   final DocumentReference<Object?> documentReference;
+
   final DocumentReference<Object?>? nullableDocumentReference;
+
   final Foo foo;
+
   final Foo fooWithDefault;
+
   final Foo? nullableFoo;
+
   final Foo? nullableFooWithDefaultAnnotation;
+
   final Foo? nullableFooWithDefaultValueInConstructor;
+
   final int fieldValueAllowedInt;
+
   final int? fieldValueAllowedNullableInt;
+
   final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
+
   final int? fieldValueAllowedNullableIntWithDefaultInConstructor;
 
   factory ReadEntity._fromJson(Map<String, dynamic> json) {
-    return ReadEntity._(
+    return ReadEntity(
       entityId: json['entityId'] as String,
-      entityReference: json['entityReference'] as DocumentReference<ReadEntity>,
+      path: json['path'] as String,
       text: json['text'] as String,
       textWithDefault:
           json['textWithDefault'] as String? ?? 'requiredWithDefault',
@@ -243,127 +292,8 @@ class ReadEntity {
     return ReadEntity._fromJson(<String, dynamic>{
       ...data,
       'entityId': ds.id,
-      'entityReference': ds.reference.parent.doc(ds.id).withConverter(
-            fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
-            toFirestore: (obj, _) => throw UnimplementedError(),
-          ),
+      'path': ds.reference.path,
     });
-  }
-
-  ReadEntity copyWith({
-    String? entityId,
-    DocumentReference<ReadEntity>? entityReference,
-    String? text,
-    String? textWithDefault,
-    String? nullableText,
-    int? integer,
-    int? integerWithDefault,
-    int? nullableInteger,
-    double? doubleNumber,
-    double? doubleNumberWithDefault,
-    double? nullableDoubleNumber,
-    bool? isBool,
-    bool? isBoolWithDefault,
-    bool? nullableIsBool,
-    List<String>? texts,
-    List<String>? textsWithDefault,
-    List<String>? nullableTexts,
-    Map<String, dynamic>? map,
-    Map<String, dynamic>? mapWithDefault,
-    Map<String, dynamic>? nullableMap,
-    Map<String, String>? stringMap,
-    Map<String, String>? stringMapWithDefault,
-    Map<String, String>? nullableStringMap,
-    Map<String, Map<String, int>>? nestedMap,
-    Map<String, Map<String, int>>? nestedMapWithDefault,
-    Map<String, Map<String, int>>? nullableNestedMap,
-    Map<String, List<int>>? listMap,
-    Map<String, List<int>>? listMapWithDefault,
-    Map<String, List<int>>? nullableListMap,
-    List<Map<String, int>>? mapList,
-    List<Map<String, int>>? mapListWithDefault,
-    List<Map<String, int>>? nullableMapList,
-    GeoPoint? geoPoint,
-    GeoPoint? geoPointWithDefault,
-    GeoPoint? nullableGeoPoint,
-    DateTime? dateTime,
-    DateTime? nullableDateTime,
-    Timestamp? timestamp,
-    Timestamp? nullableTimestamp,
-    DocumentReference<Object?>? documentReference,
-    DocumentReference<Object?>? nullableDocumentReference,
-    Foo? foo,
-    Foo? fooWithDefault,
-    Foo? nullableFoo,
-    Foo? nullableFooWithDefaultAnnotation,
-    Foo? nullableFooWithDefaultValueInConstructor,
-    int? fieldValueAllowedInt,
-    int? fieldValueAllowedNullableInt,
-    int? fieldValueAllowedNullableIntWithDefaultAnnotation,
-    int? fieldValueAllowedNullableIntWithDefaultInConstructor,
-  }) {
-    return ReadEntity._(
-      entityId: entityId ?? this.entityId,
-      entityReference: entityReference ?? this.entityReference,
-      text: text ?? this.text,
-      textWithDefault: textWithDefault ?? this.textWithDefault,
-      nullableText: nullableText ?? this.nullableText,
-      integer: integer ?? this.integer,
-      integerWithDefault: integerWithDefault ?? this.integerWithDefault,
-      nullableInteger: nullableInteger ?? this.nullableInteger,
-      doubleNumber: doubleNumber ?? this.doubleNumber,
-      doubleNumberWithDefault:
-          doubleNumberWithDefault ?? this.doubleNumberWithDefault,
-      nullableDoubleNumber: nullableDoubleNumber ?? this.nullableDoubleNumber,
-      isBool: isBool ?? this.isBool,
-      isBoolWithDefault: isBoolWithDefault ?? this.isBoolWithDefault,
-      nullableIsBool: nullableIsBool ?? this.nullableIsBool,
-      texts: texts ?? this.texts,
-      textsWithDefault: textsWithDefault ?? this.textsWithDefault,
-      nullableTexts: nullableTexts ?? this.nullableTexts,
-      map: map ?? this.map,
-      mapWithDefault: mapWithDefault ?? this.mapWithDefault,
-      nullableMap: nullableMap ?? this.nullableMap,
-      stringMap: stringMap ?? this.stringMap,
-      stringMapWithDefault: stringMapWithDefault ?? this.stringMapWithDefault,
-      nullableStringMap: nullableStringMap ?? this.nullableStringMap,
-      nestedMap: nestedMap ?? this.nestedMap,
-      nestedMapWithDefault: nestedMapWithDefault ?? this.nestedMapWithDefault,
-      nullableNestedMap: nullableNestedMap ?? this.nullableNestedMap,
-      listMap: listMap ?? this.listMap,
-      listMapWithDefault: listMapWithDefault ?? this.listMapWithDefault,
-      nullableListMap: nullableListMap ?? this.nullableListMap,
-      mapList: mapList ?? this.mapList,
-      mapListWithDefault: mapListWithDefault ?? this.mapListWithDefault,
-      nullableMapList: nullableMapList ?? this.nullableMapList,
-      geoPoint: geoPoint ?? this.geoPoint,
-      geoPointWithDefault: geoPointWithDefault ?? this.geoPointWithDefault,
-      nullableGeoPoint: nullableGeoPoint ?? this.nullableGeoPoint,
-      dateTime: dateTime ?? this.dateTime,
-      nullableDateTime: nullableDateTime ?? this.nullableDateTime,
-      timestamp: timestamp ?? this.timestamp,
-      nullableTimestamp: nullableTimestamp ?? this.nullableTimestamp,
-      documentReference: documentReference ?? this.documentReference,
-      nullableDocumentReference:
-          nullableDocumentReference ?? this.nullableDocumentReference,
-      foo: foo ?? this.foo,
-      fooWithDefault: fooWithDefault ?? this.fooWithDefault,
-      nullableFoo: nullableFoo ?? this.nullableFoo,
-      nullableFooWithDefaultAnnotation: nullableFooWithDefaultAnnotation ??
-          this.nullableFooWithDefaultAnnotation,
-      nullableFooWithDefaultValueInConstructor:
-          nullableFooWithDefaultValueInConstructor ??
-              this.nullableFooWithDefaultValueInConstructor,
-      fieldValueAllowedInt: fieldValueAllowedInt ?? this.fieldValueAllowedInt,
-      fieldValueAllowedNullableInt:
-          fieldValueAllowedNullableInt ?? this.fieldValueAllowedNullableInt,
-      fieldValueAllowedNullableIntWithDefaultAnnotation:
-          fieldValueAllowedNullableIntWithDefaultAnnotation ??
-              this.fieldValueAllowedNullableIntWithDefaultAnnotation,
-      fieldValueAllowedNullableIntWithDefaultInConstructor:
-          fieldValueAllowedNullableIntWithDefaultInConstructor ??
-              this.fieldValueAllowedNullableIntWithDefaultInConstructor,
-    );
   }
 }
 

@@ -24,20 +24,22 @@ class ReadClassTemplate {
 
   @override
   String toString() {
-    // TODO: fakeDb は別のところで生成するべき。
     return '''
-${config.useFakeFirebaseFirestore ? 'final fakeDb = FakeFirebaseFirestore();' : ''}
-
 class ${config.readClassName} {
-  const ${config.readClassName}._({
+  const ${config.readClassName}({
     required this.${config.documentIdFieldName},
-    required this.${config.documentReferenceFieldName},
+    required this.${config.documentPathFieldName},
+    ${config.includeDocumentReferenceField ? 'required this.${config.documentReferenceFieldName},' : ''}
     ${fields.entries.map((entry) => 'required this.${entry.key},').join('\n')}
   });
 
   final String ${config.documentIdFieldName};
-  final DocumentReference<${config.readClassName}> ${config.documentReferenceFieldName};
-  ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n')}
+
+  final String ${config.documentPathFieldName};
+
+  ${config.includeDocumentReferenceField ? 'final DocumentReference<${config.readClassName}> ${config.documentReferenceFieldName};' : ''}
+
+  ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n\n')}
 
   ${FromJsonTemplate(
       config: config,
@@ -48,7 +50,7 @@ class ${config.readClassName} {
 
   ${FromDocumentSnapshotTemplate(config: config)}
 
-  ${CopyWithTemplate(config: config, fields: fields)}
+  ${config.generateCopyWith ? '${CopyWithTemplate(config: config, fields: fields)}' : ''}
 }
 ''';
   }

@@ -5,23 +5,25 @@
 part of 'app_user.dart';
 
 class ReadAppUser {
-  const ReadAppUser._({
+  const ReadAppUser({
     required this.appUserId,
-    required this.appUserReference,
+    required this.path,
     required this.name,
     required this.imageUrl,
   });
 
   final String appUserId;
-  final DocumentReference<ReadAppUser> appUserReference;
+
+  final String path;
+
   final String name;
+
   final String imageUrl;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
-    return ReadAppUser._(
+    return ReadAppUser(
       appUserId: json['appUserId'] as String,
-      appUserReference:
-          json['appUserReference'] as DocumentReference<ReadAppUser>,
+      path: json['path'] as String,
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String? ?? '',
     );
@@ -32,25 +34,8 @@ class ReadAppUser {
     return ReadAppUser._fromJson(<String, dynamic>{
       ...data,
       'appUserId': ds.id,
-      'appUserReference': ds.reference.parent.doc(ds.id).withConverter(
-            fromFirestore: (ds, _) => ReadAppUser.fromDocumentSnapshot(ds),
-            toFirestore: (obj, _) => throw UnimplementedError(),
-          ),
+      'path': ds.reference.path,
     });
-  }
-
-  ReadAppUser copyWith({
-    String? appUserId,
-    DocumentReference<ReadAppUser>? appUserReference,
-    String? name,
-    String? imageUrl,
-  }) {
-    return ReadAppUser._(
-      appUserId: appUserId ?? this.appUserId,
-      appUserReference: appUserReference ?? this.appUserReference,
-      name: name ?? this.name,
-      imageUrl: imageUrl ?? this.imageUrl,
-    );
   }
 }
 

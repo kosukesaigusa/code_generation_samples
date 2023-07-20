@@ -8,6 +8,7 @@ import 'package:source_gen/source_gen.dart';
 import 'config.dart';
 import 'firestore_document_visitor.dart';
 import 'templates/create/create_class_template.dart';
+import 'templates/fake_firebase_firestore_template.dart';
 import 'templates/query_class_template.dart';
 import 'templates/read/read_class_template.dart';
 import 'templates/refs_template.dart';
@@ -34,6 +35,7 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     );
 
     final buffer = StringBuffer()
+      ..writeln(FakeFirebaseFirestoreTemplate(config: config))
       ..writeln(
         ReadClassTemplate(config: config, visitor: visitor, fields: fields),
       )
@@ -80,6 +82,9 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     return FirestoreDocumentConfig(
       useFakeFirebaseFirestore:
           _useFakeFirebaseFirestore(element: element, source: source),
+      includeDocumentReferenceField:
+          _includeDocumentReferenceField(element: element, source: source),
+      generateCopyWith: _generateCopyWith(element: element, source: source),
       baseClassName: baseClassName,
       path: _path(element: element, source: source),
       documentName: _documentName(element: element, source: source),
@@ -91,6 +96,31 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     required String source,
   }) {
     final match = RegExp(FirestoreDocument.useFakeFirebaseFirestoreRegExpSource)
+        .firstMatch(source);
+    if (match == null) {
+      return false;
+    }
+    return match.group(1) == 'true';
+  }
+
+  bool _includeDocumentReferenceField({
+    required Element element,
+    required String source,
+  }) {
+    final match =
+        RegExp(FirestoreDocument.includeDocumentReferenceFieldRegExpSource)
+            .firstMatch(source);
+    if (match == null) {
+      return false;
+    }
+    return match.group(1) == 'true';
+  }
+
+  bool _generateCopyWith({
+    required Element element,
+    required String source,
+  }) {
+    final match = RegExp(FirestoreDocument.generateCopyWithRegExpSource)
         .firstMatch(source);
     if (match == null) {
       return false;
@@ -117,8 +147,8 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     required Element element,
     required String source,
   }) {
-    final match = RegExp(FirestoreDocument.documentNameNameRegExpSource)
-        .firstMatch(source);
+    final match =
+        RegExp(FirestoreDocument.documentNameRegExpSource).firstMatch(source);
     if (match == null) {
       throw InvalidGenerationSourceError(
         '@FirestoreDocument annotation does not contain documentName. '

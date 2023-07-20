@@ -5,23 +5,25 @@
 part of 'app_user_post_like.dart';
 
 class ReadAppUserPostLike {
-  const ReadAppUserPostLike._({
+  const ReadAppUserPostLike({
     required this.appUserPostLikeId,
-    required this.appUserPostLikeReference,
+    required this.path,
     required this.likedByAppUserId,
     required this.likedAt,
   });
 
   final String appUserPostLikeId;
-  final DocumentReference<ReadAppUserPostLike> appUserPostLikeReference;
+
+  final String path;
+
   final String likedByAppUserId;
+
   final DateTime? likedAt;
 
   factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
-    return ReadAppUserPostLike._(
+    return ReadAppUserPostLike(
       appUserPostLikeId: json['appUserPostLikeId'] as String,
-      appUserPostLikeReference: json['appUserPostLikeReference']
-          as DocumentReference<ReadAppUserPostLike>,
+      path: json['path'] as String,
       likedByAppUserId: json['likedByAppUserId'] as String,
       likedAt: (json['likedAt'] as Timestamp?)?.toDate(),
     );
@@ -32,27 +34,8 @@ class ReadAppUserPostLike {
     return ReadAppUserPostLike._fromJson(<String, dynamic>{
       ...data,
       'appUserPostLikeId': ds.id,
-      'appUserPostLikeReference': ds.reference.parent.doc(ds.id).withConverter(
-            fromFirestore: (ds, _) =>
-                ReadAppUserPostLike.fromDocumentSnapshot(ds),
-            toFirestore: (obj, _) => throw UnimplementedError(),
-          ),
+      'path': ds.reference.path,
     });
-  }
-
-  ReadAppUserPostLike copyWith({
-    String? appUserPostLikeId,
-    DocumentReference<ReadAppUserPostLike>? appUserPostLikeReference,
-    String? likedByAppUserId,
-    DateTime? likedAt,
-  }) {
-    return ReadAppUserPostLike._(
-      appUserPostLikeId: appUserPostLikeId ?? this.appUserPostLikeId,
-      appUserPostLikeReference:
-          appUserPostLikeReference ?? this.appUserPostLikeReference,
-      likedByAppUserId: likedByAppUserId ?? this.likedByAppUserId,
-      likedAt: likedAt ?? this.likedAt,
-    );
   }
 }
 

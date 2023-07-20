@@ -16,12 +16,22 @@ factory ${config.readClassName}.fromDocumentSnapshot(DocumentSnapshot ds) {
     return ${config.readClassName}._fromJson(<String, dynamic>{
       ...data,
       '${config.documentIdFieldName}': ds.id,
-      '${config.documentReferenceFieldName}': ds.reference.parent.doc(ds.id).withConverter(
-        fromFirestore: (ds, _) => ${config.readClassName}.fromDocumentSnapshot(ds),
-        toFirestore: (obj, _) => throw UnimplementedError(),
-      ),
+      '${config.documentPathFieldName}': ds.reference.path,
+      ${_documentReferenceField()}
     });
   }
 ''';
+  }
+
+  String _documentReferenceField() {
+    if (config.includeDocumentReferenceField) {
+      return '''
+'${config.documentReferenceFieldName}': ds.reference.parent.doc(ds.id).withConverter(
+        fromFirestore: (ds, _) => ${config.readClassName}.fromDocumentSnapshot(ds),
+        toFirestore: (obj, _) => throw UnimplementedError(),
+      ),
+''';
+    }
+    return '';
   }
 }

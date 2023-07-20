@@ -25,6 +25,8 @@ class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({
     required this.useFakeFirebaseFirestore,
+    required this.includeDocumentReferenceField,
+    required this.generateCopyWith,
     required this.path,
     required this.baseClassName,
     required this.documentName,
@@ -32,6 +34,12 @@ class FirestoreDocumentConfig {
 
   ///
   final bool useFakeFirebaseFirestore;
+
+  ///
+  final bool includeDocumentReferenceField;
+
+  ///
+  final bool generateCopyWith;
 
   ///
   final String path;
@@ -77,6 +85,9 @@ class FirestoreDocumentConfig {
 
   ///
   String get documentIdFieldName => '${documentName}Id';
+
+  ///
+  String get documentPathFieldName => 'path';
 
   ///
   String get documentReferenceFieldName => '${documentName}Reference';

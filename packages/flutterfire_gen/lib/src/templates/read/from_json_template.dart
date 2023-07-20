@@ -31,9 +31,10 @@ class FromJsonTemplate {
   String toString() {
     return '''
 factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
-    return ${config.readClassName}._(
+    return ${config.readClassName}(
       ${config.documentIdFieldName}: json['${config.documentIdFieldName}'] as String,
-      ${config.documentReferenceFieldName}: json['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>,
+      ${config.documentPathFieldName}: json['${config.documentPathFieldName}'] as String,
+      ${config.includeDocumentReferenceField ? "${config.documentReferenceFieldName}: json['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>," : ''}
       ${_parseFields()}
     );
   }
