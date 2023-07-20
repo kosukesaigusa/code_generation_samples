@@ -39,5 +39,5 @@ class FirestoreDocument {
   static const pathRegExpSource = r"path:\s*'([^']*)'";
 
   /// A [RegExp] source string to parse [documentName] from annotation.
-  static const documentNameNameRegExpSource = r"documentName:\s*'([^']*)'";
+  static const documentNameRegExpSource = r"documentName:\s*'([^']*)'";
 }
