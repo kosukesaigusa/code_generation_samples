@@ -7,6 +7,8 @@ class FirestoreDocument {
     @visibleForTesting this.useFakeFirebaseFirestore = false,
     required this.path,
     required this.documentName,
+    this.includeDocumentReferenceField = false,
+    this.generateCopyWith = false,
   });
 
   /// Set true if you want to use FakeFirebaseFirestore for testing.
@@ -30,6 +32,12 @@ class FirestoreDocument {
   /// - userPostLike
   final String documentName;
 
+  /// Whether to include `DocumentReference` field in ReadEntity class.
+  final bool includeDocumentReferenceField;
+
+  /// Whether to generate `copyWith` method in ReadEntity class.
+  final bool generateCopyWith;
+
   /// A [RegExp] source string to parse [useFakeFirebaseFirestore] from
   /// annotation.
   static const useFakeFirebaseFirestoreRegExpSource =
@@ -39,5 +47,14 @@ class FirestoreDocument {
   static const pathRegExpSource = r"path:\s*'([^']*)'";
 
   /// A [RegExp] source string to parse [documentName] from annotation.
-  static const documentNameNameRegExpSource = r"documentName:\s*'([^']*)'";
+  static const documentNameRegExpSource = r"documentName:\s*'([^']*)'";
+
+  /// A [RegExp] source string to parse [includeDocumentReferenceField] from
+  /// annotation.
+  static const includeDocumentReferenceFieldRegExpSource =
+      r'includeDocumentReferenceField:\s*(true|false)';
+
+  /// A [RegExp] source string to parse [generateCopyWith] from annotation.
+  static const generateCopyWithRegExpSource =
+      r'generateCopyWith:\s*(true|false)';
 }
