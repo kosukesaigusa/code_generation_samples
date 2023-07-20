@@ -1,3 +1,9 @@
+## version: 0.0.1-dev.6
+
+* Make `DocumentReference` field generation in `ReadEntity` class optional.
+* Generate `path` field in `ReadEntity` class instead.
+* Make `copyWith` method generation in `ReadEntity` class optional.
+
 ## version: 0.0.1-dev.5
 
 * Fix `subscribeDocument` method template bug.
