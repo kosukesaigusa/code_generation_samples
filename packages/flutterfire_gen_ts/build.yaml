@@ -1,0 +1,24 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      flutterfire_gen_ts:
+        enabled: true
+        generate_for:
+          exclude:
+            - test
+            - example
+          include:
+            - test/helper/*
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - "type=lint"
+
+builders:
+  flutterfire_gen_ts:
+    import: "package:flutterfire_gen_ts/flutterfire_gen_ts.dart"
+    builder_factories: ["flutterfireGenBuilder"]
+    build_extensions: {".dart": [".flutterfireGen.ts"]}
+    auto_apply: dependents
+    build_to: source
