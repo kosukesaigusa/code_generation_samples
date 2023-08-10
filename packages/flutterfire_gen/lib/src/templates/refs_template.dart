@@ -4,7 +4,7 @@ import '../config.dart';
 
 /// Returns [CollectionReference] and [DocumentReference] template.
 class RefsTemplate {
-  /// Creates a [ReadRefsTemplate].
+  /// Creates a [RefsTemplate].
   const RefsTemplate({required this.config});
 
   ///
