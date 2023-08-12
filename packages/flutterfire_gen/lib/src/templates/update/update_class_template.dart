@@ -19,7 +19,7 @@ class UpdateClassTemplate {
   final FirestoreDocumentVisitor visitor;
 
   ///
-  final Map<String, dynamic> fields;
+  final Map<String, String> fields;
 
   @override
   String toString() {

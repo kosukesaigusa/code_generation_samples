@@ -19,7 +19,7 @@ class FromJsonTemplate {
   final FirestoreDocumentConfig config;
 
   ///
-  final Map<String, dynamic> fields;
+  final Map<String, String> fields;
 
   ///
   final Map<String, String> defaultValueStrings;

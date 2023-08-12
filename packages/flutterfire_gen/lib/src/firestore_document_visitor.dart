@@ -14,7 +14,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   String className = '';
 
   /// Fields of visited [FirestoreDocument] annotated class.
-  final Map<String, dynamic> fields = {};
+  final Map<String, String> fields = {};
 
   /// Default value strings of each field when reading Cloud Firestore
   /// documents.
