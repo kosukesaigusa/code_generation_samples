@@ -25,9 +25,7 @@ class UpdateClassTemplate {
   String toString() {
     return '''
 class ${config.updateClassName} {
-  const ${config.updateClassName}({
-    ${_parseConstructorFields()}
-  });
+  ${_parseConstructor()}
 
   ${_parseFields()}
 
@@ -43,19 +41,35 @@ class ${config.updateClassName} {
 ''';
   }
 
+  String _parseConstructor() {
+    final fields = _parseConstructorFields();
+    if (fields.isEmpty) {
+      return 'const ${config.updateClassName}();';
+    } else {
+      return '''
+const ${config.updateClassName}({
+  ${_parseConstructorFields()}
+  });
+''';
+    }
+  }
+
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return fields.entries.map((entry) {
+    return fields.entries
+        .where(
+      (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
+          .contains(
+        entry.key,
+      ),
+    )
+        .map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
-      final defaultValueStrings = visitor.createDefaultValueStrings;
+      final defaultValueStrings = visitor.updateDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
-      final alwaysUseFieldValueServerTimestamp =
-          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields.contains(
-        entry.key,
-      );
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -63,7 +77,6 @@ class ${config.updateClassName} {
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
         isFieldValueAllowed: isFieldValueAllowed,
-        alwaysUseFieldValueServerTimestamp: alwaysUseFieldValueServerTimestamp,
       );
     }).join('\n');
   }
@@ -73,12 +86,8 @@ class ${config.updateClassName} {
     required String typeNameString,
     required String? defaultValueString,
     required bool isFieldValueAllowed,
-    required bool alwaysUseFieldValueServerTimestamp,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
-    if (alwaysUseFieldValueServerTimestamp) {
-      return '';
-    }
     if (hasDefaultValue) {
       if (isFieldValueAllowed) {
         return 'this.$fieldNameString = const ActualValue($defaultValueString),';

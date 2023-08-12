@@ -26,9 +26,7 @@ class CreateClassTemplate {
   String toString() {
     return '''
 class ${config.createClassName} {
-  const ${config.createClassName}({
-    ${_parseConstructorFields()}
-  });
+  ${_parseConstructor()}
 
   ${_parseFields()}
 
@@ -44,19 +42,34 @@ class ${config.createClassName} {
 ''';
   }
 
+  String _parseConstructor() {
+    final fields = _parseConstructorFields();
+    if (fields.isEmpty) {
+      return 'const ${config.createClassName}();';
+    }
+    return '''
+const ${config.createClassName}({
+  ${_parseConstructorFields()}
+});
+''';
+  }
+
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return fields.entries.map((entry) {
+    return fields.entries
+        .where(
+      (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields
+          .contains(
+        entry.key,
+      ),
+    )
+        .map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
       final defaultValueStrings = visitor.createDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
-      final alwaysUseFieldValueServerTimestamp =
-          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields.contains(
-        entry.key,
-      );
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -64,7 +77,6 @@ class ${config.createClassName} {
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
         isFieldValueAllowed: isFieldValueAllowed,
-        alwaysUseFieldValueServerTimestamp: alwaysUseFieldValueServerTimestamp,
       );
     }).join('\n');
   }
@@ -74,13 +86,9 @@ class ${config.createClassName} {
     required String typeNameString,
     required String? defaultValueString,
     required bool isFieldValueAllowed,
-    required bool alwaysUseFieldValueServerTimestamp,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
     final isNullable = typeNameString.endsWith('?');
-    if (alwaysUseFieldValueServerTimestamp) {
-      return '';
-    }
     if (hasDefaultValue || isNullable) {
       if (hasDefaultValue) {
         if (isFieldValueAllowed) {
