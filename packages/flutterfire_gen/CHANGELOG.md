@@ -1,14 +1,20 @@
-## version: 0.0.1-dev.6
+## 0.0.1-dev.7
+
+* Stop using constructor default value.
+* Enable to use `AlwaysUseFieldValueServerTimestampWhenCreating`, and `AlwaysUseFieldValueServerTimestampWhenCreating` annotations.
+* Update dependency packages.
+
+## 0.0.1-dev.6
 
 * Make `DocumentReference` field generation in `ReadEntity` class optional.
 * Generate `path` field in `ReadEntity` class instead.
 * Make `copyWith` method generation in `ReadEntity` class optional.
 
-## version: 0.0.1-dev.5
+## 0.0.1-dev.5
 
 * Fix `subscribeDocument` method template bug.
 
-## version: 0.0.1-dev.4
+## 0.0.1-dev.4
 
 * Update adding Cloud Firestore document method name.
 * Refactor generating delete Cloud Firestore document related codes.
