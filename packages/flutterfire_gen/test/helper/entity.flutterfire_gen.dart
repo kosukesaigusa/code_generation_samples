@@ -438,8 +438,8 @@ class CreateEntity {
 class UpdateEntity {
   const UpdateEntity({
     this.text,
-    this.textWithDefault = 'createDefault',
-    this.nullableText = 'createDefault',
+    this.textWithDefault = 'updateDefault',
+    this.nullableText = 'updateDefault',
     this.integer,
     this.integerWithDefault,
     this.nullableInteger,
@@ -479,11 +479,10 @@ class UpdateEntity {
     this.foo,
     this.fooWithDefault,
     this.nullableFoo,
-    this.nullableFooWithDefaultAnnotation = const Foo('defaultBar'),
+    this.nullableFooWithDefaultAnnotation,
     this.fieldValueAllowedInt,
     this.fieldValueAllowedNullableInt,
-    this.fieldValueAllowedNullableIntWithDefaultAnnotation =
-        const ActualValue(0),
+    this.fieldValueAllowedNullableIntWithDefaultAnnotation,
   });
 
   final String? text;
