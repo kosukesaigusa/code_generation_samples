@@ -15,7 +15,7 @@ class ToJsonTemplate {
   });
 
   ///
-  final Map<String, dynamic> fields;
+  final Map<String, String> fields;
 
   ///
   final Map<String, String> defaultValueStrings;
@@ -40,7 +40,7 @@ toJson(): Record<string, unknown> {
   String _parseFields() {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final defaultValueString = defaultValueStrings[fieldNameString];
       final isFieldValueAllowed = fieldValueAllowedFields.contains(entry.key);
       final jsonConverterConfig = jsonConverterConfigs[fieldNameString];

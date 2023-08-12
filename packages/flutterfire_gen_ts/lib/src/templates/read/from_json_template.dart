@@ -19,7 +19,7 @@ class FromJsonTemplate {
   final FirestoreDocumentConfig config;
 
   ///
-  final Map<String, dynamic> fields;
+  final Map<String, String> fields;
 
   ///
   final Map<String, String> defaultValueStrings;
@@ -44,7 +44,7 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
   String _parseFields() {
     return '${fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final defaultValueString = defaultValueStrings[fieldNameString];
       final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
       return fromJsonEachField(
