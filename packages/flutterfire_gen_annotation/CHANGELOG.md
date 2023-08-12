@@ -1,3 +1,8 @@
+## 0.1.0-dev.3
+
+* Add `AlwaysUseFieldValueServerTimestampWhenCreating` annotation.
+* Add `AlwaysUseFieldValueServerTimestampWhenUpdating` annotation.
+
 ## 0.1.0-dev.2
 
 * Add `includeDocumentReferenceField` and `generateCopyWith` option to `FirestoreDocument` annotation.
