@@ -1,3 +1,7 @@
+## 0.0.1-dev.8
+
+* Fix create and update class template.
+
 ## 0.0.1-dev.7
 
 * Stop using constructor default value.
