@@ -131,7 +131,7 @@ DocumentReference<DeleteAppUser> deleteAppUserDocumentReference({
 }) =>
     deleteAppUserCollectionReference.doc(appUserId);
 
-/// A query manager to execute query against [AppUser].
+/// Manages queries against the appUsers collection.
 class AppUserQuery {
   /// Fetches [ReadAppUser] documents.
   Future<List<ReadAppUser>> fetchDocuments({
@@ -176,7 +176,7 @@ class AppUserQuery {
     });
   }
 
-  /// Fetches a specified [ReadAppUser] document.
+  /// Fetches a specific [ReadAppUser] document.
   Future<ReadAppUser?> fetchDocument({
     required String appUserId,
     GetOptions? options,
@@ -187,7 +187,7 @@ class AppUserQuery {
     return ds.data();
   }
 
-  /// Subscribes a specified [AppUser] document.
+  /// Subscribes a specific [AppUser] document.
   Stream<ReadAppUser?> subscribeDocument({
     required String appUserId,
     bool includeMetadataChanges = false,
@@ -218,7 +218,7 @@ class AppUserQuery {
         appUserId: appUserId,
       ).set(createAppUser, options);
 
-  /// Updates a specified [AppUser] document.
+  /// Updates a specific [AppUser] document.
   Future<void> update({
     required String appUserId,
     required UpdateAppUser updateAppUser,
@@ -227,7 +227,7 @@ class AppUserQuery {
         appUserId: appUserId,
       ).update(updateAppUser.toJson());
 
-  /// Deletes a specified [AppUser] document.
+  /// Deletes a specific [AppUser] document.
   Future<void> delete({
     required String appUserId,
   }) =>

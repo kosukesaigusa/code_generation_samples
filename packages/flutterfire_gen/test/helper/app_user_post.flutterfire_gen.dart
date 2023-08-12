@@ -170,7 +170,7 @@ DocumentReference<DeleteAppUserPost> deleteAppUserPostDocumentReference({
     deleteAppUserPostCollectionReference(appUserId: appUserId)
         .doc(appUserPostId);
 
-/// A query manager to execute query against [AppUserPost].
+/// Manages queries against the appUserPosts collection.
 class AppUserPostQuery {
   /// Fetches [ReadAppUserPost] documents.
   Future<List<ReadAppUserPost>> fetchDocuments({
@@ -221,7 +221,7 @@ class AppUserPostQuery {
     });
   }
 
-  /// Fetches a specified [ReadAppUserPost] document.
+  /// Fetches a specific [ReadAppUserPost] document.
   Future<ReadAppUserPost?> fetchDocument({
     required String appUserId,
     required String appUserPostId,
@@ -234,7 +234,7 @@ class AppUserPostQuery {
     return ds.data();
   }
 
-  /// Subscribes a specified [AppUserPost] document.
+  /// Subscribes a specific [AppUserPost] document.
   Stream<ReadAppUserPost?> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
@@ -271,7 +271,7 @@ class AppUserPostQuery {
         appUserPostId: appUserPostId,
       ).set(createAppUserPost, options);
 
-  /// Updates a specified [AppUserPost] document.
+  /// Updates a specific [AppUserPost] document.
   Future<void> update({
     required String appUserId,
     required String appUserPostId,
@@ -282,7 +282,7 @@ class AppUserPostQuery {
         appUserPostId: appUserPostId,
       ).update(updateAppUserPost.toJson());
 
-  /// Deletes a specified [AppUserPost] document.
+  /// Deletes a specific [AppUserPost] document.
   Future<void> delete({
     required String appUserId,
     required String appUserPostId,

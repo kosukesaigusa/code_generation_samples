@@ -692,7 +692,7 @@ DocumentReference<DeleteEntity> deleteEntityDocumentReference({
 }) =>
     deleteEntityCollectionReference.doc(entityId);
 
-/// A query manager to execute query against [Entity].
+/// Manages queries against the entities collection.
 class EntityQuery {
   /// Fetches [ReadEntity] documents.
   Future<List<ReadEntity>> fetchDocuments({
@@ -737,7 +737,7 @@ class EntityQuery {
     });
   }
 
-  /// Fetches a specified [ReadEntity] document.
+  /// Fetches a specific [ReadEntity] document.
   Future<ReadEntity?> fetchDocument({
     required String entityId,
     GetOptions? options,
@@ -748,7 +748,7 @@ class EntityQuery {
     return ds.data();
   }
 
-  /// Subscribes a specified [Entity] document.
+  /// Subscribes a specific [Entity] document.
   Stream<ReadEntity?> subscribeDocument({
     required String entityId,
     bool includeMetadataChanges = false,
@@ -779,7 +779,7 @@ class EntityQuery {
         entityId: entityId,
       ).set(createEntity, options);
 
-  /// Updates a specified [Entity] document.
+  /// Updates a specific [Entity] document.
   Future<void> update({
     required String entityId,
     required UpdateEntity updateEntity,
@@ -788,7 +788,7 @@ class EntityQuery {
         entityId: entityId,
       ).update(updateEntity.toJson());
 
-  /// Deletes a specified [Entity] document.
+  /// Deletes a specific [Entity] document.
   Future<void> delete({
     required String entityId,
   }) =>

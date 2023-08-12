@@ -187,7 +187,7 @@ DocumentReference<DeleteAppUserPostLike>
                 appUserId: appUserId, appUserPostId: appUserPostId)
             .doc(appUserPostLikeId);
 
-/// A query manager to execute query against [AppUserPostLike].
+/// Manages queries against the appUserPostLikes collection.
 class AppUserPostLikeQuery {
   /// Fetches [ReadAppUserPostLike] documents.
   Future<List<ReadAppUserPostLike>> fetchDocuments({
@@ -240,7 +240,7 @@ class AppUserPostLikeQuery {
     });
   }
 
-  /// Fetches a specified [ReadAppUserPostLike] document.
+  /// Fetches a specific [ReadAppUserPostLike] document.
   Future<ReadAppUserPostLike?> fetchDocument({
     required String appUserId,
     required String appUserPostId,
@@ -255,7 +255,7 @@ class AppUserPostLikeQuery {
     return ds.data();
   }
 
-  /// Subscribes a specified [AppUserPostLike] document.
+  /// Subscribes a specific [AppUserPostLike] document.
   Stream<ReadAppUserPostLike?> subscribeDocument({
     required String appUserId,
     required String appUserPostId,
@@ -298,7 +298,7 @@ class AppUserPostLikeQuery {
         appUserPostLikeId: appUserPostLikeId,
       ).set(createAppUserPostLike, options);
 
-  /// Updates a specified [AppUserPostLike] document.
+  /// Updates a specific [AppUserPostLike] document.
   Future<void> update({
     required String appUserId,
     required String appUserPostId,
@@ -311,7 +311,7 @@ class AppUserPostLikeQuery {
         appUserPostLikeId: appUserPostLikeId,
       ).update(updateAppUserPostLike.toJson());
 
-  /// Deletes a specified [AppUserPostLike] document.
+  /// Deletes a specific [AppUserPostLike] document.
   Future<void> delete({
     required String appUserId,
     required String appUserPostId,

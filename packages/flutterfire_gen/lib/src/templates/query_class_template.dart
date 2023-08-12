@@ -13,7 +13,7 @@ class QueryClassTemplate {
   @override
   String toString() {
     return '''
-/// A query manager to execute query against [${config.baseClassName}].
+/// Manages queries against the ${config.collectionName} collection.
 class ${config.baseClassName}Query {
   /// Fetches [${config.readClassName}] documents.
   Future<List<${config.readClassName}>> fetchDocuments({
@@ -60,7 +60,7 @@ class ${config.baseClassName}Query {
     });
   }
 
-  /// Fetches a specified [${config.readClassName}] document.
+  /// Fetches a specific [${config.readClassName}] document.
   Future<${config.readClassName}?> fetchDocument({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
@@ -74,7 +74,7 @@ class ${config.baseClassName}Query {
     return ds.data();
   }
 
-  /// Subscribes a specified [${config.baseClassName}] document.
+  /// Subscribes a specific [${config.baseClassName}] document.
   Stream<${config.readClassName}?> subscribeDocument({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
@@ -111,7 +111,7 @@ class ${config.baseClassName}Query {
         ${config.documentName}Id: ${config.documentName}Id,
       ).set(${config.createClassInstanceName}, options);
 
-  /// Updates a specified [${config.baseClassName}] document.
+  /// Updates a specific [${config.baseClassName}] document.
   Future<void> update({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
@@ -122,7 +122,7 @@ class ${config.baseClassName}Query {
         ${config.documentName}Id: ${config.documentName}Id,
       ).update(${config.updateClassInstanceName}.toJson());
 
-  /// Deletes a specified [${config.baseClassName}] document.
+  /// Deletes a specific [${config.baseClassName}] document.
   Future<void> delete({
     ${_parentDocumentIdArguments()}
     required String ${config.documentName}Id,
