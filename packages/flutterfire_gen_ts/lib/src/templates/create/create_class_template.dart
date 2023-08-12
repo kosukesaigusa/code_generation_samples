@@ -51,8 +51,10 @@ export class ${config.createClassName} {
   ${ToJsonTemplate(
       fields: fields,
       defaultValueStrings: visitor.createDefaultValueStrings,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      alwaysUseFieldValueServerTimestampWhenCreatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
     )}
 }
 ''';

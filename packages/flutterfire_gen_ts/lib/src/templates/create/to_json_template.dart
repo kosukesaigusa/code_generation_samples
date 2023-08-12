@@ -10,8 +10,9 @@ class ToJsonTemplate {
   const ToJsonTemplate({
     required this.fields,
     required this.defaultValueStrings,
-    required this.jsonConverterConfigs,
     required this.fieldValueAllowedFields,
+    required this.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+    required this.jsonConverterConfigs,
   });
 
   ///
@@ -21,10 +22,13 @@ class ToJsonTemplate {
   final Map<String, String> defaultValueStrings;
 
   ///
-  final Map<String, JsonConverterConfig> jsonConverterConfigs;
+  final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields;
 
   ///
   final Set<String> fieldValueAllowedFields;
+
+  ///
+  final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
   @override
   String toString() {
@@ -43,13 +47,18 @@ toJson(): Record<string, unknown> {
       final typeNameString = entry.value;
       final defaultValueString = defaultValueStrings[fieldNameString];
       final isFieldValueAllowed = fieldValueAllowedFields.contains(entry.key);
+      final isAlwaysUseFieldValueServerTimestampWhenCreating =
+          alwaysUseFieldValueServerTimestampWhenCreatingFields
+              .contains(entry.key);
       final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
       return toJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
-        jsonConverterConfig: jsonConverterConfig,
         isFieldValueAllowed: isFieldValueAllowed,
+        isAlwaysUseFieldValueServerTimestampWhenCreating:
+            isAlwaysUseFieldValueServerTimestampWhenCreating,
+        jsonConverterConfig: jsonConverterConfig,
       );
     }).join('\n');
   }
@@ -60,8 +69,9 @@ toJson(): Record<string, unknown> {
     required String fieldNameString,
     required String typeNameString,
     String? defaultValueString,
-    JsonConverterConfig? jsonConverterConfig,
     bool isFieldValueAllowed = false,
+    bool isAlwaysUseFieldValueServerTimestampWhenCreating = false,
+    JsonConverterConfig? jsonConverterConfig,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
     final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
