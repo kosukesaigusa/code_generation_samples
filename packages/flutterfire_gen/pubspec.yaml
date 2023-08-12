@@ -8,14 +8,14 @@ environment:
   flutter: '>=3.10.0'
 
 dependencies:
-  analyzer: ^6.0.0
+  analyzer: ^6.1.0
   build: ^2.4.1
-  cloud_firestore: ^4.8.2
+  cloud_firestore: ^4.8.4
   dart_style: ^2.3.2
   flutter:
     sdk: flutter
-  flutterfire_gen_annotation: ^0.1.0-dev.2
-  flutterfire_gen_utils: ^0.0.1-dev.2
+  flutterfire_gen_annotation: ^0.1.0-dev.3
+  flutterfire_gen_utils: ^0.0.1-dev.3
   json_annotation: ^4.8.1
   meta: ^1.9.1
   path: ^1.8.3
