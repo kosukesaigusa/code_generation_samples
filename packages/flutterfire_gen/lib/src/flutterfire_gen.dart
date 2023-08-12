@@ -8,6 +8,7 @@ import 'package:source_gen/source_gen.dart';
 import 'config.dart';
 import 'firestore_document_visitor.dart';
 import 'templates/create/create_class_template.dart';
+import 'templates/delete/delete_class_template.dart';
 import 'templates/fake_firebase_firestore_template.dart';
 import 'templates/query_class_template.dart';
 import 'templates/read/read_class_template.dart';
@@ -45,6 +46,7 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       ..writeln(
         UpdateClassTemplate(config: config, visitor: visitor, fields: fields),
       )
+      ..writeln(DeleteClassTemplate(config: config))
       ..writeln(RefsTemplate(config: config))
       ..writeln(QueryClassTemplate(config: config));
 

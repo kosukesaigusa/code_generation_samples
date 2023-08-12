@@ -73,7 +73,9 @@ class UpdateAppUserPostLike {
   }
 }
 
-/// A [CollectionReference] to appUserPostLikes collection to read.
+class DeleteAppUserPostLike {}
+
+/// Provides a reference to the appUserPostLikes collection for reading.
 CollectionReference<ReadAppUserPostLike>
     readAppUserPostLikeCollectionReference({
   required String appUserId,
@@ -88,10 +90,10 @@ CollectionReference<ReadAppUserPostLike>
             .withConverter<ReadAppUserPostLike>(
               fromFirestore: (ds, _) =>
                   ReadAppUserPostLike.fromDocumentSnapshot(ds),
-              toFirestore: (obj, _) => throw UnimplementedError(),
+              toFirestore: (_, __) => throw UnimplementedError(),
             );
 
-/// A [DocumentReference] to appUserPostLike document to read.
+/// Provides a reference to a appUserPostLike document for reading.
 DocumentReference<ReadAppUserPostLike> readAppUserPostLikeDocumentReference({
   required String appUserId,
   required String appUserPostId,
@@ -101,7 +103,7 @@ DocumentReference<ReadAppUserPostLike> readAppUserPostLikeDocumentReference({
             appUserId: appUserId, appUserPostId: appUserPostId)
         .doc(appUserPostLikeId);
 
-/// A [CollectionReference] to appUserPostLikes collection to create.
+/// Provides a reference to the appUserPostLikes collection for creating.
 CollectionReference<CreateAppUserPostLike>
     createAppUserPostLikeCollectionReference({
   required String appUserId,
@@ -114,11 +116,11 @@ CollectionReference<CreateAppUserPostLike>
             .doc(appUserPostId)
             .collection('appUserPostLikes')
             .withConverter<CreateAppUserPostLike>(
-              fromFirestore: (ds, _) => throw UnimplementedError(),
+              fromFirestore: (_, __) => throw UnimplementedError(),
               toFirestore: (obj, _) => obj.toJson(),
             );
 
-/// A [DocumentReference] to appUserPostLike document to create.
+/// Provides a reference to a appUserPostLike document for creating.
 DocumentReference<CreateAppUserPostLike>
     createAppUserPostLikeDocumentReference({
   required String appUserId,
@@ -129,7 +131,7 @@ DocumentReference<CreateAppUserPostLike>
                 appUserId: appUserId, appUserPostId: appUserPostId)
             .doc(appUserPostLikeId);
 
-/// A [CollectionReference] to appUserPostLikes collection to update.
+/// Provides a reference to the appUserPostLikes collection for updating.
 CollectionReference<UpdateAppUserPostLike>
     updateAppUserPostLikeCollectionReference({
   required String appUserId,
@@ -142,11 +144,11 @@ CollectionReference<UpdateAppUserPostLike>
             .doc(appUserPostId)
             .collection('appUserPostLikes')
             .withConverter<UpdateAppUserPostLike>(
-              fromFirestore: (ds, _) => throw UnimplementedError(),
+              fromFirestore: (_, __) => throw UnimplementedError(),
               toFirestore: (obj, _) => obj.toJson(),
             );
 
-/// A [DocumentReference] to appUserPostLike document to update.
+/// Provides a reference to a appUserPostLike document for updating.
 DocumentReference<UpdateAppUserPostLike>
     updateAppUserPostLikeDocumentReference({
   required String appUserId,
@@ -157,27 +159,33 @@ DocumentReference<UpdateAppUserPostLike>
                 appUserId: appUserId, appUserPostId: appUserPostId)
             .doc(appUserPostLikeId);
 
-/// A [CollectionReference] to appUserPostLikes collection to delete.
-CollectionReference<Object?> deleteAppUserPostLikeCollectionReference({
+/// Provides a reference to the appUserPostLikes collection for deleting.
+CollectionReference<DeleteAppUserPostLike>
+    deleteAppUserPostLikeCollectionReference({
   required String appUserId,
   required String appUserPostId,
 }) =>
-    FirebaseFirestore.instance
-        .collection('appUsers')
-        .doc(appUserId)
-        .collection('appUserPosts')
-        .doc(appUserPostId)
-        .collection('appUserPostLikes');
+        FirebaseFirestore.instance
+            .collection('appUsers')
+            .doc(appUserId)
+            .collection('appUserPosts')
+            .doc(appUserPostId)
+            .collection('appUserPostLikes')
+            .withConverter<DeleteAppUserPostLike>(
+              fromFirestore: (_, __) => throw UnimplementedError(),
+              toFirestore: (_, __) => throw UnimplementedError(),
+            );
 
-/// A [DocumentReference] to appUserPostLike document to delete.
-DocumentReference<Object?> deleteAppUserPostLikeDocumentReference({
+/// Provides a reference to a appUserPostLike document for deleting.
+DocumentReference<DeleteAppUserPostLike>
+    deleteAppUserPostLikeDocumentReference({
   required String appUserId,
   required String appUserPostId,
   required String appUserPostLikeId,
 }) =>
-    deleteAppUserPostLikeCollectionReference(
-            appUserId: appUserId, appUserPostId: appUserPostId)
-        .doc(appUserPostLikeId);
+        deleteAppUserPostLikeCollectionReference(
+                appUserId: appUserId, appUserPostId: appUserPostId)
+            .doc(appUserPostLikeId);
 
 /// A query manager to execute query against [AppUserPostLike].
 class AppUserPostLikeQuery {

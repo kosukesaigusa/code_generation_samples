@@ -85,7 +85,9 @@ class UpdateAppUserPost {
   }
 }
 
-/// A [CollectionReference] to appUserPosts collection to read.
+class DeleteAppUserPost {}
+
+/// Provides a reference to the appUserPosts collection for reading.
 CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference({
   required String appUserId,
 }) =>
@@ -95,17 +97,17 @@ CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference({
         .collection('appUserPosts')
         .withConverter<ReadAppUserPost>(
           fromFirestore: (ds, _) => ReadAppUserPost.fromDocumentSnapshot(ds),
-          toFirestore: (obj, _) => throw UnimplementedError(),
+          toFirestore: (_, __) => throw UnimplementedError(),
         );
 
-/// A [DocumentReference] to appUserPost document to read.
+/// Provides a reference to a appUserPost document for reading.
 DocumentReference<ReadAppUserPost> readAppUserPostDocumentReference({
   required String appUserId,
   required String appUserPostId,
 }) =>
     readAppUserPostCollectionReference(appUserId: appUserId).doc(appUserPostId);
 
-/// A [CollectionReference] to appUserPosts collection to create.
+/// Provides a reference to the appUserPosts collection for creating.
 CollectionReference<CreateAppUserPost> createAppUserPostCollectionReference({
   required String appUserId,
 }) =>
@@ -114,11 +116,11 @@ CollectionReference<CreateAppUserPost> createAppUserPostCollectionReference({
         .doc(appUserId)
         .collection('appUserPosts')
         .withConverter<CreateAppUserPost>(
-          fromFirestore: (ds, _) => throw UnimplementedError(),
+          fromFirestore: (_, __) => throw UnimplementedError(),
           toFirestore: (obj, _) => obj.toJson(),
         );
 
-/// A [DocumentReference] to appUserPost document to create.
+/// Provides a reference to a appUserPost document for creating.
 DocumentReference<CreateAppUserPost> createAppUserPostDocumentReference({
   required String appUserId,
   required String appUserPostId,
@@ -126,7 +128,7 @@ DocumentReference<CreateAppUserPost> createAppUserPostDocumentReference({
     createAppUserPostCollectionReference(appUserId: appUserId)
         .doc(appUserPostId);
 
-/// A [CollectionReference] to appUserPosts collection to update.
+/// Provides a reference to the appUserPosts collection for updating.
 CollectionReference<UpdateAppUserPost> updateAppUserPostCollectionReference({
   required String appUserId,
 }) =>
@@ -135,11 +137,11 @@ CollectionReference<UpdateAppUserPost> updateAppUserPostCollectionReference({
         .doc(appUserId)
         .collection('appUserPosts')
         .withConverter<UpdateAppUserPost>(
-          fromFirestore: (ds, _) => throw UnimplementedError(),
+          fromFirestore: (_, __) => throw UnimplementedError(),
           toFirestore: (obj, _) => obj.toJson(),
         );
 
-/// A [DocumentReference] to appUserPost document to update.
+/// Provides a reference to a appUserPost document for updating.
 DocumentReference<UpdateAppUserPost> updateAppUserPostDocumentReference({
   required String appUserId,
   required String appUserPostId,
@@ -147,17 +149,21 @@ DocumentReference<UpdateAppUserPost> updateAppUserPostDocumentReference({
     updateAppUserPostCollectionReference(appUserId: appUserId)
         .doc(appUserPostId);
 
-/// A [CollectionReference] to appUserPosts collection to delete.
-CollectionReference<Object?> deleteAppUserPostCollectionReference({
+/// Provides a reference to the appUserPosts collection for deleting.
+CollectionReference<DeleteAppUserPost> deleteAppUserPostCollectionReference({
   required String appUserId,
 }) =>
     FirebaseFirestore.instance
         .collection('appUsers')
         .doc(appUserId)
-        .collection('appUserPosts');
+        .collection('appUserPosts')
+        .withConverter<DeleteAppUserPost>(
+          fromFirestore: (_, __) => throw UnimplementedError(),
+          toFirestore: (_, __) => throw UnimplementedError(),
+        );
 
-/// A [DocumentReference] to appUserPost document to delete.
-DocumentReference<Object?> deleteAppUserPostDocumentReference({
+/// Provides a reference to a appUserPost document for deleting.
+DocumentReference<DeleteAppUserPost> deleteAppUserPostDocumentReference({
   required String appUserId,
   required String appUserPostId,
 }) =>

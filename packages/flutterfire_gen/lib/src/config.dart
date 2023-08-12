@@ -143,4 +143,18 @@ enum ReferenceClassType {
   ///
   delete,
   ;
+
+  ///
+  String toIng() {
+    switch (this) {
+      case ReferenceClassType.read:
+        return 'reading';
+      case ReferenceClassType.create:
+        return 'creating';
+      case ReferenceClassType.update:
+        return 'updating';
+      case ReferenceClassType.delete:
+        return 'deleting';
+    }
+  }
 }

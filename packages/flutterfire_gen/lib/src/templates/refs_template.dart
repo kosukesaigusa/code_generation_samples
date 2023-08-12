@@ -14,8 +14,10 @@ class RefsTemplate {
   String toString() {
     final buffer = StringBuffer();
     for (final referenceClassType in ReferenceClassType.values) {
-      buffer.writeln(_collectionReferenceTemplate(referenceClassType));
-      buffer.writeln(_documentReferenceTemplate(referenceClassType));
+      buffer
+        ..writeln(_collectionReferenceTemplate(referenceClassType))
+        ..writeln()
+        ..writeln(_documentReferenceTemplate(referenceClassType));
     }
     return buffer.toString();
   }
@@ -23,7 +25,7 @@ class RefsTemplate {
   String _collectionReferenceTemplate(ReferenceClassType referenceClassType) {
     final buffer = StringBuffer()
       ..writeln(
-        '/// A [CollectionReference] to ${config.collectionName} collection to ${referenceClassType.name}.',
+        '/// Provides a reference to the ${config.collectionName} collection for ${referenceClassType.toIng()}.',
       )
       ..write(_collectionReference(referenceClassType))
       ..write(_firestoreInstance());
@@ -35,9 +37,7 @@ class RefsTemplate {
         buffer.write('.doc($documentName)');
       }
     }
-    if (_needsTyping(referenceClassType)) {
-      buffer.write(_withConverterString(referenceClassType));
-    }
+    buffer.write(_withConverterString(referenceClassType));
     buffer.write(';');
     return buffer.toString();
   }
@@ -45,7 +45,7 @@ class RefsTemplate {
   String _documentReferenceTemplate(ReferenceClassType referenceClassType) {
     final buffer = StringBuffer()
       ..writeln(
-        '/// A [DocumentReference] to ${config.documentName} document to ${referenceClassType.name}.',
+        '/// Provides a reference to a ${config.documentName} document for ${referenceClassType.toIng()}.',
       )
       ..writeln(_documentReference(referenceClassType));
     return buffer.toString();
@@ -79,19 +79,24 @@ ${_collectionReferenceTypeAnnotation(referenceClassType)} ${_collectionReference
         return '''
 .withConverter<${_className(referenceClassType)}>(
   fromFirestore: (ds, _) => ${_className(referenceClassType)}.fromDocumentSnapshot(ds),
-  toFirestore: (obj, _) => throw UnimplementedError(),
+  toFirestore: (_, __) => throw UnimplementedError(),
 )
 ''';
       case ReferenceClassType.create:
       case ReferenceClassType.update:
         return '''
 .withConverter<${_className(referenceClassType)}>(
-  fromFirestore: (ds, _) => throw UnimplementedError(),
+  fromFirestore: (_, __) => throw UnimplementedError(),
   toFirestore: (obj, _) => obj.toJson(),
 )
 ''';
       case ReferenceClassType.delete:
-        throw ArgumentError();
+        return '''
+.withConverter<${_className(referenceClassType)}>(
+  fromFirestore: (_, __) => throw UnimplementedError(),
+  toFirestore: (_, __) => throw UnimplementedError(),
+)
+''';
     }
   }
 
@@ -164,28 +169,13 @@ ${_documentReferenceTypeAnnotation(referenceClassType)} ${_documentReferenceName
     }
   }
 
-  /// [CollectionReference] や [DocumentReference] に型をつけるかどうか。
-  /// [ReferenceClassType] によって異なる。
-  bool _needsTyping(ReferenceClassType referenceClassType) =>
-      referenceClassType != ReferenceClassType.delete;
-
   String _collectionReferenceTypeAnnotation(
     ReferenceClassType referenceClassType,
-  ) {
-    if (_needsTyping(referenceClassType)) {
-      return 'CollectionReference<${_className(referenceClassType)}>';
-    } else {
-      return 'CollectionReference<Object?>';
-    }
-  }
+  ) =>
+      'CollectionReference<${_className(referenceClassType)}>';
 
   String _documentReferenceTypeAnnotation(
     ReferenceClassType referenceClassType,
-  ) {
-    if (_needsTyping(referenceClassType)) {
-      return 'DocumentReference<${_className(referenceClassType)}>';
-    } else {
-      return 'DocumentReference<Object?>';
-    }
-  }
+  ) =>
+      'DocumentReference<${_className(referenceClassType)}>';
 }

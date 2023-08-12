@@ -638,50 +638,56 @@ class UpdateEntity {
   }
 }
 
-/// A [CollectionReference] to entities collection to read.
+class DeleteEntity {}
+
+/// Provides a reference to the entities collection for reading.
 final readEntityCollectionReference =
     fakeDb.collection('entities').withConverter<ReadEntity>(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
-          toFirestore: (obj, _) => throw UnimplementedError(),
+          toFirestore: (_, __) => throw UnimplementedError(),
         );
 
-/// A [DocumentReference] to entity document to read.
+/// Provides a reference to a entity document for reading.
 DocumentReference<ReadEntity> readEntityDocumentReference({
   required String entityId,
 }) =>
     readEntityCollectionReference.doc(entityId);
 
-/// A [CollectionReference] to entities collection to create.
+/// Provides a reference to the entities collection for creating.
 final createEntityCollectionReference =
     fakeDb.collection('entities').withConverter<CreateEntity>(
-          fromFirestore: (ds, _) => throw UnimplementedError(),
+          fromFirestore: (_, __) => throw UnimplementedError(),
           toFirestore: (obj, _) => obj.toJson(),
         );
 
-/// A [DocumentReference] to entity document to create.
+/// Provides a reference to a entity document for creating.
 DocumentReference<CreateEntity> createEntityDocumentReference({
   required String entityId,
 }) =>
     createEntityCollectionReference.doc(entityId);
 
-/// A [CollectionReference] to entities collection to update.
+/// Provides a reference to the entities collection for updating.
 final updateEntityCollectionReference =
     fakeDb.collection('entities').withConverter<UpdateEntity>(
-          fromFirestore: (ds, _) => throw UnimplementedError(),
+          fromFirestore: (_, __) => throw UnimplementedError(),
           toFirestore: (obj, _) => obj.toJson(),
         );
 
-/// A [DocumentReference] to entity document to update.
+/// Provides a reference to a entity document for updating.
 DocumentReference<UpdateEntity> updateEntityDocumentReference({
   required String entityId,
 }) =>
     updateEntityCollectionReference.doc(entityId);
 
-/// A [CollectionReference] to entities collection to delete.
-final deleteEntityCollectionReference = fakeDb.collection('entities');
+/// Provides a reference to the entities collection for deleting.
+final deleteEntityCollectionReference =
+    fakeDb.collection('entities').withConverter<DeleteEntity>(
+          fromFirestore: (_, __) => throw UnimplementedError(),
+          toFirestore: (_, __) => throw UnimplementedError(),
+        );
 
-/// A [DocumentReference] to entity document to delete.
-DocumentReference<Object?> deleteEntityDocumentReference({
+/// Provides a reference to a entity document for deleting.
+DocumentReference<DeleteEntity> deleteEntityDocumentReference({
   required String entityId,
 }) =>
     deleteEntityCollectionReference.doc(entityId);
