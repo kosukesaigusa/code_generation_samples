@@ -49,18 +49,16 @@ class CreateAppUserPost {
   const CreateAppUserPost({
     required this.content,
     required this.numbers,
-    this.updatedAt,
   });
 
   final String content;
   final FirestoreData<List<int>> numbers;
-  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
       'content': content,
       'numbers': numbers.value,
-      'updatedAt': updatedAt,
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 }
@@ -69,18 +67,16 @@ class UpdateAppUserPost {
   const UpdateAppUserPost({
     this.content,
     this.numbers,
-    this.updatedAt,
   });
 
   final String? content;
   final FirestoreData<List<int>>? numbers;
-  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
       if (content != null) 'content': content,
       if (numbers != null) 'numbers': numbers!.value,
-      if (updatedAt != null) 'updatedAt': updatedAt,
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 }

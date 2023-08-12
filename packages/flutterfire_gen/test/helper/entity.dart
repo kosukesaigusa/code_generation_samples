@@ -56,11 +56,9 @@ class Entity {
     required this.fooWithDefault,
     this.nullableFoo,
     this.nullableFooWithDefaultAnnotation,
-    this.nullableFooWithDefaultValueInConstructor = const Foo('defaultBar'),
     required this.fieldValueAllowedInt,
     this.fieldValueAllowedNullableInt,
     this.fieldValueAllowedNullableIntWithDefaultAnnotation,
-    this.fieldValueAllowedNullableIntWithDefaultInConstructor = 0,
   });
 
   final String text;
@@ -185,9 +183,6 @@ class Entity {
   @_FooJsonConverter()
   final Foo? nullableFooWithDefaultAnnotation;
 
-  @_FooJsonConverter()
-  final Foo? nullableFooWithDefaultValueInConstructor;
-
   @AllowFieldValue()
   final int fieldValueAllowedInt;
 
@@ -197,9 +192,6 @@ class Entity {
   @AllowFieldValue()
   @CreateDefault(0)
   final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
-
-  @AllowFieldValue()
-  final int? fieldValueAllowedNullableIntWithDefaultInConstructor;
 }
 
 class Foo {

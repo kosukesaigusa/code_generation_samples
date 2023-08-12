@@ -35,8 +35,10 @@ class ${config.createClassName} {
   ${ToJsonTemplate(
       fields: fields,
       defaultValueStrings: visitor.createDefaultValueStrings,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      alwaysUseFieldValueServerTimestampWhenCreatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
     )}
 }
 ''';
@@ -44,13 +46,17 @@ class ${config.createClassName} {
 
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return '${fields.entries.map((entry) {
+    return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
 
       final defaultValueStrings = visitor.createDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
+      final alwaysUseFieldValueServerTimestamp =
+          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields.contains(
+        entry.key,
+      );
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -58,8 +64,9 @@ class ${config.createClassName} {
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
         isFieldValueAllowed: isFieldValueAllowed,
+        alwaysUseFieldValueServerTimestamp: alwaysUseFieldValueServerTimestamp,
       );
-    }).join(',\n')},';
+    }).join('\n');
   }
 
   String _constructorEachField({
@@ -67,29 +74,40 @@ class ${config.createClassName} {
     required String typeNameString,
     required String? defaultValueString,
     required bool isFieldValueAllowed,
+    required bool alwaysUseFieldValueServerTimestamp,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
     final isNullable = typeNameString.endsWith('?');
+    if (alwaysUseFieldValueServerTimestamp) {
+      return '';
+    }
     if (hasDefaultValue || isNullable) {
       if (hasDefaultValue) {
         if (isFieldValueAllowed) {
-          return 'this.$fieldNameString = const ActualValue($defaultValueString)';
+          return 'this.$fieldNameString = const ActualValue($defaultValueString),';
         }
-        return 'this.$fieldNameString = $defaultValueString';
+        return 'this.$fieldNameString = $defaultValueString,';
       }
-      return 'this.$fieldNameString';
+      return 'this.$fieldNameString,';
     }
-    return 'required this.$fieldNameString';
+    return 'required this.$fieldNameString,';
   }
 
   String _parseFields() {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
+      final alwaysUseFieldValueServerTimestamp =
+          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields.contains(
+        entry.key,
+      );
 
+      if (alwaysUseFieldValueServerTimestamp) {
+        return '';
+      }
       if (isFieldValueAllowed) {
         if (nullableTypeMatch != null) {
           final type = nullableTypeMatch.group(1)!;

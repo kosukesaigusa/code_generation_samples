@@ -22,6 +22,7 @@ class AppUserPost {
   @AllowFieldValue()
   final List<int> numbers;
 
-  // 書き込み時は常に自動でサーバ時間のつもり、そういう JsonConverter を指定するべきか
+  @AlwaysUseFieldValueServerTimestampWhenCreating()
+  @AlwaysUseFieldValueServerTimestampWhenUpdating()
   final DateTime? updatedAt;
 }

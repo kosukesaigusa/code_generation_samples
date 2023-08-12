@@ -8,9 +8,18 @@ part 'app_user_post_like.flutterfire_gen.dart';
   documentName: 'appUserPostLike',
 )
 class AppUserPostLike {
-  AppUserPostLike({required this.likedByAppUserId, this.likedAt});
+  AppUserPostLike({
+    required this.likedByAppUserId,
+    this.likedAt,
+    this.updatedAt,
+  });
 
   final String likedByAppUserId;
 
+  @AlwaysUseFieldValueServerTimestampWhenCreating()
   final DateTime? likedAt;
+
+  @AlwaysUseFieldValueServerTimestampWhenCreating()
+  @AlwaysUseFieldValueServerTimestampWhenUpdating()
+  final DateTime? updatedAt;
 }

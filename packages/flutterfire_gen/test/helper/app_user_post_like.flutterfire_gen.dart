@@ -10,6 +10,7 @@ class ReadAppUserPostLike {
     required this.path,
     required this.likedByAppUserId,
     required this.likedAt,
+    required this.updatedAt,
   });
 
   final String appUserPostLikeId;
@@ -20,12 +21,15 @@ class ReadAppUserPostLike {
 
   final DateTime? likedAt;
 
+  final DateTime? updatedAt;
+
   factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
     return ReadAppUserPostLike(
       appUserPostLikeId: json['appUserPostLikeId'] as String,
       path: json['path'] as String,
       likedByAppUserId: json['likedByAppUserId'] as String,
       likedAt: (json['likedAt'] as Timestamp?)?.toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -42,16 +46,15 @@ class ReadAppUserPostLike {
 class CreateAppUserPostLike {
   const CreateAppUserPostLike({
     required this.likedByAppUserId,
-    this.likedAt,
   });
 
   final String likedByAppUserId;
-  final DateTime? likedAt;
 
   Map<String, dynamic> toJson() {
     return {
       'likedByAppUserId': likedByAppUserId,
-      'likedAt': likedAt,
+      'likedAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 }
@@ -69,6 +72,7 @@ class UpdateAppUserPostLike {
     return {
       if (likedByAppUserId != null) 'likedByAppUserId': likedByAppUserId,
       if (likedAt != null) 'likedAt': likedAt,
+      'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 }

@@ -24,7 +24,7 @@ ${config.readClassName} copyWith({
     ${config.includeDocumentReferenceField ? 'DocumentReference<${config.readClassName}>? ${config.documentReferenceFieldName},' : ''}
     ${fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       return '${typeNameString.ensureNullable()} $fieldNameString,';
     }).join('\n')}
   }) {

@@ -34,8 +34,10 @@ class ${config.updateClassName} {
   ${ToJsonTemplate(
       fields: fields,
       defaultValueStrings: visitor.updateDefaultValueStrings,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      alwaysUseFieldValueServerTimestampWhenUpdatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
     )}
 }
 ''';
@@ -43,13 +45,17 @@ class ${config.updateClassName} {
 
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return '${fields.entries.map((entry) {
+    return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
 
-      final defaultValueStrings = visitor.updateDefaultValueStrings;
+      final defaultValueStrings = visitor.createDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
+      final alwaysUseFieldValueServerTimestamp =
+          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields.contains(
+        entry.key,
+      );
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -57,8 +63,9 @@ class ${config.updateClassName} {
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
         isFieldValueAllowed: isFieldValueAllowed,
+        alwaysUseFieldValueServerTimestamp: alwaysUseFieldValueServerTimestamp,
       );
-    }).join(',\n')},';
+    }).join('\n');
   }
 
   String _constructorEachField({
@@ -66,23 +73,35 @@ class ${config.updateClassName} {
     required String typeNameString,
     required String? defaultValueString,
     required bool isFieldValueAllowed,
+    required bool alwaysUseFieldValueServerTimestamp,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
+    if (alwaysUseFieldValueServerTimestamp) {
+      return '';
+    }
     if (hasDefaultValue) {
       if (isFieldValueAllowed) {
-        return 'this.$fieldNameString = const ActualValue($defaultValueString)';
+        return 'this.$fieldNameString = const ActualValue($defaultValueString),';
       }
-      return 'this.$fieldNameString = $defaultValueString';
+      return 'this.$fieldNameString = $defaultValueString,';
     }
-    return 'this.$fieldNameString';
+    return 'this.$fieldNameString,';
   }
 
   String _parseFields() {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
+      final alwaysUseFieldValueServerTimestamp =
+          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields.contains(
+        entry.key,
+      );
+
+      if (alwaysUseFieldValueServerTimestamp) {
+        return '';
+      }
       if (isFieldValueAllowed) {
         // TODO: typeNameString が nullable になる可能性はある？
         return 'final FirestoreData<$typeNameString>? $fieldNameString;';

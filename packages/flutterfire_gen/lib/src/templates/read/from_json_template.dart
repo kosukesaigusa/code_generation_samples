@@ -45,7 +45,7 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
   String _parseFields() {
     return '${fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final defaultValueString = defaultValueStrings[fieldNameString];
       final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
       return fromJsonEachField(

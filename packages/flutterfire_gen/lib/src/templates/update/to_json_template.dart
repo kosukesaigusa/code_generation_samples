@@ -10,8 +10,9 @@ class ToJsonTemplate {
   const ToJsonTemplate({
     required this.fields,
     required this.defaultValueStrings,
-    required this.jsonConverterConfigs,
     required this.fieldValueAllowedFields,
+    required this.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+    required this.jsonConverterConfigs,
   });
 
   ///
@@ -21,10 +22,13 @@ class ToJsonTemplate {
   final Map<String, String> defaultValueStrings;
 
   ///
-  final Map<String, JsonConverterConfig> jsonConverterConfigs;
+  final Set<String> fieldValueAllowedFields;
 
   ///
-  final Set<String> fieldValueAllowedFields;
+  final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields;
+
+  ///
+  final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
   @override
   String toString() {
@@ -40,16 +44,21 @@ Map<String, dynamic> toJson() {
   String _parseFields() {
     return fields.entries.map((entry) {
       final fieldNameString = entry.key;
-      final typeNameString = entry.value as String;
+      final typeNameString = entry.value;
       final defaultValueString = defaultValueStrings[fieldNameString];
       final isFieldValueAllowed = fieldValueAllowedFields.contains(entry.key);
+      final isAlwaysUseFieldValueServerTimestampWhenUpdating =
+          alwaysUseFieldValueServerTimestampWhenUpdatingFields
+              .contains(entry.key);
       final jsonConverterConfig = jsonConverterConfigs[fieldNameString];
       return toJsonEachField(
         fieldNameString: fieldNameString,
         typeNameString: typeNameString,
         defaultValueString: defaultValueString,
-        jsonConverterConfig: jsonConverterConfig,
         isFieldValueAllowed: isFieldValueAllowed,
+        isAlwaysUseFieldValueServerTimestampWhenUpdating:
+            isAlwaysUseFieldValueServerTimestampWhenUpdating,
+        jsonConverterConfig: jsonConverterConfig,
       );
     }).join('\n');
   }
@@ -60,17 +69,31 @@ Map<String, dynamic> toJson() {
     required String fieldNameString,
     required String typeNameString,
     String? defaultValueString,
-    JsonConverterConfig? jsonConverterConfig,
     bool isFieldValueAllowed = false,
+    bool isAlwaysUseFieldValueServerTimestampWhenUpdating = false,
+    JsonConverterConfig? jsonConverterConfig,
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
+    if (isAlwaysUseFieldValueServerTimestampWhenUpdating) {
+      return "'$fieldNameString': FieldValue.serverTimestamp(),";
+    }
     if (jsonConverterConfig != null) {
       if (hasDefaultValue) {
-        return "'$fieldNameString': $fieldNameString == null "
-            '? $defaultValueString '
-            ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
+        if (isFieldValueAllowed) {
+          return "'$fieldNameString': $fieldNameString == null "
+              '? $defaultValueString '
+              ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!.actualValue),';
+        } else {
+          return "'$fieldNameString': $fieldNameString == null "
+              '? $defaultValueString '
+              ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
+        }
       }
-      return "if ($fieldNameString != null) '$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),";
+      if (isFieldValueAllowed) {
+        return "if ($fieldNameString != null) '$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!.actualValue),";
+      } else {
+        return "if ($fieldNameString != null) '$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),";
+      }
     }
     if (isFieldValueAllowed) {
       if (hasDefaultValue) {

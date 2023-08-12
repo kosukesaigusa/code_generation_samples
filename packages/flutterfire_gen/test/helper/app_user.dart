@@ -13,9 +13,9 @@ class AppUser {
     required this.imageUrl,
   });
 
+  @ReadDefault('')
   final String name;
 
   @ReadDefault('')
-  @CreateDefault('')
   final String imageUrl;
 }

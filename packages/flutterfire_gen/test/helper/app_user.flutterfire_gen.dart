@@ -24,7 +24,7 @@ class ReadAppUser {
     return ReadAppUser(
       appUserId: json['appUserId'] as String,
       path: json['path'] as String,
-      name: json['name'] as String,
+      name: json['name'] as String? ?? '',
       imageUrl: json['imageUrl'] as String? ?? '',
     );
   }
@@ -42,7 +42,7 @@ class ReadAppUser {
 class CreateAppUser {
   const CreateAppUser({
     required this.name,
-    this.imageUrl = '',
+    required this.imageUrl,
   });
 
   final String name;

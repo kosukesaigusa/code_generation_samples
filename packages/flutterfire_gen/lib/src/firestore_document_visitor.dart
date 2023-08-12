@@ -31,6 +31,14 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// A set of strings of FieldValue allowed fields.
   final Set<String> fieldValueAllowedFields = {};
 
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// creating.
+  final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields = {};
+
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// updating.
+  final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields = {};
+
   /// [JsonConverter] strings of each field.
   final Map<String, JsonConverterConfig> jsonConverterConfigs = {};
 
@@ -54,13 +62,11 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         final fieldName = parameter.name;
         final defaultValueCode = parameter.defaultValueCode;
         if (defaultValueCode != null) {
-          // TODO: コンストラクタパラメータでデフォルト値を渡した場合は
-          // toJson, fromJson が共通になるのは仕様として納得感があるかどうか、
-          // その場合は、アノテーションにおいても toJson, fromJson をいっしょくたに
-          // あつかうような概念が必要になりそうかを確認する。必要ならそのように
-          // リファクタする。
-          readDefaultValueStrings[fieldName] = defaultValueCode;
-          createDefaultValueStrings[fieldName] = defaultValueCode;
+          print(
+            '❗The default value $defaultValueCode for $className.$fieldName is '
+            'set in the constructor of $className, but it has no meaning. '
+            'Use @ReadDefault, @CreateDefault, or @UpdateDefault instead.',
+          );
         }
       }
     }
@@ -71,6 +77,10 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
     const defaultTypeChecker = TypeChecker.fromRuntime(Default);
     const jsonConverterTypeChecker = TypeChecker.fromRuntime(JsonConverter);
     const allowFieldValueTypeChecker = TypeChecker.fromRuntime(AllowFieldValue);
+    const alwaysUseFieldValueServerTimestampWhenCreatingTypeChecker =
+        TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenCreating);
+    const alwaysUseFieldValueServerTimestampWhenUpdatingTypeChecker =
+        TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenUpdating);
 
     final metadata = element.metadata;
     for (final meta in metadata) {
@@ -103,6 +113,14 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
       }
       if (allowFieldValueTypeChecker.isExactlyType(objectType)) {
         fieldValueAllowedFields.add(fieldName);
+      }
+      if (alwaysUseFieldValueServerTimestampWhenCreatingTypeChecker
+          .isExactlyType(objectType)) {
+        alwaysUseFieldValueServerTimestampWhenCreatingFields.add(fieldName);
+      }
+      if (alwaysUseFieldValueServerTimestampWhenUpdatingTypeChecker
+          .isExactlyType(objectType)) {
+        alwaysUseFieldValueServerTimestampWhenUpdatingFields.add(fieldName);
       }
     }
   }
