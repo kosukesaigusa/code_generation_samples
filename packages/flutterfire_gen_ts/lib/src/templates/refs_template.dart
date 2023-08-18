@@ -30,8 +30,12 @@ class RefsTemplate {
  * Provides a reference to the ${config.collectionName} collection for ${referenceClassType.toIng()}.
  */
 ''')
-      ..writeln(_collectionReference(referenceClassType))
-      ..writeln('db');
+      ..writeln(_collectionReference(referenceClassType));
+    if (config.firestorePathSegments.length == 1) {
+      buffer.writeln('db');
+    } else {
+      buffer.writeln('=> { return db');
+    }
     for (final segment in config.firestorePathSegments) {
       final collectionName = segment.collectionName;
       final documentName = segment.documentName;
@@ -41,7 +45,10 @@ class RefsTemplate {
       }
     }
     buffer.write(_withConverterString(referenceClassType));
-    buffer.write(';');
+    if (config.firestorePathSegments.length == 1) {
+    } else {
+      buffer.write('}');
+    }
     return buffer.toString();
   }
 
@@ -67,10 +74,52 @@ class RefsTemplate {
       return 'export const ${_collectionReferenceName(referenceClassType)} = ';
     }
     return '''
-${_collectionReferenceTypeAnnotation(referenceClassType)} ${_collectionReferenceName(referenceClassType)} ({
+export const ${_collectionReferenceName(referenceClassType)} = (
   ${_documentIdParameters()}
-}) =>
+): ${_collectionReferenceTypeAnnotation(referenceClassType)}
 ''';
+  }
+
+  String _documentReference(ReferenceClassType referenceClassType) {
+    if (config.firestorePathSegments.isEmpty) {
+      // TODO: 適切にエラーをハンドリングする
+      throw Error();
+    }
+    if (config.firestorePathSegments.length == 1) {
+      return '''
+export const ${_documentReferenceName(referenceClassType)} = ({
+  ${config.documentName}Id
+}: {
+  ${config.documentName}Id: string
+}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
+    ${_collectionReferenceName(referenceClassType)}.doc(${config.documentName}Id);
+''';
+    }
+    return '''
+export const ${_documentReferenceName(referenceClassType)} = ({
+  ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join('\n')},
+  ${config.documentName}Id,
+}: {
+  ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: string').join('\n')},
+  ${config.documentName}Id: string
+}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
+    ${_collectionReferenceName(referenceClassType)}({
+      ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join(',\n')}
+    }).doc(${config.documentName}Id);
+''';
+  }
+
+  String _documentIdParameters() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>()
+        .toList();
+    return '''
+{
+  ${documentIds.map((documentId) => documentId).join(',\n')}
+}: {
+  ${documentIds.map((documentId) => '$documentId: string').join(',\n')}
+}''';
   }
 
   String _withConverterString(ReferenceClassType referenceClassType) {
@@ -111,38 +160,6 @@ ${_collectionReferenceTypeAnnotation(referenceClassType)} ${_collectionReference
 ''';
     }
   }
-
-  String _documentReference(ReferenceClassType referenceClassType) {
-    if (config.firestorePathSegments.isEmpty) {
-      // TODO: 適切にエラーをハンドリングする
-      throw Error();
-    }
-    if (config.firestorePathSegments.length == 1) {
-      return '''
-export const ${_documentReferenceName(referenceClassType)} = ({
-  ${config.documentName}Id
-}: {
-  ${config.documentName}Id: string
-}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
-    ${_collectionReferenceName(referenceClassType)}.doc(${config.documentName}Id);
-''';
-    }
-    return '''
-export const ${_documentReferenceName(referenceClassType)} = ({
-  "${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId,').join('\n')},"
-  ${config.documentName}Id,
-}: {
-  "${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: string').join('\n')},"
-  ${config.documentName}Id: string
-}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
-    ${_collectionReferenceName(referenceClassType)}(
-      ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => "$documentId: $documentId").join(',\n')}
-    ).doc(${config.documentName}Id);
-''';
-  }
-
-  String _documentIdParameters() =>
-      "${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => 'required String $documentId').join(',\n')},";
 
   ///
   String _className(ReferenceClassType referenceClassType) {
@@ -189,5 +206,5 @@ export const ${_documentReferenceName(referenceClassType)} = ({
   String _collectionReferenceTypeAnnotation(
     ReferenceClassType referenceClassType,
   ) =>
-      'CollectionReference<${_className(referenceClassType)}>';
+      'FirebaseFirestore.CollectionReference<${_className(referenceClassType)}>';
 }

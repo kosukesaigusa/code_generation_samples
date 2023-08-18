@@ -72,6 +72,7 @@ imageUrl: string
 this.imageUrl = imageUrl
   }
 
+
   readonly name: string
 
 readonly imageUrl: string
@@ -90,23 +91,24 @@ export class UpdateAppUser {
     name,
 imageUrl,
   }: {
-    name: string
-imageUrl: string
+    name?: string
+imageUrl?: string
   }) {
     this.name = name
 this.imageUrl = imageUrl
   }
 
-  readonly name: string
 
-readonly imageUrl: string
+  readonly name?: string
+
+readonly imageUrl?: string
 
   toJson(): Record<string, unknown> {
   const json: Record<string, unknown> = {}
-  if (this.name != null) {
+  if (this.name != undefined) {
   json['name'] = this.name
 }
-if (this.imageUrl != null) {
+if (this.imageUrl != undefined) {
   json['imageUrl'] = this.imageUrl
 }
 
@@ -136,7 +138,7 @@ db
       throw new Error(`toFirestore is not implemented for ReadAppUser`)
   }
 })
-;
+
 
 /**
  * Provides a reference to a appUser document for reading.
@@ -163,7 +165,7 @@ db
       return obj.toJson()
   }
 })
-;
+
 
 /**
  * Provides a reference to a appUser document for creating.
@@ -190,7 +192,7 @@ db
       return obj.toJson()
   }
 })
-;
+
 
 /**
  * Provides a reference to a appUser document for updating.
@@ -217,7 +219,7 @@ db
     throw new Error(`toFirestore is not implemented for DeleteAppUser`)
   }
 })
-;
+
 
 /**
  * Provides a reference to a appUser document for deleting.
@@ -242,14 +244,16 @@ export class AppUserQuery {
    * @param compare - Function to sort the results.
    */
   async fetchDocuments({
+      
       queryBuilder,
       compare
   }: {
+      
       queryBuilder?: (
           query: FirebaseFirestore.Query<ReadAppUser>
       ) => FirebaseFirestore.Query<ReadAppUser>
       compare?: (lhs: ReadAppUser, rhs: ReadAppUser) => number
-  } = {}): Promise<ReadAppUser[]> {
+  }): Promise<ReadAppUser[]> {
       let query: FirebaseFirestore.Query<ReadAppUser> =
           readAppUserCollectionReference
       if (queryBuilder != undefined) {
@@ -269,60 +273,98 @@ export class AppUserQuery {
    * Fetches a specific appUser document.
    * @param appUserId - The ID of the appUser document to fetch.
    */
-  async fetchDocument(appUserId: string): Promise<ReadAppUser | undefined> {
-      const ds = await readAppUserDocumentReference({ appUserId }).get()
-      return ds.data()
+  async fetchDocument({
+    
+    appUserId
+  }: {
+    
+    appUserId: string
+  }): Promise<ReadAppUser | undefined> {
+    const ds = await readAppUserDocumentReference({
+      
+      appUserId
+    }).get()
+    return ds.data()
   }
 
   /**
    * Adds a appUser document.
-   * @param createAppUser - The appUser details to add.
+   * @param CreateAppUser - The appUser details to add.
    */
-  async add(createAppUser: CreateAppUser): Promise<DocumentReference<CreateAppUser>> {
-      return createAppUserCollectionReference.add(createAppUser)
+  async add({
+    
+    CreateAppUser
+  }: {
+    
+    CreateAppUser: CreateAppUser
+  }): Promise<DocumentReference<CreateAppUser>> {
+    return createAppUserCollectionReference.add(CreateAppUser)
   }
 
   /**
    * Sets a appUser document.
    * @param appUserId - The ID of the appUser document to set.
-   * @param createAppUser - The appUser details to set.
+   * @param CreateAppUser - The appUser details to set.
    * @param options - Options for the set operation.
    */
   async set({
+      
       appUserId,
-      createAppUser,
+      CreateAppUser,
       options
   }: {
+      
       appUserId: string
-      createAppUser: CreateAppUser
+      CreateAppUser: CreateAppUser
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
-          return createAppUserDocumentReference({ appUserId }).set(createAppUser)
+          return createAppUserDocumentReference({
+            
+            appUserId
+          }).set(CreateAppUser)
       } else {
-          return createAppUserDocumentReference({ appUserId }).set(
-              createAppUser,
-              options
-          )
+          return createAppUserDocumentReference({ 
+            
+            appUserId 
+            }).set(CreateAppUser, options)
       }
   }
 
   /**
    * Updates a specific appUser document.
    * @param appUserId - The ID of the appUser document to update.
-   * @param updateAppUser - The details for updating the appUser.
+   * @param UpdateAppUser - The details for updating the appUser.
    */
-  async update(appUserId: string, updateAppUser: UpdateAppUser): Promise<WriteResult> {
-      return updateAppUserDocumentReference({ appUserId }).update(
-          updateAppUser.toJson()
-      )
+  async update({
+    
+    appUserId,
+    UpdateAppUser
+  }: {
+    
+    appUserId: string
+    UpdateAppUser: UpdateAppUser
+  }): Promise<WriteResult> {
+      return updateAppUserDocumentReference({ 
+        
+        appUserId 
+      }).update(UpdateAppUser.toJson())
   }
 
   /**
    * Deletes a specific appUser document.
    * @param appUserId - The ID of the appUser document to delete.
    */
-  async delete(appUserId: string): Promise<WriteResult> {
-      return deleteAppUserDocumentReference({ appUserId }).delete()
+  async delete({
+    
+    appUserId
+  }: {
+    
+    appUserId: string
+  }): Promise<WriteResult> {
+      return deleteAppUserDocumentReference({ 
+        
+        appUserId 
+      }).delete()
   }
 }

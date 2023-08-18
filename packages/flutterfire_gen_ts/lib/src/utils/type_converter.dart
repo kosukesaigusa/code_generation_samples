@@ -2,13 +2,22 @@
 String toTypeScriptFieldDefinitionString({
   required String dartTypeNameString,
   required String dartFieldNameString,
+  bool isFieldValueAllowed = false,
 }) {
   final (typeScriptTypeNameString, isUndefinedAllowed) =
       returnsTypeScriptTypeStringAndUndefinedAllowed(dartTypeNameString);
   if (isUndefinedAllowed) {
-    return '$dartFieldNameString?: $typeScriptTypeNameString';
+    if (isFieldValueAllowed) {
+      return '$dartFieldNameString?: $typeScriptTypeNameString | FieldValue';
+    } else {
+      return '$dartFieldNameString?: $typeScriptTypeNameString';
+    }
   } else {
-    return '$dartFieldNameString: $typeScriptTypeNameString';
+    if (isFieldValueAllowed) {
+      return '$dartFieldNameString: $typeScriptTypeNameString | FieldValue';
+    } else {
+      return '$dartFieldNameString: $typeScriptTypeNameString';
+    }
   }
 }
 

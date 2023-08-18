@@ -81,6 +81,7 @@ this.imageUrl = imageUrl
 this.isHost = isHost
   }
 
+
   readonly displayName: string
 
 readonly imageUrl: string
@@ -103,30 +104,31 @@ export class UpdateWorker {
 imageUrl,
 isHost,
   }: {
-    displayName: string
-imageUrl: string
-isHost: boolean
+    displayName?: string
+imageUrl?: string
+isHost?: boolean
   }) {
     this.displayName = displayName
 this.imageUrl = imageUrl
 this.isHost = isHost
   }
 
-  readonly displayName: string
 
-readonly imageUrl: string
+  readonly displayName?: string
 
-readonly isHost: boolean
+readonly imageUrl?: string
+
+readonly isHost?: boolean
 
   toJson(): Record<string, unknown> {
   const json: Record<string, unknown> = {}
-  if (this.displayName != null) {
+  if (this.displayName != undefined) {
   json['displayName'] = this.displayName
 }
-if (this.imageUrl != null) {
+if (this.imageUrl != undefined) {
   json['imageUrl'] = this.imageUrl
 }
-if (this.isHost != null) {
+if (this.isHost != undefined) {
   json['isHost'] = this.isHost
 }
 
@@ -156,7 +158,7 @@ db
       throw new Error(`toFirestore is not implemented for ReadWorker`)
   }
 })
-;
+
 
 /**
  * Provides a reference to a worker document for reading.
@@ -183,7 +185,7 @@ db
       return obj.toJson()
   }
 })
-;
+
 
 /**
  * Provides a reference to a worker document for creating.
@@ -210,7 +212,7 @@ db
       return obj.toJson()
   }
 })
-;
+
 
 /**
  * Provides a reference to a worker document for updating.
@@ -237,7 +239,7 @@ db
     throw new Error(`toFirestore is not implemented for DeleteWorker`)
   }
 })
-;
+
 
 /**
  * Provides a reference to a worker document for deleting.
@@ -262,14 +264,16 @@ export class WorkerQuery {
    * @param compare - Function to sort the results.
    */
   async fetchDocuments({
+      
       queryBuilder,
       compare
   }: {
+      
       queryBuilder?: (
           query: FirebaseFirestore.Query<ReadWorker>
       ) => FirebaseFirestore.Query<ReadWorker>
       compare?: (lhs: ReadWorker, rhs: ReadWorker) => number
-  } = {}): Promise<ReadWorker[]> {
+  }): Promise<ReadWorker[]> {
       let query: FirebaseFirestore.Query<ReadWorker> =
           readWorkerCollectionReference
       if (queryBuilder != undefined) {
@@ -289,60 +293,98 @@ export class WorkerQuery {
    * Fetches a specific worker document.
    * @param workerId - The ID of the worker document to fetch.
    */
-  async fetchDocument(workerId: string): Promise<ReadWorker | undefined> {
-      const ds = await readWorkerDocumentReference({ workerId }).get()
-      return ds.data()
+  async fetchDocument({
+    
+    workerId
+  }: {
+    
+    workerId: string
+  }): Promise<ReadWorker | undefined> {
+    const ds = await readWorkerDocumentReference({
+      
+      workerId
+    }).get()
+    return ds.data()
   }
 
   /**
    * Adds a worker document.
-   * @param createWorker - The worker details to add.
+   * @param CreateWorker - The worker details to add.
    */
-  async add(createWorker: CreateWorker): Promise<DocumentReference<CreateWorker>> {
-      return createWorkerCollectionReference.add(createWorker)
+  async add({
+    
+    CreateWorker
+  }: {
+    
+    CreateWorker: CreateWorker
+  }): Promise<DocumentReference<CreateWorker>> {
+    return createWorkerCollectionReference.add(CreateWorker)
   }
 
   /**
    * Sets a worker document.
    * @param workerId - The ID of the worker document to set.
-   * @param createWorker - The worker details to set.
+   * @param CreateWorker - The worker details to set.
    * @param options - Options for the set operation.
    */
   async set({
+      
       workerId,
-      createWorker,
+      CreateWorker,
       options
   }: {
+      
       workerId: string
-      createWorker: CreateWorker
+      CreateWorker: CreateWorker
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
-          return createWorkerDocumentReference({ workerId }).set(createWorker)
+          return createWorkerDocumentReference({
+            
+            workerId
+          }).set(CreateWorker)
       } else {
-          return createWorkerDocumentReference({ workerId }).set(
-              createWorker,
-              options
-          )
+          return createWorkerDocumentReference({ 
+            
+            workerId 
+            }).set(CreateWorker, options)
       }
   }
 
   /**
    * Updates a specific worker document.
    * @param workerId - The ID of the worker document to update.
-   * @param updateWorker - The details for updating the worker.
+   * @param UpdateWorker - The details for updating the worker.
    */
-  async update(workerId: string, updateWorker: UpdateWorker): Promise<WriteResult> {
-      return updateWorkerDocumentReference({ workerId }).update(
-          updateWorker.toJson()
-      )
+  async update({
+    
+    workerId,
+    UpdateWorker
+  }: {
+    
+    workerId: string
+    UpdateWorker: UpdateWorker
+  }): Promise<WriteResult> {
+      return updateWorkerDocumentReference({ 
+        
+        workerId 
+      }).update(UpdateWorker.toJson())
   }
 
   /**
    * Deletes a specific worker document.
    * @param workerId - The ID of the worker document to delete.
    */
-  async delete(workerId: string): Promise<WriteResult> {
-      return deleteWorkerDocumentReference({ workerId }).delete()
+  async delete({
+    
+    workerId
+  }: {
+    
+    workerId: string
+  }): Promise<WriteResult> {
+      return deleteWorkerDocumentReference({ 
+        
+        workerId 
+      }).delete()
   }
 }

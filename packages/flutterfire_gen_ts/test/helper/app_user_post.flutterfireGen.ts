@@ -73,7 +73,7 @@ numbers,
 updatedAt,
   }: {
     content: string
-numbers: number[]
+numbers: number[] | FieldValue
 updatedAt?: Date
   }) {
     this.content = content
@@ -81,9 +81,10 @@ this.numbers = numbers
 this.updatedAt = updatedAt
   }
 
+
   readonly content: string
 
-readonly numbers: number[]
+readonly numbers: number[] | FieldValue
 
 readonly updatedAt?: Date
 
@@ -103,8 +104,8 @@ export class UpdateAppUserPost {
 numbers,
 updatedAt,
   }: {
-    content: string
-numbers: number[]
+    content?: string
+numbers?: number[] | FieldValue
 updatedAt?: Date
   }) {
     this.content = content
@@ -112,21 +113,22 @@ this.numbers = numbers
 this.updatedAt = updatedAt
   }
 
-  readonly content: string
 
-readonly numbers: number[]
+  readonly content?: string
+
+readonly numbers?: number[] | FieldValue
 
 readonly updatedAt?: Date
 
   toJson(): Record<string, unknown> {
   const json: Record<string, unknown> = {}
-  if (this.content != null) {
+  if (this.content != undefined) {
   json['content'] = this.content
 }
-if (this.numbers != null) {
+if (this.numbers != undefined) {
   json['numbers'] = this.numbers
 }
-if (this.updatedAt != null) {
+if (this.updatedAt != undefined) {
   json['updatedAt'] = this.updatedAt
 }
 
@@ -146,11 +148,15 @@ db.settings({ ignoreUndefinedProperties: true })
 /**
  * Provides a reference to the appUserPosts collection for reading.
  */
-CollectionReference<ReadAppUserPost> readAppUserPostCollectionReference ({
-  required String appUserId,
-}) =>
+export const readAppUserPostCollectionReference = (
+  {
+  appUserId
+}: {
+  appUserId: string
+}
+): FirebaseFirestore.CollectionReference<ReadAppUserPost>
 
-db
+=> { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<ReadAppUserPost>({
   fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadAppUserPost => {
     return ReadAppUserPost.fromDocumentSnapshot(ds)
@@ -159,32 +165,36 @@ db
       throw new Error(`toFirestore is not implemented for ReadAppUserPost`)
   }
 })
-;
+}
 
 /**
  * Provides a reference to a appUserPost document for reading.
  * @param appUserPostId - The ID of the appUserPost document to read.
  */
 export const readAppUserPostDocumentReference = ({
-  "appUserId,,"
+  appUserId,
   appUserPostId,
 }: {
-  "appUserId: string,"
+  appUserId: string,
   appUserPostId: string
 }): FirebaseFirestore.DocumentReference<ReadAppUserPost> =>
-    readAppUserPostCollectionReference(
-      appUserId: appUserId
-    ).doc(appUserPostId);
+    readAppUserPostCollectionReference({
+      appUserId
+    }).doc(appUserPostId);
 
 
 /**
  * Provides a reference to the appUserPosts collection for creating.
  */
-CollectionReference<CreateAppUserPost> createAppUserPostCollectionReference ({
-  required String appUserId,
-}) =>
+export const createAppUserPostCollectionReference = (
+  {
+  appUserId
+}: {
+  appUserId: string
+}
+): FirebaseFirestore.CollectionReference<CreateAppUserPost>
 
-db
+=> { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<CreateAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateAppUserPost`)
@@ -193,32 +203,36 @@ db
       return obj.toJson()
   }
 })
-;
+}
 
 /**
  * Provides a reference to a appUserPost document for creating.
  * @param appUserPostId - The ID of the appUserPost document to read.
  */
 export const createAppUserPostDocumentReference = ({
-  "appUserId,,"
+  appUserId,
   appUserPostId,
 }: {
-  "appUserId: string,"
+  appUserId: string,
   appUserPostId: string
 }): FirebaseFirestore.DocumentReference<CreateAppUserPost> =>
-    createAppUserPostCollectionReference(
-      appUserId: appUserId
-    ).doc(appUserPostId);
+    createAppUserPostCollectionReference({
+      appUserId
+    }).doc(appUserPostId);
 
 
 /**
  * Provides a reference to the appUserPosts collection for updating.
  */
-CollectionReference<UpdateAppUserPost> updateAppUserPostCollectionReference ({
-  required String appUserId,
-}) =>
+export const updateAppUserPostCollectionReference = (
+  {
+  appUserId
+}: {
+  appUserId: string
+}
+): FirebaseFirestore.CollectionReference<UpdateAppUserPost>
 
-db
+=> { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<UpdateAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateAppUserPost`)
@@ -227,32 +241,36 @@ db
       return obj.toJson()
   }
 })
-;
+}
 
 /**
  * Provides a reference to a appUserPost document for updating.
  * @param appUserPostId - The ID of the appUserPost document to read.
  */
 export const updateAppUserPostDocumentReference = ({
-  "appUserId,,"
+  appUserId,
   appUserPostId,
 }: {
-  "appUserId: string,"
+  appUserId: string,
   appUserPostId: string
 }): FirebaseFirestore.DocumentReference<UpdateAppUserPost> =>
-    updateAppUserPostCollectionReference(
-      appUserId: appUserId
-    ).doc(appUserPostId);
+    updateAppUserPostCollectionReference({
+      appUserId
+    }).doc(appUserPostId);
 
 
 /**
  * Provides a reference to the appUserPosts collection for deleting.
  */
-CollectionReference<DeleteAppUserPost> deleteAppUserPostCollectionReference ({
-  required String appUserId,
-}) =>
+export const deleteAppUserPostCollectionReference = (
+  {
+  appUserId
+}: {
+  appUserId: string
+}
+): FirebaseFirestore.CollectionReference<DeleteAppUserPost>
 
-db
+=> { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<DeleteAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteAppUserPost`)
@@ -261,22 +279,22 @@ db
     throw new Error(`toFirestore is not implemented for DeleteAppUserPost`)
   }
 })
-;
+}
 
 /**
  * Provides a reference to a appUserPost document for deleting.
  * @param appUserPostId - The ID of the appUserPost document to read.
  */
 export const deleteAppUserPostDocumentReference = ({
-  "appUserId,,"
+  appUserId,
   appUserPostId,
 }: {
-  "appUserId: string,"
+  appUserId: string,
   appUserPostId: string
 }): FirebaseFirestore.DocumentReference<DeleteAppUserPost> =>
-    deleteAppUserPostCollectionReference(
-      appUserId: appUserId
-    ).doc(appUserPostId);
+    deleteAppUserPostCollectionReference({
+      appUserId
+    }).doc(appUserPostId);
 
 
 
@@ -290,16 +308,18 @@ export class AppUserPostQuery {
    * @param compare - Function to sort the results.
    */
   async fetchDocuments({
+      appUserId,
       queryBuilder,
       compare
   }: {
+      appUserId: string,
       queryBuilder?: (
           query: FirebaseFirestore.Query<ReadAppUserPost>
       ) => FirebaseFirestore.Query<ReadAppUserPost>
       compare?: (lhs: ReadAppUserPost, rhs: ReadAppUserPost) => number
-  } = {}): Promise<ReadAppUserPost[]> {
+  }): Promise<ReadAppUserPost[]> {
       let query: FirebaseFirestore.Query<ReadAppUserPost> =
-          readAppUserPostCollectionReference
+          readAppUserPostCollectionReference({appUserId})
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
       }
@@ -317,60 +337,98 @@ export class AppUserPostQuery {
    * Fetches a specific appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to fetch.
    */
-  async fetchDocument(appUserPostId: string): Promise<ReadAppUserPost | undefined> {
-      const ds = await readAppUserPostDocumentReference({ appUserPostId }).get()
-      return ds.data()
+  async fetchDocument({
+    appUserId,
+    appUserPostId
+  }: {
+    appUserId: string,
+    appUserPostId: string
+  }): Promise<ReadAppUserPost | undefined> {
+    const ds = await readAppUserPostDocumentReference({
+      appUserId,
+      appUserPostId
+    }).get()
+    return ds.data()
   }
 
   /**
    * Adds a appUserPost document.
-   * @param createAppUserPost - The appUserPost details to add.
+   * @param CreateAppUserPost - The appUserPost details to add.
    */
-  async add(createAppUserPost: CreateAppUserPost): Promise<DocumentReference<CreateAppUserPost>> {
-      return createAppUserPostCollectionReference.add(createAppUserPost)
+  async add({
+    appUserId,
+    CreateAppUserPost
+  }: {
+    appUserId: string,
+    CreateAppUserPost: CreateAppUserPost
+  }): Promise<DocumentReference<CreateAppUserPost>> {
+    return createAppUserPostCollectionReference({appUserId}).add(CreateAppUserPost)
   }
 
   /**
    * Sets a appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to set.
-   * @param createAppUserPost - The appUserPost details to set.
+   * @param CreateAppUserPost - The appUserPost details to set.
    * @param options - Options for the set operation.
    */
   async set({
+      appUserId,
       appUserPostId,
-      createAppUserPost,
+      CreateAppUserPost,
       options
   }: {
+      appUserId: string,
       appUserPostId: string
-      createAppUserPost: CreateAppUserPost
+      CreateAppUserPost: CreateAppUserPost
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
-          return createAppUserPostDocumentReference({ appUserPostId }).set(createAppUserPost)
+          return createAppUserPostDocumentReference({
+            appUserId,
+            appUserPostId
+          }).set(CreateAppUserPost)
       } else {
-          return createAppUserPostDocumentReference({ appUserPostId }).set(
-              createAppUserPost,
-              options
-          )
+          return createAppUserPostDocumentReference({ 
+            appUserId,
+            appUserPostId 
+            }).set(CreateAppUserPost, options)
       }
   }
 
   /**
    * Updates a specific appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to update.
-   * @param updateAppUserPost - The details for updating the appUserPost.
+   * @param UpdateAppUserPost - The details for updating the appUserPost.
    */
-  async update(appUserPostId: string, updateAppUserPost: UpdateAppUserPost): Promise<WriteResult> {
-      return updateAppUserPostDocumentReference({ appUserPostId }).update(
-          updateAppUserPost.toJson()
-      )
+  async update({
+    appUserId,
+    appUserPostId,
+    UpdateAppUserPost
+  }: {
+    appUserId: string,
+    appUserPostId: string
+    UpdateAppUserPost: UpdateAppUserPost
+  }): Promise<WriteResult> {
+      return updateAppUserPostDocumentReference({ 
+        appUserId,
+        appUserPostId 
+      }).update(UpdateAppUserPost.toJson())
   }
 
   /**
    * Deletes a specific appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to delete.
    */
-  async delete(appUserPostId: string): Promise<WriteResult> {
-      return deleteAppUserPostDocumentReference({ appUserPostId }).delete()
+  async delete({
+    appUserId,
+    appUserPostId
+  }: {
+    appUserId: string,
+    appUserPostId: string
+  }): Promise<WriteResult> {
+      return deleteAppUserPostDocumentReference({ 
+        appUserId,
+        appUserPostId 
+      }).delete()
   }
 }

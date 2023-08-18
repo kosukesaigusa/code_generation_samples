@@ -31,12 +31,12 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// A set of strings of FieldValue allowed fields.
   final Set<String> fieldValueAllowedFields = {};
 
-  /// A set of strings of fields that always use FieldValue.serverTimestamp()
-  /// when creating Cloud Firestore documents.
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// creating.
   final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields = {};
 
-  /// A set of strings of fields that always use FieldValue.serverTimestamp()
-  /// when updating Cloud Firestore documents.
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// updating.
   final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields = {};
 
   /// [JsonConverter] strings of each field.
@@ -77,10 +77,10 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
     const defaultTypeChecker = TypeChecker.fromRuntime(Default);
     const jsonConverterTypeChecker = TypeChecker.fromRuntime(JsonConverter);
     const allowFieldValueTypeChecker = TypeChecker.fromRuntime(AllowFieldValue);
-    // const useAlwaysFieldValueServerTimestampWhenCreatingTypeChecker =
-    //     TypeChecker.fromRuntime(UseAlwaysFieldValueServerTimestampWhenCreating);
-    // const useAlwaysFieldValueServerTimestampWhenUpdatingTypeChecker =
-    //     TypeChecker.fromRuntime(UseAlwaysFieldValueServerTimestampWhenUpdating);
+    const alwaysUseFieldValueServerTimestampWhenCreatingTypeChecker =
+        TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenCreating);
+    const alwaysUseFieldValueServerTimestampWhenUpdatingTypeChecker =
+        TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenUpdating);
 
     final metadata = element.metadata;
     for (final meta in metadata) {
@@ -114,14 +114,14 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
       if (allowFieldValueTypeChecker.isExactlyType(objectType)) {
         fieldValueAllowedFields.add(fieldName);
       }
-      // if (useAlwaysFieldValueServerTimestampWhenCreatingTypeChecker
-      //     .isExactlyType(objectType)) {
-      //   alwaysUseFieldValueServerTimestampWhenCreatingFields.add(fieldName);
-      // }
-      // if (useAlwaysFieldValueServerTimestampWhenUpdatingTypeChecker
-      //     .isExactlyType(objectType)) {
-      //   alwaysUseFieldValueServerTimestampWhenUpdatingFields.add(fieldName);
-      // }
+      if (alwaysUseFieldValueServerTimestampWhenCreatingTypeChecker
+          .isExactlyType(objectType)) {
+        alwaysUseFieldValueServerTimestampWhenCreatingFields.add(fieldName);
+      }
+      if (alwaysUseFieldValueServerTimestampWhenUpdatingTypeChecker
+          .isExactlyType(objectType)) {
+        alwaysUseFieldValueServerTimestampWhenUpdatingFields.add(fieldName);
+      }
     }
   }
 

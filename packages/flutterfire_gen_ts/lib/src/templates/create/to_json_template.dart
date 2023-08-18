@@ -22,10 +22,10 @@ class ToJsonTemplate {
   final Map<String, String> defaultValueStrings;
 
   ///
-  final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields;
+  final Set<String> fieldValueAllowedFields;
 
   ///
-  final Set<String> fieldValueAllowedFields;
+  final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields;
 
   ///
   final Map<String, JsonConverterConfig> jsonConverterConfigs;
@@ -76,28 +76,24 @@ toJson(): Record<string, unknown> {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
     final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
     final isNullableType = nullableTypeMatch != null;
-    // TODO: JsonConverter 対応もできていない
-    if (jsonConverterConfig != null) {
-      if (hasDefaultValue && isNullableType) {
-        return '$fieldNameString: $fieldNameString == null '
-            '? $defaultValueString '
-            ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
-      }
-      return "'$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString),";
+
+    if (isAlwaysUseFieldValueServerTimestampWhenCreating) {
+      return "'$fieldNameString': FieldValue.serverTimestamp(),";
     }
-    // TODO: FieldValue 対応はいったん無視
-    // if (isFieldValueAllowed) {
-    //   if (isNullableType) {
-    //     if (hasDefaultValue) {
-    //       return '$fieldNameString: $fieldNameString?.value ?? $defaultValueString,';
-    //     }
-    //     return '$fieldNameString: $fieldNameString?.value,';
+    // TODO: JsonConverter 対応はできていない
+    // if (jsonConverterConfig != null) {
+    //   if (hasDefaultValue && isNullableType) {
+    //     return '$fieldNameString: $fieldNameString == null '
+    //         '? $defaultValueString '
+    //         ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
     //   }
-    //   return '$fieldNameString: $fieldNameString.value,';
+    //   return "'$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString),";
     // }
+    // NOTE: FieldValue 対応はない
     if (isNullableType && hasDefaultValue) {
       return '$fieldNameString: this.$fieldNameString ?? $defaultValueString,';
+    } else {
+      return '$fieldNameString: this.$fieldNameString,';
     }
-    return '$fieldNameString: this.$fieldNameString,';
   }
 }

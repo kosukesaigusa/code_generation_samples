@@ -90,6 +90,7 @@ this.imageUrls = imageUrls
 this.isDeleted = isDeleted
   }
 
+
   readonly senderId: string
 
 readonly content: string
@@ -116,10 +117,10 @@ content,
 imageUrls,
 isDeleted,
   }: {
-    senderId: string
-content: string
-imageUrls: string[]
-isDeleted: boolean
+    senderId?: string
+content?: string
+imageUrls?: string[]
+isDeleted?: boolean
   }) {
     this.senderId = senderId
 this.content = content
@@ -127,26 +128,27 @@ this.imageUrls = imageUrls
 this.isDeleted = isDeleted
   }
 
-  readonly senderId: string
 
-readonly content: string
+  readonly senderId?: string
 
-readonly imageUrls: string[]
+readonly content?: string
 
-readonly isDeleted: boolean
+readonly imageUrls?: string[]
+
+readonly isDeleted?: boolean
 
   toJson(): Record<string, unknown> {
   const json: Record<string, unknown> = {}
-  if (this.senderId != null) {
+  if (this.senderId != undefined) {
   json['senderId'] = this.senderId
 }
-if (this.content != null) {
+if (this.content != undefined) {
   json['content'] = this.content
 }
-if (this.imageUrls != null) {
+if (this.imageUrls != undefined) {
   json['imageUrls'] = this.imageUrls
 }
-if (this.isDeleted != null) {
+if (this.isDeleted != undefined) {
   json['isDeleted'] = this.isDeleted
 }
 
@@ -166,11 +168,15 @@ db.settings({ ignoreUndefinedProperties: true })
 /**
  * Provides a reference to the chatMessages collection for reading.
  */
-CollectionReference<ReadChatMessage> readChatMessageCollectionReference ({
-  required String chatRoomId,
-}) =>
+export const readChatMessageCollectionReference = (
+  {
+  chatRoomId
+}: {
+  chatRoomId: string
+}
+): FirebaseFirestore.CollectionReference<ReadChatMessage>
 
-db
+=> { return db
 .collection('chatRooms').doc(chatRoomId).collection('chatMessages').withConverter<ReadChatMessage>({
   fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadChatMessage => {
     return ReadChatMessage.fromDocumentSnapshot(ds)
@@ -179,32 +185,36 @@ db
       throw new Error(`toFirestore is not implemented for ReadChatMessage`)
   }
 })
-;
+}
 
 /**
  * Provides a reference to a chatMessage document for reading.
  * @param chatMessageId - The ID of the chatMessage document to read.
  */
 export const readChatMessageDocumentReference = ({
-  "chatRoomId,,"
+  chatRoomId,
   chatMessageId,
 }: {
-  "chatRoomId: string,"
+  chatRoomId: string,
   chatMessageId: string
 }): FirebaseFirestore.DocumentReference<ReadChatMessage> =>
-    readChatMessageCollectionReference(
-      chatRoomId: chatRoomId
-    ).doc(chatMessageId);
+    readChatMessageCollectionReference({
+      chatRoomId
+    }).doc(chatMessageId);
 
 
 /**
  * Provides a reference to the chatMessages collection for creating.
  */
-CollectionReference<CreateChatMessage> createChatMessageCollectionReference ({
-  required String chatRoomId,
-}) =>
+export const createChatMessageCollectionReference = (
+  {
+  chatRoomId
+}: {
+  chatRoomId: string
+}
+): FirebaseFirestore.CollectionReference<CreateChatMessage>
 
-db
+=> { return db
 .collection('chatRooms').doc(chatRoomId).collection('chatMessages').withConverter<CreateChatMessage>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateChatMessage`)
@@ -213,32 +223,36 @@ db
       return obj.toJson()
   }
 })
-;
+}
 
 /**
  * Provides a reference to a chatMessage document for creating.
  * @param chatMessageId - The ID of the chatMessage document to read.
  */
 export const createChatMessageDocumentReference = ({
-  "chatRoomId,,"
+  chatRoomId,
   chatMessageId,
 }: {
-  "chatRoomId: string,"
+  chatRoomId: string,
   chatMessageId: string
 }): FirebaseFirestore.DocumentReference<CreateChatMessage> =>
-    createChatMessageCollectionReference(
-      chatRoomId: chatRoomId
-    ).doc(chatMessageId);
+    createChatMessageCollectionReference({
+      chatRoomId
+    }).doc(chatMessageId);
 
 
 /**
  * Provides a reference to the chatMessages collection for updating.
  */
-CollectionReference<UpdateChatMessage> updateChatMessageCollectionReference ({
-  required String chatRoomId,
-}) =>
+export const updateChatMessageCollectionReference = (
+  {
+  chatRoomId
+}: {
+  chatRoomId: string
+}
+): FirebaseFirestore.CollectionReference<UpdateChatMessage>
 
-db
+=> { return db
 .collection('chatRooms').doc(chatRoomId).collection('chatMessages').withConverter<UpdateChatMessage>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateChatMessage`)
@@ -247,32 +261,36 @@ db
       return obj.toJson()
   }
 })
-;
+}
 
 /**
  * Provides a reference to a chatMessage document for updating.
  * @param chatMessageId - The ID of the chatMessage document to read.
  */
 export const updateChatMessageDocumentReference = ({
-  "chatRoomId,,"
+  chatRoomId,
   chatMessageId,
 }: {
-  "chatRoomId: string,"
+  chatRoomId: string,
   chatMessageId: string
 }): FirebaseFirestore.DocumentReference<UpdateChatMessage> =>
-    updateChatMessageCollectionReference(
-      chatRoomId: chatRoomId
-    ).doc(chatMessageId);
+    updateChatMessageCollectionReference({
+      chatRoomId
+    }).doc(chatMessageId);
 
 
 /**
  * Provides a reference to the chatMessages collection for deleting.
  */
-CollectionReference<DeleteChatMessage> deleteChatMessageCollectionReference ({
-  required String chatRoomId,
-}) =>
+export const deleteChatMessageCollectionReference = (
+  {
+  chatRoomId
+}: {
+  chatRoomId: string
+}
+): FirebaseFirestore.CollectionReference<DeleteChatMessage>
 
-db
+=> { return db
 .collection('chatRooms').doc(chatRoomId).collection('chatMessages').withConverter<DeleteChatMessage>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteChatMessage`)
@@ -281,22 +299,22 @@ db
     throw new Error(`toFirestore is not implemented for DeleteChatMessage`)
   }
 })
-;
+}
 
 /**
  * Provides a reference to a chatMessage document for deleting.
  * @param chatMessageId - The ID of the chatMessage document to read.
  */
 export const deleteChatMessageDocumentReference = ({
-  "chatRoomId,,"
+  chatRoomId,
   chatMessageId,
 }: {
-  "chatRoomId: string,"
+  chatRoomId: string,
   chatMessageId: string
 }): FirebaseFirestore.DocumentReference<DeleteChatMessage> =>
-    deleteChatMessageCollectionReference(
-      chatRoomId: chatRoomId
-    ).doc(chatMessageId);
+    deleteChatMessageCollectionReference({
+      chatRoomId
+    }).doc(chatMessageId);
 
 
 
@@ -310,16 +328,18 @@ export class ChatMessageQuery {
    * @param compare - Function to sort the results.
    */
   async fetchDocuments({
+      chatRoomId,
       queryBuilder,
       compare
   }: {
+      chatRoomId: string,
       queryBuilder?: (
           query: FirebaseFirestore.Query<ReadChatMessage>
       ) => FirebaseFirestore.Query<ReadChatMessage>
       compare?: (lhs: ReadChatMessage, rhs: ReadChatMessage) => number
-  } = {}): Promise<ReadChatMessage[]> {
+  }): Promise<ReadChatMessage[]> {
       let query: FirebaseFirestore.Query<ReadChatMessage> =
-          readChatMessageCollectionReference
+          readChatMessageCollectionReference({chatRoomId})
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
       }
@@ -337,60 +357,98 @@ export class ChatMessageQuery {
    * Fetches a specific chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to fetch.
    */
-  async fetchDocument(chatMessageId: string): Promise<ReadChatMessage | undefined> {
-      const ds = await readChatMessageDocumentReference({ chatMessageId }).get()
-      return ds.data()
+  async fetchDocument({
+    chatRoomId,
+    chatMessageId
+  }: {
+    chatRoomId: string,
+    chatMessageId: string
+  }): Promise<ReadChatMessage | undefined> {
+    const ds = await readChatMessageDocumentReference({
+      chatRoomId,
+      chatMessageId
+    }).get()
+    return ds.data()
   }
 
   /**
    * Adds a chatMessage document.
-   * @param createChatMessage - The chatMessage details to add.
+   * @param CreateChatMessage - The chatMessage details to add.
    */
-  async add(createChatMessage: CreateChatMessage): Promise<DocumentReference<CreateChatMessage>> {
-      return createChatMessageCollectionReference.add(createChatMessage)
+  async add({
+    chatRoomId,
+    CreateChatMessage
+  }: {
+    chatRoomId: string,
+    CreateChatMessage: CreateChatMessage
+  }): Promise<DocumentReference<CreateChatMessage>> {
+    return createChatMessageCollectionReference({chatRoomId}).add(CreateChatMessage)
   }
 
   /**
    * Sets a chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to set.
-   * @param createChatMessage - The chatMessage details to set.
+   * @param CreateChatMessage - The chatMessage details to set.
    * @param options - Options for the set operation.
    */
   async set({
+      chatRoomId,
       chatMessageId,
-      createChatMessage,
+      CreateChatMessage,
       options
   }: {
+      chatRoomId: string,
       chatMessageId: string
-      createChatMessage: CreateChatMessage
+      CreateChatMessage: CreateChatMessage
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
-          return createChatMessageDocumentReference({ chatMessageId }).set(createChatMessage)
+          return createChatMessageDocumentReference({
+            chatRoomId,
+            chatMessageId
+          }).set(CreateChatMessage)
       } else {
-          return createChatMessageDocumentReference({ chatMessageId }).set(
-              createChatMessage,
-              options
-          )
+          return createChatMessageDocumentReference({ 
+            chatRoomId,
+            chatMessageId 
+            }).set(CreateChatMessage, options)
       }
   }
 
   /**
    * Updates a specific chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to update.
-   * @param updateChatMessage - The details for updating the chatMessage.
+   * @param UpdateChatMessage - The details for updating the chatMessage.
    */
-  async update(chatMessageId: string, updateChatMessage: UpdateChatMessage): Promise<WriteResult> {
-      return updateChatMessageDocumentReference({ chatMessageId }).update(
-          updateChatMessage.toJson()
-      )
+  async update({
+    chatRoomId,
+    chatMessageId,
+    UpdateChatMessage
+  }: {
+    chatRoomId: string,
+    chatMessageId: string
+    UpdateChatMessage: UpdateChatMessage
+  }): Promise<WriteResult> {
+      return updateChatMessageDocumentReference({ 
+        chatRoomId,
+        chatMessageId 
+      }).update(UpdateChatMessage.toJson())
   }
 
   /**
    * Deletes a specific chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to delete.
    */
-  async delete(chatMessageId: string): Promise<WriteResult> {
-      return deleteChatMessageDocumentReference({ chatMessageId }).delete()
+  async delete({
+    chatRoomId,
+    chatMessageId
+  }: {
+    chatRoomId: string,
+    chatMessageId: string
+  }): Promise<WriteResult> {
+      return deleteChatMessageDocumentReference({ 
+        chatRoomId,
+        chatMessageId 
+      }).delete()
   }
 }

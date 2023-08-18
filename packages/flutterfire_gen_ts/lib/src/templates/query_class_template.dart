@@ -23,16 +23,18 @@ export class ${config.baseClassName}Query {
    * @param compare - Function to sort the results.
    */
   async fetchDocuments({
+      ${_parentDocumentIdArguments()}
       queryBuilder,
       compare
   }: {
+      ${_parentDocumentIdArgumentTypes()}
       queryBuilder?: (
           query: FirebaseFirestore.Query<${config.readClassName}>
       ) => FirebaseFirestore.Query<${config.readClassName}>
       compare?: (lhs: ${config.readClassName}, rhs: ${config.readClassName}) => number
-  } = {}): Promise<${config.readClassName}[]> {
+  }): Promise<${config.readClassName}[]> {
       let query: FirebaseFirestore.Query<${config.readClassName}> =
-          ${config.readCollectionReferenceName}
+          ${_collectionReference(ReferenceClassType.read)}
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
       }
@@ -50,63 +52,136 @@ export class ${config.baseClassName}Query {
    * Fetches a specific ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to fetch.
    */
-  async fetchDocument(${config.documentIdFieldName}: string): Promise<${config.readClassName} | undefined> {
-      const ds = await ${config.readDocumentReferenceName}({ ${config.documentIdFieldName} }).get()
-      return ds.data()
+  async fetchDocument({
+    ${_parentDocumentIdArguments()}
+    ${config.documentIdFieldName}
+  }: {
+    ${_parentDocumentIdArgumentTypes()}
+    ${config.documentIdFieldName}: string
+  }): Promise<${config.readClassName} | undefined> {
+    const ds = await ${config.readDocumentReferenceName}({
+      ${_parentDocumentIdParameters()}
+      ${config.documentIdFieldName}
+    }).get()
+    return ds.data()
   }
 
   /**
    * Adds a ${config.documentName} document.
-   * @param create${config.baseClassName} - The ${config.documentName} details to add.
+   * @param ${config.createClassName} - The ${config.documentName} details to add.
    */
-  async add(create${config.baseClassName}: ${config.createClassName}): Promise<DocumentReference<${config.createClassName}>> {
-      return create${config.baseClassName}CollectionReference.add(create${config.baseClassName})
+  async add({
+    ${_parentDocumentIdArguments()}
+    ${config.createClassName}
+  }: {
+    ${_parentDocumentIdArgumentTypes()}
+    ${config.createClassName}: ${config.createClassName}
+  }): Promise<DocumentReference<${config.createClassName}>> {
+    return ${_collectionReference(ReferenceClassType.create)}.add(${config.createClassName})
   }
 
   /**
    * Sets a ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to set.
-   * @param create${config.baseClassName} - The ${config.documentName} details to set.
+   * @param ${config.createClassName} - The ${config.documentName} details to set.
    * @param options - Options for the set operation.
    */
   async set({
+      ${_parentDocumentIdArguments()}
       ${config.documentIdFieldName},
-      create${config.baseClassName},
+      ${config.createClassName},
       options
   }: {
+      ${_parentDocumentIdArgumentTypes()}
       ${config.documentIdFieldName}: string
-      create${config.baseClassName}: ${config.createClassName}
+      ${config.createClassName}: ${config.createClassName}
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
-          return ${config.createDocumentReferenceName}({ ${config.documentIdFieldName} }).set(create${config.baseClassName})
+          return ${config.createDocumentReferenceName}({
+            ${_parentDocumentIdArguments()}
+            ${config.documentIdFieldName}
+          }).set(${config.createClassName})
       } else {
-          return ${config.createDocumentReferenceName}({ ${config.documentIdFieldName} }).set(
-              create${config.baseClassName},
-              options
-          )
+          return ${config.createDocumentReferenceName}({ 
+            ${_parentDocumentIdArguments()}
+            ${config.documentIdFieldName} 
+            }).set(${config.createClassName}, options)
       }
   }
 
   /**
    * Updates a specific ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to update.
-   * @param update${config.baseClassName} - The details for updating the ${config.documentName}.
+   * @param ${config.updateClassName} - The details for updating the ${config.documentName}.
    */
-  async update(${config.documentIdFieldName}: string, update${config.baseClassName}: ${config.updateClassName}): Promise<WriteResult> {
-      return ${config.updateDocumentReferenceName}({ ${config.documentIdFieldName} }).update(
-          update${config.baseClassName}.toJson()
-      )
+  async update({
+    ${_parentDocumentIdArguments()}
+    ${config.documentIdFieldName},
+    ${config.updateClassName}
+  }: {
+    ${_parentDocumentIdArgumentTypes()}
+    ${config.documentIdFieldName}: string
+    ${config.updateClassName}: ${config.updateClassName}
+  }): Promise<WriteResult> {
+      return ${config.updateDocumentReferenceName}({ 
+        ${_parentDocumentIdArguments()}
+        ${config.documentIdFieldName} 
+      }).update(${config.updateClassName}.toJson())
   }
 
   /**
    * Deletes a specific ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to delete.
    */
-  async delete(${config.documentIdFieldName}: string): Promise<WriteResult> {
-      return ${config.deleteDocumentReferenceName}({ ${config.documentIdFieldName} }).delete()
+  async delete({
+    ${_parentDocumentIdArguments()}
+    ${config.documentIdFieldName}
+  }: {
+    ${_parentDocumentIdArgumentTypes()}
+    ${config.documentIdFieldName}: string
+  }): Promise<WriteResult> {
+      return ${config.deleteDocumentReferenceName}({ 
+        ${_parentDocumentIdArguments()}
+        ${config.documentIdFieldName} 
+      }).delete()
   }
 }
 ''';
+  }
+
+  String _parentDocumentIdArguments() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>();
+    return documentIds.isNotEmpty
+        ? documentIds.map((documentId) => '$documentId,').join('\n')
+        : '';
+  }
+
+  String _parentDocumentIdArgumentTypes() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>();
+    return documentIds.isNotEmpty
+        ? "${documentIds.map((documentId) => '$documentId: string').join('\n')},"
+        : '';
+  }
+
+  String _parentDocumentIdParameters() {
+    final documentIds = config.firestorePathSegments
+        .map((segment) => segment.documentName)
+        .whereType<String>();
+    return documentIds.isNotEmpty
+        ? documentIds.map((documentId) => '$documentId,').join('\n')
+        : '';
+  }
+
+  String _collectionReference(ReferenceClassType referenceClassType) {
+    if (config.firestorePathSegments.length > 1) {
+      return '${config.collectionReferenceName(referenceClassType)}({${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join(',')}})';
+    } else {
+      return config.collectionReferenceName(referenceClassType);
+    }
   }
 }

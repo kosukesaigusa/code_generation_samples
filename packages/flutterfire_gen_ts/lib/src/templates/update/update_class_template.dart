@@ -1,5 +1,6 @@
 import '../../config.dart';
 import '../../firestore_document_visitor.dart';
+import '../../utils/string.dart';
 import '../../utils/type_converter.dart';
 import 'to_json_template.dart';
 
@@ -25,87 +26,72 @@ class UpdateClassTemplate {
   String toString() {
     return '''
 export class ${config.updateClassName} {
-  constructor({
-    ${fields.entries.map((entry) => '${entry.key},').join('\n')}
-  }: {
-    ${fields.entries.map((entry) {
-      return toTypeScriptFieldDefinitionString(
-        dartTypeNameString: entry.value,
-        dartFieldNameString: entry.key,
-      );
-    }).join('\n')}
-  }) {
-    ${fields.entries.map((entry) => 'this.${entry.key} = ${entry.key}').join('\n')}
-  }
+  ${_parseConstructor()}
 
-  ${fields.entries.map((entry) {
-      return 'readonly ${toTypeScriptFieldDefinitionString(
-        dartTypeNameString: entry.value,
-        dartFieldNameString: entry.key,
-      )}';
-    }).join('\n\n')}
+  ${_parseEffectiveFields()}
 
   ${ToJsonTemplate(
       fields: fields,
       defaultValueStrings: visitor.updateDefaultValueStrings,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      alwaysUseFieldValueServerTimestampWhenUpdatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
     )}
 }
 ''';
   }
 
-  // TODO: 可読性、テスト対象を定める意味でリファクタできそう
-  String _parseConstructorFields() {
-    return '${fields.entries.map((entry) {
+  String _parseConstructor() {
+    if (effectiveEntries.isEmpty) {
+      return 'constructor() {}';
+    }
+    return '''
+constructor({
+    ${effectiveEntries.map((entry) => '${entry.key},').join('\n')}
+  }: {
+    ${effectiveEntries.map((entry) {
+      return toTypeScriptFieldDefinitionString(
+        dartTypeNameString: entry.value.ensureUndefinedable(),
+        dartFieldNameString: entry.key,
+        isFieldValueAllowed:
+            visitor.fieldValueAllowedFields.contains(entry.key),
+      );
+    }).join('\n')}
+  }) {
+    ${_parseEffectiveEntries()}
+  }
+''';
+  }
+
+  String _parseEffectiveFields() {
+    return effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
-
-      final defaultValueStrings = visitor.updateDefaultValueStrings;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
 
-      final defaultValueString = defaultValueStrings[fieldNameString];
-      return _constructorEachField(
-        fieldNameString: fieldNameString,
-        typeNameString: typeNameString,
-        defaultValueString: defaultValueString,
+      return 'readonly ${toTypeScriptFieldDefinitionString(
+        dartTypeNameString: typeNameString.ensureUndefinedable(),
+        dartFieldNameString: fieldNameString,
         isFieldValueAllowed: isFieldValueAllowed,
+      )}';
+    }).join('\n\n');
+  }
+
+  String _parseEffectiveEntries() {
+    return effectiveEntries.map((entry) {
+      final fieldNameString = entry.key;
+      return 'this.$fieldNameString = $fieldNameString';
+    }).join('\n');
+  }
+
+  ///
+  Iterable<MapEntry<String, String>> get effectiveEntries =>
+      fields.entries.where(
+        (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
+            .contains(
+          entry.key,
+        ),
       );
-    }).join(',\n')},';
-  }
-
-  String _constructorEachField({
-    required String fieldNameString,
-    required String typeNameString,
-    required String? defaultValueString,
-    required bool isFieldValueAllowed,
-  }) {
-    final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
-    if (hasDefaultValue) {
-      if (isFieldValueAllowed) {
-        return 'this.$fieldNameString = const ActualValue($defaultValueString)';
-      }
-      return 'this.$fieldNameString = $defaultValueString';
-    }
-    return 'this.$fieldNameString';
-  }
-
-  // String _parseFields() {
-  //   return fields.entries.map((entry) {
-  //     final fieldNameString = entry.key;
-  //     final typeNameString = entry.value;
-  //     final isFieldValueAllowed =
-  //         visitor.fieldValueAllowedFields.contains(entry.key);
-  //     // TODO: いったん FieldValue は無視
-  //     // if (isFieldValueAllowed) {
-  //     //   // TODO: typeNameString が nullable になる可能性はある？
-  //     //   return 'final FirestoreData<$typeNameString>? $fieldNameString;';
-  //     // } else {
-  //     //   return 'final ${typeNameString.ensureNullable()} $fieldNameString;';
-  //     // }
-  //     // TODO: undefinedable に対応する
-  //     return 'readonly $fieldNameString?: $typeNameString';
-  //   }).join('\n');
-  // }
 }
