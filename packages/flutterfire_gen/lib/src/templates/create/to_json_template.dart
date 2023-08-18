@@ -106,7 +106,8 @@ Map<String, dynamic> toJson() {
     }
     if (isNullableType && hasDefaultValue) {
       return "'$fieldNameString': $fieldNameString ?? $defaultValueString,";
+    } else {
+      return "'$fieldNameString': $fieldNameString,";
     }
-    return "'$fieldNameString': $fieldNameString,";
   }
 }

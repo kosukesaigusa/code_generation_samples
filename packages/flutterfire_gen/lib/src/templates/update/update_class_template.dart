@@ -56,14 +56,7 @@ const ${config.updateClassName}({
 
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return fields.entries
-        .where(
-      (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
-          .contains(
-        entry.key,
-      ),
-    )
-        .map((entry) {
+    return effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
@@ -98,19 +91,12 @@ const ${config.updateClassName}({
   }
 
   String _parseFields() {
-    return fields.entries.map((entry) {
+    return effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
-      final alwaysUseFieldValueServerTimestamp =
-          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields.contains(
-        entry.key,
-      );
 
-      if (alwaysUseFieldValueServerTimestamp) {
-        return '';
-      }
       if (isFieldValueAllowed) {
         // TODO: typeNameString が nullable になる可能性はある？
         return 'final FirestoreData<$typeNameString>? $fieldNameString;';
@@ -119,4 +105,13 @@ const ${config.updateClassName}({
       }
     }).join('\n');
   }
+
+  ///
+  Iterable<MapEntry<String, String>> get effectiveEntries =>
+      fields.entries.where(
+        (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
+            .contains(
+          entry.key,
+        ),
+      );
 }

@@ -56,14 +56,7 @@ const ${config.createClassName}({
 
   // TODO: 可読性、テスト対象を定める意味でリファクタできそう
   String _parseConstructorFields() {
-    return fields.entries
-        .where(
-      (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields
-          .contains(
-        entry.key,
-      ),
-    )
-        .map((entry) {
+    return effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
@@ -93,29 +86,25 @@ const ${config.createClassName}({
       if (hasDefaultValue) {
         if (isFieldValueAllowed) {
           return 'this.$fieldNameString = const ActualValue($defaultValueString),';
+        } else {
+          return 'this.$fieldNameString = $defaultValueString,';
         }
-        return 'this.$fieldNameString = $defaultValueString,';
+      } else {
+        return 'this.$fieldNameString,';
       }
-      return 'this.$fieldNameString,';
+    } else {
+      return 'required this.$fieldNameString,';
     }
-    return 'required this.$fieldNameString,';
   }
 
   String _parseFields() {
-    return fields.entries.map((entry) {
+    return effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
       final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
       final isFieldValueAllowed =
           visitor.fieldValueAllowedFields.contains(entry.key);
-      final alwaysUseFieldValueServerTimestamp =
-          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields.contains(
-        entry.key,
-      );
 
-      if (alwaysUseFieldValueServerTimestamp) {
-        return '';
-      }
       if (isFieldValueAllowed) {
         if (nullableTypeMatch != null) {
           final type = nullableTypeMatch.group(1)!;
@@ -128,4 +117,13 @@ const ${config.createClassName}({
       }
     }).join('\n');
   }
+
+  ///
+  Iterable<MapEntry<String, String>> get effectiveEntries =>
+      fields.entries.where(
+        (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields
+            .contains(
+          entry.key,
+        ),
+      );
 }
