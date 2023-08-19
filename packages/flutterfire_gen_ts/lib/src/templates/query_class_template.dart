@@ -68,66 +68,66 @@ export class ${config.baseClassName}Query {
 
   /**
    * Adds a ${config.documentName} document.
-   * @param ${config.createClassName} - The ${config.documentName} details to add.
+   * @param ${config.createClassInstanceName} - The ${config.documentName} details to add.
    */
   async add({
     ${_parentDocumentIdArguments()}
-    ${config.createClassName}
+    ${config.createClassInstanceName}
   }: {
     ${_parentDocumentIdArgumentTypes()}
-    ${config.createClassName}: ${config.createClassName}
+    ${config.createClassInstanceName}: ${config.createClassName}
   }): Promise<DocumentReference<${config.createClassName}>> {
-    return ${_collectionReference(ReferenceClassType.create)}.add(${config.createClassName})
+    return ${_collectionReference(ReferenceClassType.create)}.add(${config.createClassInstanceName})
   }
 
   /**
    * Sets a ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to set.
-   * @param ${config.createClassName} - The ${config.documentName} details to set.
+   * @param ${config.createClassInstanceName} - The ${config.documentName} details to set.
    * @param options - Options for the set operation.
    */
   async set({
       ${_parentDocumentIdArguments()}
       ${config.documentIdFieldName},
-      ${config.createClassName},
+      ${config.createClassInstanceName},
       options
   }: {
       ${_parentDocumentIdArgumentTypes()}
       ${config.documentIdFieldName}: string
-      ${config.createClassName}: ${config.createClassName}
+      ${config.createClassInstanceName}: ${config.createClassName}
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return ${config.createDocumentReferenceName}({
             ${_parentDocumentIdArguments()}
             ${config.documentIdFieldName}
-          }).set(${config.createClassName})
+          }).set(${config.createClassInstanceName})
       } else {
           return ${config.createDocumentReferenceName}({ 
             ${_parentDocumentIdArguments()}
             ${config.documentIdFieldName} 
-            }).set(${config.createClassName}, options)
+            }).set(${config.createClassInstanceName}, options)
       }
   }
 
   /**
    * Updates a specific ${config.documentName} document.
    * @param ${config.documentIdFieldName} - The ID of the ${config.documentName} document to update.
-   * @param ${config.updateClassName} - The details for updating the ${config.documentName}.
+   * @param ${config.updateClassInstanceName} - The details for updating the ${config.documentName}.
    */
   async update({
     ${_parentDocumentIdArguments()}
     ${config.documentIdFieldName},
-    ${config.updateClassName}
+    ${config.updateClassInstanceName}
   }: {
     ${_parentDocumentIdArgumentTypes()}
     ${config.documentIdFieldName}: string
-    ${config.updateClassName}: ${config.updateClassName}
+    ${config.updateClassInstanceName}: ${config.updateClassName}
   }): Promise<WriteResult> {
       return ${config.updateDocumentReferenceName}({ 
         ${_parentDocumentIdArguments()}
         ${config.documentIdFieldName} 
-      }).update(${config.updateClassName}.toJson())
+      }).update(${config.updateClassInstanceName}.toJson())
   }
 
   /**

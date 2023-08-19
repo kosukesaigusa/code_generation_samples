@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -43,7 +44,7 @@ readonly updatedAt?: Date
       appUserPostId: json['appUserPostId'] as string,
       path: json['path'] as string,
       content: (json['content'] as string | undefined) ?? '',
-numbers: (json['numbers'] as (unknown[]  | undefined))?.map((e) => e as number).toList() ?? const <int>[],
+numbers: (json['numbers'] as unknown[] | undefined)?.map((e) => e as number) ?? [],
 updatedAt: (json['updatedAt'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
     })
   }
@@ -120,8 +121,10 @@ readonly numbers?: number[] | FieldValue
 
 readonly updatedAt?: Date
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.content != undefined) {
   json['content'] = this.content
 }
@@ -353,66 +356,66 @@ export class AppUserPostQuery {
 
   /**
    * Adds a appUserPost document.
-   * @param CreateAppUserPost - The appUserPost details to add.
+   * @param createAppUserPost - The appUserPost details to add.
    */
   async add({
     appUserId,
-    CreateAppUserPost
+    createAppUserPost
   }: {
     appUserId: string,
-    CreateAppUserPost: CreateAppUserPost
+    createAppUserPost: CreateAppUserPost
   }): Promise<DocumentReference<CreateAppUserPost>> {
-    return createAppUserPostCollectionReference({appUserId}).add(CreateAppUserPost)
+    return createAppUserPostCollectionReference({appUserId}).add(createAppUserPost)
   }
 
   /**
    * Sets a appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to set.
-   * @param CreateAppUserPost - The appUserPost details to set.
+   * @param createAppUserPost - The appUserPost details to set.
    * @param options - Options for the set operation.
    */
   async set({
       appUserId,
       appUserPostId,
-      CreateAppUserPost,
+      createAppUserPost,
       options
   }: {
       appUserId: string,
       appUserPostId: string
-      CreateAppUserPost: CreateAppUserPost
+      createAppUserPost: CreateAppUserPost
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createAppUserPostDocumentReference({
             appUserId,
             appUserPostId
-          }).set(CreateAppUserPost)
+          }).set(createAppUserPost)
       } else {
           return createAppUserPostDocumentReference({ 
             appUserId,
             appUserPostId 
-            }).set(CreateAppUserPost, options)
+            }).set(createAppUserPost, options)
       }
   }
 
   /**
    * Updates a specific appUserPost document.
    * @param appUserPostId - The ID of the appUserPost document to update.
-   * @param UpdateAppUserPost - The details for updating the appUserPost.
+   * @param updateAppUserPost - The details for updating the appUserPost.
    */
   async update({
     appUserId,
     appUserPostId,
-    UpdateAppUserPost
+    updateAppUserPost
   }: {
     appUserId: string,
     appUserPostId: string
-    UpdateAppUserPost: UpdateAppUserPost
+    updateAppUserPost: UpdateAppUserPost
   }): Promise<WriteResult> {
       return updateAppUserPostDocumentReference({ 
         appUserId,
         appUserPostId 
-      }).update(UpdateAppUserPost.toJson())
+      }).update(updateAppUserPost.toJson())
   }
 
   /**

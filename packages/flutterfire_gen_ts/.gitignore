@@ -25,3 +25,6 @@ migrate_working_dir/
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# Examples
+test/helper/examples/

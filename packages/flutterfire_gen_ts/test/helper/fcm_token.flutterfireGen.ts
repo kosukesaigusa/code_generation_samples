@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -37,7 +38,7 @@ readonly createdAt?: Date
     return new ReadFcmToken({
       fcmTokenId: json['fcmTokenId'] as string,
       path: json['path'] as string,
-      tokenAndDevices: (json['tokenAndDevices'] as unknown[]).map((e) => e as TokenAndDevice).toList(),
+      tokenAndDevices: (json['tokenAndDevices'] as unknown[]).map((e) => e as TokenAndDevice),
 createdAt: (json['createdAt'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
     })
   }
@@ -98,8 +99,10 @@ this.createdAt = createdAt
 
 readonly createdAt?: Date
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.tokenAndDevices != undefined) {
   json['tokenAndDevices'] = this.tokenAndDevices
 }
@@ -284,66 +287,66 @@ export class FcmTokenQuery {
 
   /**
    * Adds a fcmToken document.
-   * @param CreateFcmToken - The fcmToken details to add.
+   * @param createFcmToken - The fcmToken details to add.
    */
   async add({
     
-    CreateFcmToken
+    createFcmToken
   }: {
     
-    CreateFcmToken: CreateFcmToken
+    createFcmToken: CreateFcmToken
   }): Promise<DocumentReference<CreateFcmToken>> {
-    return createFcmTokenCollectionReference.add(CreateFcmToken)
+    return createFcmTokenCollectionReference.add(createFcmToken)
   }
 
   /**
    * Sets a fcmToken document.
    * @param fcmTokenId - The ID of the fcmToken document to set.
-   * @param CreateFcmToken - The fcmToken details to set.
+   * @param createFcmToken - The fcmToken details to set.
    * @param options - Options for the set operation.
    */
   async set({
       
       fcmTokenId,
-      CreateFcmToken,
+      createFcmToken,
       options
   }: {
       
       fcmTokenId: string
-      CreateFcmToken: CreateFcmToken
+      createFcmToken: CreateFcmToken
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createFcmTokenDocumentReference({
             
             fcmTokenId
-          }).set(CreateFcmToken)
+          }).set(createFcmToken)
       } else {
           return createFcmTokenDocumentReference({ 
             
             fcmTokenId 
-            }).set(CreateFcmToken, options)
+            }).set(createFcmToken, options)
       }
   }
 
   /**
    * Updates a specific fcmToken document.
    * @param fcmTokenId - The ID of the fcmToken document to update.
-   * @param UpdateFcmToken - The details for updating the fcmToken.
+   * @param updateFcmToken - The details for updating the fcmToken.
    */
   async update({
     
     fcmTokenId,
-    UpdateFcmToken
+    updateFcmToken
   }: {
     
     fcmTokenId: string
-    UpdateFcmToken: UpdateFcmToken
+    updateFcmToken: UpdateFcmToken
   }): Promise<WriteResult> {
       return updateFcmTokenDocumentReference({ 
         
         fcmTokenId 
-      }).update(UpdateFcmToken.toJson())
+      }).update(updateFcmToken.toJson())
   }
 
   /**

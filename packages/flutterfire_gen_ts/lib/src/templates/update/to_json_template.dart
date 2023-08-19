@@ -33,8 +33,10 @@ class ToJsonTemplate {
   @override
   String toString() {
     return '''
-toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   ${_parseFields()}
   return json
 }

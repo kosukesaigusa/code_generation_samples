@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -49,7 +50,7 @@ readonly isDeleted: boolean
       path: json['path'] as string,
       senderId: json['senderId'] as string,
 content: (json['content'] as string | undefined) ?? '',
-imageUrls: (json['imageUrls'] as (unknown[]  | undefined))?.map((e) => e as string).toList() ?? const <String>[],
+imageUrls: (json['imageUrls'] as unknown[] | undefined)?.map((e) => e as string) ?? [],
 isDeleted: (json['isDeleted'] as boolean | undefined) ?? false,
     })
   }
@@ -137,8 +138,10 @@ readonly imageUrls?: string[]
 
 readonly isDeleted?: boolean
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.senderId != undefined) {
   json['senderId'] = this.senderId
 }
@@ -373,66 +376,66 @@ export class ChatMessageQuery {
 
   /**
    * Adds a chatMessage document.
-   * @param CreateChatMessage - The chatMessage details to add.
+   * @param createChatMessage - The chatMessage details to add.
    */
   async add({
     chatRoomId,
-    CreateChatMessage
+    createChatMessage
   }: {
     chatRoomId: string,
-    CreateChatMessage: CreateChatMessage
+    createChatMessage: CreateChatMessage
   }): Promise<DocumentReference<CreateChatMessage>> {
-    return createChatMessageCollectionReference({chatRoomId}).add(CreateChatMessage)
+    return createChatMessageCollectionReference({chatRoomId}).add(createChatMessage)
   }
 
   /**
    * Sets a chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to set.
-   * @param CreateChatMessage - The chatMessage details to set.
+   * @param createChatMessage - The chatMessage details to set.
    * @param options - Options for the set operation.
    */
   async set({
       chatRoomId,
       chatMessageId,
-      CreateChatMessage,
+      createChatMessage,
       options
   }: {
       chatRoomId: string,
       chatMessageId: string
-      CreateChatMessage: CreateChatMessage
+      createChatMessage: CreateChatMessage
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createChatMessageDocumentReference({
             chatRoomId,
             chatMessageId
-          }).set(CreateChatMessage)
+          }).set(createChatMessage)
       } else {
           return createChatMessageDocumentReference({ 
             chatRoomId,
             chatMessageId 
-            }).set(CreateChatMessage, options)
+            }).set(createChatMessage, options)
       }
   }
 
   /**
    * Updates a specific chatMessage document.
    * @param chatMessageId - The ID of the chatMessage document to update.
-   * @param UpdateChatMessage - The details for updating the chatMessage.
+   * @param updateChatMessage - The details for updating the chatMessage.
    */
   async update({
     chatRoomId,
     chatMessageId,
-    UpdateChatMessage
+    updateChatMessage
   }: {
     chatRoomId: string,
     chatMessageId: string
-    UpdateChatMessage: UpdateChatMessage
+    updateChatMessage: UpdateChatMessage
   }): Promise<WriteResult> {
       return updateChatMessageDocumentReference({ 
         chatRoomId,
         chatMessageId 
-      }).update(UpdateChatMessage.toJson())
+      }).update(updateChatMessage.toJson())
   }
 
   /**

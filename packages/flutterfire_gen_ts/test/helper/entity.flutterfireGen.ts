@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -77,30 +78,30 @@ nullableIsBool?: boolean
 texts: string[]
 textsWithDefault: string[]
 nullableTexts?: string[]
-map: Record<string, String, dynamic>
-mapWithDefault: Record<string, String, dynamic>
-nullableMap?: Record<string, String, dynamic>
-stringMap: Record<string, String, String>
-stringMapWithDefault: Record<string, String, String>
-nullableStringMap?: Record<string, String, String>
-nestedMap: Record<string, String, Map<String, int>>
-nestedMapWithDefault: Record<string, String, Map<String, int>>
-nullableNestedMap?: Record<string, String, Map<String, int>>
-listMap: Record<string, String, List<int>>
-listMapWithDefault: Record<string, String, List<int>>
-nullableListMap?: Record<string, String, List<int>>
-mapList: Record<string, String, int>[]
-mapListWithDefault: Record<string, String, int>[]
-nullableMapList?: Record<string, String, int>[]
-geoPoint: InvalidType
-geoPointWithDefault: InvalidType
-nullableGeoPoint: InvalidType
+map: Record<string, unknown>
+mapWithDefault: Record<string, unknown>
+nullableMap: Record<string, unknown> | undefined
+stringMap: Record<string, string>
+stringMapWithDefault: Record<string, string>
+nullableStringMap: Record<string, string> | undefined
+nestedMap: Record<string, Record<string, number>>
+nestedMapWithDefault: Record<string, Record<string, number>>
+nullableNestedMap: Record<string, Record<string, number>> | undefined
+listMap: Record<string, number[]>
+listMapWithDefault: Record<string, number[]>
+nullableListMap: Record<string, number[]> | undefined
+mapList: Record<string, number>[]
+mapListWithDefault: Record<string, number>[]
+nullableMapList?: Record<string, number>[]
+geoPoint: GeoPoint
+geoPointWithDefault: GeoPoint
+nullableGeoPoint?: GeoPoint
 dateTime: Date
 nullableDateTime?: Date
-timestamp: InvalidType
-nullableTimestamp: InvalidType
-documentReference: InvalidType
-nullableDocumentReference: InvalidType
+timestamp: Timestamp
+nullableTimestamp?: Timestamp
+documentReference: DocumentReference<Object?>
+nullableDocumentReference?: DocumentReference<Object?>
 foo: Foo
 fooWithDefault: Foo
 nullableFoo?: Foo
@@ -197,53 +198,53 @@ readonly textsWithDefault: string[]
 
 readonly nullableTexts?: string[]
 
-readonly map: Record<string, String, dynamic>
+readonly map: Record<string, unknown>
 
-readonly mapWithDefault: Record<string, String, dynamic>
+readonly mapWithDefault: Record<string, unknown>
 
-readonly nullableMap?: Record<string, String, dynamic>
+readonly nullableMap: Record<string, unknown> | undefined
 
-readonly stringMap: Record<string, String, String>
+readonly stringMap: Record<string, string>
 
-readonly stringMapWithDefault: Record<string, String, String>
+readonly stringMapWithDefault: Record<string, string>
 
-readonly nullableStringMap?: Record<string, String, String>
+readonly nullableStringMap: Record<string, string> | undefined
 
-readonly nestedMap: Record<string, String, Map<String, int>>
+readonly nestedMap: Record<string, Record<string, number>>
 
-readonly nestedMapWithDefault: Record<string, String, Map<String, int>>
+readonly nestedMapWithDefault: Record<string, Record<string, number>>
 
-readonly nullableNestedMap?: Record<string, String, Map<String, int>>
+readonly nullableNestedMap: Record<string, Record<string, number>> | undefined
 
-readonly listMap: Record<string, String, List<int>>
+readonly listMap: Record<string, number[]>
 
-readonly listMapWithDefault: Record<string, String, List<int>>
+readonly listMapWithDefault: Record<string, number[]>
 
-readonly nullableListMap?: Record<string, String, List<int>>
+readonly nullableListMap: Record<string, number[]> | undefined
 
-readonly mapList: Record<string, String, int>[]
+readonly mapList: Record<string, number>[]
 
-readonly mapListWithDefault: Record<string, String, int>[]
+readonly mapListWithDefault: Record<string, number>[]
 
-readonly nullableMapList?: Record<string, String, int>[]
+readonly nullableMapList?: Record<string, number>[]
 
-readonly geoPoint: InvalidType
+readonly geoPoint: GeoPoint
 
-readonly geoPointWithDefault: InvalidType
+readonly geoPointWithDefault: GeoPoint
 
-readonly nullableGeoPoint: InvalidType
+readonly nullableGeoPoint?: GeoPoint
 
 readonly dateTime: Date
 
 readonly nullableDateTime?: Date
 
-readonly timestamp: InvalidType
+readonly timestamp: Timestamp
 
-readonly nullableTimestamp: InvalidType
+readonly nullableTimestamp?: Timestamp
 
-readonly documentReference: InvalidType
+readonly documentReference: DocumentReference<Object?>
 
-readonly nullableDocumentReference: InvalidType
+readonly nullableDocumentReference?: DocumentReference<Object?>
 
 readonly foo: Foo
 
@@ -279,35 +280,35 @@ nullableDoubleNumber: (json['nullableDoubleNumber'] as number | undefined) ?? 3.
 isBool: json['isBool'] as boolean,
 isBoolWithDefault: (json['isBoolWithDefault'] as boolean | undefined) ?? false,
 nullableIsBool: (json['nullableIsBool'] as boolean | undefined) ?? false,
-texts: (json['texts'] as unknown[]).map((e) => e as string).toList(),
-textsWithDefault: (json['textsWithDefault'] as (unknown[]  | undefined))?.map((e) => e as string).toList() ?? const <String>['requiredWithDefault'],
-nullableTexts: (json['nullableTexts'] as (unknown[] | undefined))?.map((e) => e as string).toList() ?? const <String>[],
-map: json['map'] as Record<string, unknown>,
-mapWithDefault: json['mapWithDefault'] as (Record<string, unknown> | undefined) ?? const <String, dynamic>{},
-nullableMap: json['nullableMap'] as (Record<string, unknown> | undefined) ?? const <String, dynamic>{},
-stringMap: (json['stringMap'] as Record<string, unknown>).map((k, v) => MapEntry(k, v as string)),
-stringMapWithDefault: (json['stringMapWithDefault'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, v as string)) ?? const <String, String>{},
-nullableStringMap: (json['nullableStringMap'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, v as string)) ?? const <String, String>{},
-nestedMap: (json['nestedMap'] as Record<string, unknown>).map((k, v) => MapEntry(k, (v as Record<string, unknown>).map((k, v) => MapEntry(k, v as number)))),
-nestedMapWithDefault: (json['nestedMapWithDefault'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, (v as Record<string, unknown>).map((k, v) => MapEntry(k, v as number)))) ?? const <String, Map<String, int>>{'requiredWithDefault' : <String, int>{}},
-nullableNestedMap: (json['nullableNestedMap'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, (v as Record<string, unknown>).map((k, v) => MapEntry(k, v as number)))) ?? const <String, Map<String, int>>{},
-listMap: (json['listMap'] as Record<string, unknown>).map((k, v) => MapEntry(k, (v as unknown[]).map((e) => e as number).toList())),
-listMapWithDefault: (json['listMapWithDefault'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, (v as unknown[]).map((e) => e as number).toList())) ?? const <String, List<int>>{'requiredWithDefault' : <int>[]},
-nullableListMap: (json['nullableListMap'] as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, (v as unknown[]).map((e) => e as number).toList())) ?? const <String, List<int>>{},
-mapList: (json['mapList'] as unknown[]).map((e) => (e as Record<string, unknown>).map((k, v) => MapEntry(k, v as number))).toList(),
-mapListWithDefault: (json['mapListWithDefault'] as (unknown[]  | undefined))?.map((e) => (e as Record<string, unknown>).map((k, v) => MapEntry(k, v as number))).toList() ?? const <Map<String, int>>[<String, int>{'requiredWithDefault' : 0}],
-nullableMapList: (json['nullableMapList'] as (unknown[] | undefined))?.map((e) => (e as Record<string, unknown>).map((k, v) => MapEntry(k, v as number))).toList() ?? const <Map<String, int>>[],
-geoPoint: json['geoPoint'] as InvalidType,
-geoPointWithDefault: (json['geoPointWithDefault'] as InvalidType | undefined) ?? const GeoPoint(0, 0),
-nullableGeoPoint: (json['nullableGeoPoint'] as InvalidType | undefined) ?? const GeoPoint(0, 0),
+texts: (json['texts'] as unknown[]).map((e) => e as string),
+textsWithDefault: (json['textsWithDefault'] as unknown[] | undefined)?.map((e) => e as string) ?? [],
+nullableTexts: (json['nullableTexts'] as unknown[] | undefined)?.map((e) => e as string) ?? [],
+map: Object.fromEntries(Object.entries(json['map'] as Record<string, unknown>).map(([k, v]) => [k, v as unknown])),
+mapWithDefault: Object.fromEntries(Object.entries(json['mapWithDefault'] as Record<string, unknown>).map(([k, v]) => [k, v as unknown])) ?? {},
+nullableMap: Object.fromEntries(Object.entries(json['nullableMap'] as Record<string, unknown>).map(([k, v]) => [k, v as unknown])) ?? {},
+stringMap: Object.fromEntries(Object.entries(json['stringMap'] as Record<string, unknown>).map(([k, v]) => [k, v as string])),
+stringMapWithDefault: Object.fromEntries(Object.entries(json['stringMapWithDefault'] as Record<string, unknown>).map(([k, v]) => [k, v as string])) ?? {},
+nullableStringMap: Object.fromEntries(Object.entries(json['nullableStringMap'] as Record<string, unknown>).map(([k, v]) => [k, v as string])) ?? {},
+nestedMap: Object.fromEntries(Object.entries(json['nestedMap'] as Record<string, unknown>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v as Record<string, unknown>).map(([k, v]) => [k, v as number]))])),
+nestedMapWithDefault: Object.fromEntries(Object.entries(json['nestedMapWithDefault'] as Record<string, unknown>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v as Record<string, unknown>).map(([k, v]) => [k, v as number]))])) ?? {},
+nullableNestedMap: Object.fromEntries(Object.entries(json['nullableNestedMap'] as Record<string, unknown>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v as Record<string, unknown>).map(([k, v]) => [k, v as number]))])) ?? {},
+listMap: Object.fromEntries(Object.entries(json['listMap'] as Record<string, unknown>).map(([k, v]) => [k, (v as unknown[]).map((e) => e as number)])),
+listMapWithDefault: Object.fromEntries(Object.entries(json['listMapWithDefault'] as Record<string, unknown>).map(([k, v]) => [k, (v as unknown[]).map((e) => e as number)])) ?? {},
+nullableListMap: Object.fromEntries(Object.entries(json['nullableListMap'] as Record<string, unknown>).map(([k, v]) => [k, (v as unknown[]).map((e) => e as number)])) ?? {},
+mapList: (json['mapList'] as unknown[]).map((e) => Object.fromEntries(Object.entries(e as Record<string, unknown>).map(([k, v]) => [k, v as number]))),
+mapListWithDefault: (json['mapListWithDefault'] as unknown[] | undefined)?.map((e) => Object.fromEntries(Object.entries(e as Record<string, unknown>).map(([k, v]) => [k, v as number]))) ?? [],
+nullableMapList: (json['nullableMapList'] as unknown[] | undefined)?.map((e) => Object.fromEntries(Object.entries(e as Record<string, unknown>).map(([k, v]) => [k, v as number]))) ?? [],
+geoPoint: json['geoPoint'] as GeoPoint,
+geoPointWithDefault: (json['geoPointWithDefault'] as GeoPoint | undefined) ?? new GeoPoint(0, 0),
+nullableGeoPoint: (json['nullableGeoPoint'] as GeoPoint | undefined) ?? new GeoPoint(0, 0),
 dateTime: (json['dateTime'] as FirebaseFirestore.Timestamp).toDate(),
 nullableDateTime: (json['nullableDateTime'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
-timestamp: json['timestamp'] as InvalidType,
-nullableTimestamp: json['nullableTimestamp'] as InvalidType,
-documentReference: json['documentReference'] as InvalidType,
-nullableDocumentReference: json['nullableDocumentReference'] as InvalidType,
+timestamp: json['timestamp'] as Timestamp,
+nullableTimestamp: json['nullableTimestamp'] as Timestamp | undefined,
+documentReference: json['documentReference'] as DocumentReference<Object?>,
+nullableDocumentReference: json['nullableDocumentReference'] as DocumentReference<Object?> | undefined,
 foo: json['foo'] as Foo,
-fooWithDefault: (json['fooWithDefault'] as Foo | undefined) ?? const Foo('requiredWithDefault'),
+fooWithDefault: (json['fooWithDefault'] as Foo | undefined) ?? ,
 nullableFoo: json['nullableFoo'] as Foo | undefined,
 nullableFooWithDefaultAnnotation: json['nullableFooWithDefaultAnnotation'] as Foo | undefined,
 nullableFooWithDefaultValueInConstructor: json['nullableFooWithDefaultValueInConstructor'] as Foo | undefined,
@@ -402,30 +403,30 @@ nullableIsBool?: boolean
 texts: string[]
 textsWithDefault: string[]
 nullableTexts?: string[]
-map: Record<string, String, dynamic>
-mapWithDefault: Record<string, String, dynamic>
-nullableMap?: Record<string, String, dynamic>
-stringMap: Record<string, String, String>
-stringMapWithDefault: Record<string, String, String>
-nullableStringMap?: Record<string, String, String>
-nestedMap: Record<string, String, Map<String, int>>
-nestedMapWithDefault: Record<string, String, Map<String, int>>
-nullableNestedMap?: Record<string, String, Map<String, int>>
-listMap: Record<string, String, List<int>>
-listMapWithDefault: Record<string, String, List<int>>
-nullableListMap?: Record<string, String, List<int>>
-mapList: Record<string, String, int>[]
-mapListWithDefault: Record<string, String, int>[]
-nullableMapList?: Record<string, String, int>[]
-geoPoint: InvalidType
-geoPointWithDefault: InvalidType
-nullableGeoPoint: InvalidType
+map: Record<string, unknown>
+mapWithDefault: Record<string, unknown>
+nullableMap: Record<string, unknown> | undefined
+stringMap: Record<string, string>
+stringMapWithDefault: Record<string, string>
+nullableStringMap: Record<string, string> | undefined
+nestedMap: Record<string, Record<string, number>>
+nestedMapWithDefault: Record<string, Record<string, number>>
+nullableNestedMap: Record<string, Record<string, number>> | undefined
+listMap: Record<string, number[]>
+listMapWithDefault: Record<string, number[]>
+nullableListMap: Record<string, number[]> | undefined
+mapList: Record<string, number>[]
+mapListWithDefault: Record<string, number>[]
+nullableMapList?: Record<string, number>[]
+geoPoint: GeoPoint
+geoPointWithDefault: GeoPoint
+nullableGeoPoint?: GeoPoint
 dateTime: Date
 nullableDateTime?: Date
-timestamp: InvalidType
-nullableTimestamp: InvalidType
-documentReference: InvalidType
-nullableDocumentReference: InvalidType
+timestamp: Timestamp
+nullableTimestamp?: Timestamp
+documentReference: DocumentReference<Object?>
+nullableDocumentReference?: DocumentReference<Object?>
 foo: Foo
 fooWithDefault: Foo
 nullableFoo?: Foo
@@ -517,53 +518,53 @@ readonly textsWithDefault: string[]
 
 readonly nullableTexts?: string[]
 
-readonly map: Record<string, String, dynamic>
+readonly map: Record<string, unknown>
 
-readonly mapWithDefault: Record<string, String, dynamic>
+readonly mapWithDefault: Record<string, unknown>
 
-readonly nullableMap?: Record<string, String, dynamic>
+readonly nullableMap: Record<string, unknown> | undefined
 
-readonly stringMap: Record<string, String, String>
+readonly stringMap: Record<string, string>
 
-readonly stringMapWithDefault: Record<string, String, String>
+readonly stringMapWithDefault: Record<string, string>
 
-readonly nullableStringMap?: Record<string, String, String>
+readonly nullableStringMap: Record<string, string> | undefined
 
-readonly nestedMap: Record<string, String, Map<String, int>>
+readonly nestedMap: Record<string, Record<string, number>>
 
-readonly nestedMapWithDefault: Record<string, String, Map<String, int>>
+readonly nestedMapWithDefault: Record<string, Record<string, number>>
 
-readonly nullableNestedMap?: Record<string, String, Map<String, int>>
+readonly nullableNestedMap: Record<string, Record<string, number>> | undefined
 
-readonly listMap: Record<string, String, List<int>>
+readonly listMap: Record<string, number[]>
 
-readonly listMapWithDefault: Record<string, String, List<int>>
+readonly listMapWithDefault: Record<string, number[]>
 
-readonly nullableListMap?: Record<string, String, List<int>>
+readonly nullableListMap: Record<string, number[]> | undefined
 
-readonly mapList: Record<string, String, int>[]
+readonly mapList: Record<string, number>[]
 
-readonly mapListWithDefault: Record<string, String, int>[]
+readonly mapListWithDefault: Record<string, number>[]
 
-readonly nullableMapList?: Record<string, String, int>[]
+readonly nullableMapList?: Record<string, number>[]
 
-readonly geoPoint: InvalidType
+readonly geoPoint: GeoPoint
 
-readonly geoPointWithDefault: InvalidType
+readonly geoPointWithDefault: GeoPoint
 
-readonly nullableGeoPoint: InvalidType
+readonly nullableGeoPoint?: GeoPoint
 
 readonly dateTime: Date
 
 readonly nullableDateTime?: Date
 
-readonly timestamp: InvalidType
+readonly timestamp: Timestamp
 
-readonly nullableTimestamp: InvalidType
+readonly nullableTimestamp?: Timestamp
 
-readonly documentReference: InvalidType
+readonly documentReference: DocumentReference<Object?>
 
-readonly nullableDocumentReference: InvalidType
+readonly nullableDocumentReference?: DocumentReference<Object?>
 
 readonly foo: Foo
 
@@ -704,30 +705,30 @@ nullableIsBool?: boolean
 texts?: string[]
 textsWithDefault?: string[]
 nullableTexts?: string[]
-map?: Record<string, String, dynamic>
-mapWithDefault?: Record<string, String, dynamic>
-nullableMap?: Record<string, String, dynamic>
-stringMap?: Record<string, String, String>
-stringMapWithDefault?: Record<string, String, String>
-nullableStringMap?: Record<string, String, String>
-nestedMap?: Record<string, String, Map<String, int>>
-nestedMapWithDefault?: Record<string, String, Map<String, int>>
-nullableNestedMap?: Record<string, String, Map<String, int>>
-listMap?: Record<string, String, List<int>>
-listMapWithDefault?: Record<string, String, List<int>>
-nullableListMap?: Record<string, String, List<int>>
-mapList?: Record<string, String, int>[]
-mapListWithDefault?: Record<string, String, int>[]
-nullableMapList?: Record<string, String, int>[]
-geoPoint?: InvalidType
-geoPointWithDefault?: InvalidType
-nullableGeoPoint?: InvalidType
+map: Record<string, unknown> | undefined
+mapWithDefault: Record<string, unknown> | undefined
+nullableMap: Record<string, unknown> | undefined
+stringMap: Record<string, string> | undefined
+stringMapWithDefault: Record<string, string> | undefined
+nullableStringMap: Record<string, string> | undefined
+nestedMap: Record<string, Record<string, number>> | undefined
+nestedMapWithDefault: Record<string, Record<string, number>> | undefined
+nullableNestedMap: Record<string, Record<string, number>> | undefined
+listMap: Record<string, number[]> | undefined
+listMapWithDefault: Record<string, number[]> | undefined
+nullableListMap: Record<string, number[]> | undefined
+mapList?: Record<string, number>[]
+mapListWithDefault?: Record<string, number>[]
+nullableMapList?: Record<string, number>[]
+geoPoint?: GeoPoint
+geoPointWithDefault?: GeoPoint
+nullableGeoPoint?: GeoPoint
 dateTime?: Date
 nullableDateTime?: Date
-timestamp?: InvalidType
-nullableTimestamp?: InvalidType
-documentReference?: InvalidType
-nullableDocumentReference?: InvalidType
+timestamp?: Timestamp
+nullableTimestamp?: Timestamp
+documentReference?: DocumentReference<Object?>
+nullableDocumentReference?: DocumentReference<Object?>
 foo?: Foo
 fooWithDefault?: Foo
 nullableFoo?: Foo
@@ -819,53 +820,53 @@ readonly textsWithDefault?: string[]
 
 readonly nullableTexts?: string[]
 
-readonly map?: Record<string, String, dynamic>
+readonly map: Record<string, unknown> | undefined
 
-readonly mapWithDefault?: Record<string, String, dynamic>
+readonly mapWithDefault: Record<string, unknown> | undefined
 
-readonly nullableMap?: Record<string, String, dynamic>
+readonly nullableMap: Record<string, unknown> | undefined
 
-readonly stringMap?: Record<string, String, String>
+readonly stringMap: Record<string, string> | undefined
 
-readonly stringMapWithDefault?: Record<string, String, String>
+readonly stringMapWithDefault: Record<string, string> | undefined
 
-readonly nullableStringMap?: Record<string, String, String>
+readonly nullableStringMap: Record<string, string> | undefined
 
-readonly nestedMap?: Record<string, String, Map<String, int>>
+readonly nestedMap: Record<string, Record<string, number>> | undefined
 
-readonly nestedMapWithDefault?: Record<string, String, Map<String, int>>
+readonly nestedMapWithDefault: Record<string, Record<string, number>> | undefined
 
-readonly nullableNestedMap?: Record<string, String, Map<String, int>>
+readonly nullableNestedMap: Record<string, Record<string, number>> | undefined
 
-readonly listMap?: Record<string, String, List<int>>
+readonly listMap: Record<string, number[]> | undefined
 
-readonly listMapWithDefault?: Record<string, String, List<int>>
+readonly listMapWithDefault: Record<string, number[]> | undefined
 
-readonly nullableListMap?: Record<string, String, List<int>>
+readonly nullableListMap: Record<string, number[]> | undefined
 
-readonly mapList?: Record<string, String, int>[]
+readonly mapList?: Record<string, number>[]
 
-readonly mapListWithDefault?: Record<string, String, int>[]
+readonly mapListWithDefault?: Record<string, number>[]
 
-readonly nullableMapList?: Record<string, String, int>[]
+readonly nullableMapList?: Record<string, number>[]
 
-readonly geoPoint?: InvalidType
+readonly geoPoint?: GeoPoint
 
-readonly geoPointWithDefault?: InvalidType
+readonly geoPointWithDefault?: GeoPoint
 
-readonly nullableGeoPoint?: InvalidType
+readonly nullableGeoPoint?: GeoPoint
 
 readonly dateTime?: Date
 
 readonly nullableDateTime?: Date
 
-readonly timestamp?: InvalidType
+readonly timestamp?: Timestamp
 
-readonly nullableTimestamp?: InvalidType
+readonly nullableTimestamp?: Timestamp
 
-readonly documentReference?: InvalidType
+readonly documentReference?: DocumentReference<Object?>
 
-readonly nullableDocumentReference?: InvalidType
+readonly nullableDocumentReference?: DocumentReference<Object?>
 
 readonly foo?: Foo
 
@@ -885,8 +886,10 @@ readonly fieldValueAllowedNullableIntWithDefaultAnnotation?: number | FieldValue
 
 readonly fieldValueAllowedNullableIntWithDefaultInConstructor?: number | FieldValue
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.text != undefined) {
   json['text'] = this.text
 }
@@ -1203,66 +1206,66 @@ export class EntityQuery {
 
   /**
    * Adds a entity document.
-   * @param CreateEntity - The entity details to add.
+   * @param createEntity - The entity details to add.
    */
   async add({
     
-    CreateEntity
+    createEntity
   }: {
     
-    CreateEntity: CreateEntity
+    createEntity: CreateEntity
   }): Promise<DocumentReference<CreateEntity>> {
-    return createEntityCollectionReference.add(CreateEntity)
+    return createEntityCollectionReference.add(createEntity)
   }
 
   /**
    * Sets a entity document.
    * @param entityId - The ID of the entity document to set.
-   * @param CreateEntity - The entity details to set.
+   * @param createEntity - The entity details to set.
    * @param options - Options for the set operation.
    */
   async set({
       
       entityId,
-      CreateEntity,
+      createEntity,
       options
   }: {
       
       entityId: string
-      CreateEntity: CreateEntity
+      createEntity: CreateEntity
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createEntityDocumentReference({
             
             entityId
-          }).set(CreateEntity)
+          }).set(createEntity)
       } else {
           return createEntityDocumentReference({ 
             
             entityId 
-            }).set(CreateEntity, options)
+            }).set(createEntity, options)
       }
   }
 
   /**
    * Updates a specific entity document.
    * @param entityId - The ID of the entity document to update.
-   * @param UpdateEntity - The details for updating the entity.
+   * @param updateEntity - The details for updating the entity.
    */
   async update({
     
     entityId,
-    UpdateEntity
+    updateEntity
   }: {
     
     entityId: string
-    UpdateEntity: UpdateEntity
+    updateEntity: UpdateEntity
   }): Promise<WriteResult> {
       return updateEntityDocumentReference({ 
         
         entityId 
-      }).update(UpdateEntity.toJson())
+      }).update(updateEntity.toJson())
   }
 
   /**

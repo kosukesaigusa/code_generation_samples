@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -72,8 +73,10 @@ export class UpdateReadStatus {
 
   
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   json['lastReadAt'] = FieldValue.serverTimestamp()
   return json
 }
@@ -296,66 +299,66 @@ export class ReadStatusQuery {
 
   /**
    * Adds a readStatus document.
-   * @param CreateReadStatus - The readStatus details to add.
+   * @param createReadStatus - The readStatus details to add.
    */
   async add({
     chatRoomId,
-    CreateReadStatus
+    createReadStatus
   }: {
     chatRoomId: string,
-    CreateReadStatus: CreateReadStatus
+    createReadStatus: CreateReadStatus
   }): Promise<DocumentReference<CreateReadStatus>> {
-    return createReadStatusCollectionReference({chatRoomId}).add(CreateReadStatus)
+    return createReadStatusCollectionReference({chatRoomId}).add(createReadStatus)
   }
 
   /**
    * Sets a readStatus document.
    * @param readStatusId - The ID of the readStatus document to set.
-   * @param CreateReadStatus - The readStatus details to set.
+   * @param createReadStatus - The readStatus details to set.
    * @param options - Options for the set operation.
    */
   async set({
       chatRoomId,
       readStatusId,
-      CreateReadStatus,
+      createReadStatus,
       options
   }: {
       chatRoomId: string,
       readStatusId: string
-      CreateReadStatus: CreateReadStatus
+      createReadStatus: CreateReadStatus
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createReadStatusDocumentReference({
             chatRoomId,
             readStatusId
-          }).set(CreateReadStatus)
+          }).set(createReadStatus)
       } else {
           return createReadStatusDocumentReference({ 
             chatRoomId,
             readStatusId 
-            }).set(CreateReadStatus, options)
+            }).set(createReadStatus, options)
       }
   }
 
   /**
    * Updates a specific readStatus document.
    * @param readStatusId - The ID of the readStatus document to update.
-   * @param UpdateReadStatus - The details for updating the readStatus.
+   * @param updateReadStatus - The details for updating the readStatus.
    */
   async update({
     chatRoomId,
     readStatusId,
-    UpdateReadStatus
+    updateReadStatus
   }: {
     chatRoomId: string,
     readStatusId: string
-    UpdateReadStatus: UpdateReadStatus
+    updateReadStatus: UpdateReadStatus
   }): Promise<WriteResult> {
       return updateReadStatusDocumentReference({ 
         chatRoomId,
         readStatusId 
-      }).update(UpdateReadStatus.toJson())
+      }).update(updateReadStatus.toJson())
   }
 
   /**

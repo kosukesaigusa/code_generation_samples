@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -103,8 +104,10 @@ this.imageUrl = imageUrl
 
 readonly imageUrl?: string
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.name != undefined) {
   json['name'] = this.name
 }
@@ -289,66 +292,66 @@ export class AppUserQuery {
 
   /**
    * Adds a appUser document.
-   * @param CreateAppUser - The appUser details to add.
+   * @param createAppUser - The appUser details to add.
    */
   async add({
     
-    CreateAppUser
+    createAppUser
   }: {
     
-    CreateAppUser: CreateAppUser
+    createAppUser: CreateAppUser
   }): Promise<DocumentReference<CreateAppUser>> {
-    return createAppUserCollectionReference.add(CreateAppUser)
+    return createAppUserCollectionReference.add(createAppUser)
   }
 
   /**
    * Sets a appUser document.
    * @param appUserId - The ID of the appUser document to set.
-   * @param CreateAppUser - The appUser details to set.
+   * @param createAppUser - The appUser details to set.
    * @param options - Options for the set operation.
    */
   async set({
       
       appUserId,
-      CreateAppUser,
+      createAppUser,
       options
   }: {
       
       appUserId: string
-      CreateAppUser: CreateAppUser
+      createAppUser: CreateAppUser
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createAppUserDocumentReference({
             
             appUserId
-          }).set(CreateAppUser)
+          }).set(createAppUser)
       } else {
           return createAppUserDocumentReference({ 
             
             appUserId 
-            }).set(CreateAppUser, options)
+            }).set(createAppUser, options)
       }
   }
 
   /**
    * Updates a specific appUser document.
    * @param appUserId - The ID of the appUser document to update.
-   * @param UpdateAppUser - The details for updating the appUser.
+   * @param updateAppUser - The details for updating the appUser.
    */
   async update({
     
     appUserId,
-    UpdateAppUser
+    updateAppUser
   }: {
     
     appUserId: string
-    UpdateAppUser: UpdateAppUser
+    updateAppUser: UpdateAppUser
   }): Promise<WriteResult> {
       return updateAppUserDocumentReference({ 
         
         appUserId 
-      }).update(UpdateAppUser.toJson())
+      }).update(updateAppUser.toJson())
   }
 
   /**

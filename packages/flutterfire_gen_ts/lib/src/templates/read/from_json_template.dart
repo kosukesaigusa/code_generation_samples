@@ -65,8 +65,12 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
     String parsedKey = 'e',
   }) {
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
-    final defaultValueExpression =
-        (isFirstLoop && hasDefaultValue) ? ' ?? $defaultValueString' : '';
+    final defaultValueExpression = (isFirstLoop && hasDefaultValue)
+        ? ' ?? ${toTypeScriptDefaultValueString(
+            dartTypeNameString: typeNameString,
+            dartDefaultValueString: defaultValueString!,
+          )}'
+        : '';
 
     // TODO: jsonConverter は使えないはずなのでいったんコメントアウト
     // if (jsonConverterConfig != null) {
@@ -93,7 +97,7 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
         defaultValueString: defaultValueString,
         isFirstLoop: false,
       );
-      return '($effectiveParsedKey as (unknown[] | undefined))?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
+      return '($effectiveParsedKey as unknown[] | undefined)?.map((e) => $parsedListItemType)$defaultValueExpression';
     }
 
     final listMatch = RegExp(r'^List<(.*)>$').firstMatch(typeNameString);
@@ -106,19 +110,41 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
         isFirstLoop: false,
       );
       if (defaultValueExpression.isEmpty) {
-        return '($effectiveParsedKey as unknown[]).map((e) => $parsedListItemType).toList()';
+        return '($effectiveParsedKey as unknown[]).map((e) => $parsedListItemType)';
       } else {
-        return '($effectiveParsedKey as (unknown[]  | undefined))?.map((e) => $parsedListItemType).toList()$defaultValueExpression';
+        return '($effectiveParsedKey as unknown[] | undefined)?.map((e) => $parsedListItemType)$defaultValueExpression';
       }
     }
 
+    // TODO: 修正する
     final nullableMapMatch =
         RegExp(r'^Map<String, (.*)>\?$').firstMatch(typeNameString);
-    if (nullableMapMatch != null) {
-      final mapValueType = nullableMapMatch.group(1)!;
-      if (mapValueType == 'dynamic') {
-        return '$effectiveParsedKey as (Record<string, unknown> | undefined)$defaultValueExpression';
-      }
+    // if (nullableMapMatch != null) {
+    //   final mapValueType = nullableMapMatch.group(1)!;
+    //   final parsedMapValueType = _parseType(
+    //     fieldNameString,
+    //     mapValueType,
+    //     defaultValueString: defaultValueString,
+    //     isFirstLoop: false,
+    //     parsedKey: 'v',
+    //   );
+    //   return '($effectiveParsedKey ? Object.fromEntries(Object.entries($effectiveParsedKey as Record<string, Record<string, string>>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([k, v]) => [k, v] as [string, string]))])) : {})$defaultValueExpression';
+    // }
+
+    final mapMatch = RegExp(r'^Map<String, (.*)>$').firstMatch(typeNameString);
+    // if (mapMatch != null) {
+    //   final mapValueType = mapMatch.group(1)!;
+    //   final parsedMapValueType = _parseType(
+    //     fieldNameString,
+    //     mapValueType,
+    //     defaultValueString: defaultValueString,
+    //     isFirstLoop: false,
+    //     parsedKey: 'v',
+    //   );
+    //   return 'Object.fromEntries(Object.entries($effectiveParsedKey as Record<string, Record<string, string>>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([k, v]) => [k, v] as [string, string]))]))$defaultValueExpression';
+    // }
+    if (nullableMapMatch != null || mapMatch != null) {
+      final mapValueType = (nullableMapMatch?.group(1) ?? mapMatch?.group(1))!;
       final parsedMapValueType = _parseType(
         fieldNameString,
         mapValueType,
@@ -126,32 +152,7 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
         isFirstLoop: false,
         parsedKey: 'v',
       );
-      return '($effectiveParsedKey as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
-    }
-
-    final mapMatch = RegExp(r'^Map<String, (.*)>$').firstMatch(typeNameString);
-    if (mapMatch != null) {
-      final mapValueType = mapMatch.group(1)!;
-      if (mapValueType == 'dynamic') {
-        if (defaultValueExpression.isEmpty) {
-          return '$effectiveParsedKey as Record<string, unknown>$defaultValueExpression';
-        } else {
-          return '$effectiveParsedKey as (Record<string, unknown> | undefined)$defaultValueExpression';
-        }
-      } else {
-        final parsedMapValueType = _parseType(
-          fieldNameString,
-          mapValueType,
-          defaultValueString: defaultValueString,
-          isFirstLoop: false,
-          parsedKey: 'v',
-        );
-        if (defaultValueExpression.isEmpty) {
-          return '($effectiveParsedKey as Record<string, unknown>).map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
-        } else {
-          return '($effectiveParsedKey as (Record<string, unknown> | undefined))?.map((k, v) => MapEntry(k, $parsedMapValueType))$defaultValueExpression';
-        }
-      }
+      return 'Object.fromEntries(Object.entries($effectiveParsedKey as Record<string, unknown>).map(([k, v]) => [k, $parsedMapValueType]))$defaultValueExpression';
     }
 
     final dateTimeMatch = RegExp(r'^DateTime\??$').firstMatch(typeNameString);

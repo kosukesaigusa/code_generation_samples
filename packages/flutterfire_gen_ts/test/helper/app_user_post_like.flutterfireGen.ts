@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin'
 import {
     DocumentReference,
     FieldValue,
+    GeoPoint,
     QueryDocumentSnapshot,
     QuerySnapshot,
     WriteResult
@@ -154,8 +155,10 @@ readonly nullableStringWithDefaultValue?: string
 
 readonly likedAt?: Date
 
-  toJson(): Record<string, unknown> {
-  const json: Record<string, unknown> = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+toJson(): Record<string, any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const json: Record<string, any> = {}
   if (this.likedByAppUserId != undefined) {
   json['likedByAppUserId'] = this.likedByAppUserId
 }
@@ -418,37 +421,37 @@ appUserPostId,
 
   /**
    * Adds a appUserPostLike document.
-   * @param CreateAppUserPostLike - The appUserPostLike details to add.
+   * @param createAppUserPostLike - The appUserPostLike details to add.
    */
   async add({
     appUserId,
 appUserPostId,
-    CreateAppUserPostLike
+    createAppUserPostLike
   }: {
     appUserId: string
 appUserPostId: string,
-    CreateAppUserPostLike: CreateAppUserPostLike
+    createAppUserPostLike: CreateAppUserPostLike
   }): Promise<DocumentReference<CreateAppUserPostLike>> {
-    return createAppUserPostLikeCollectionReference({appUserId,appUserPostId}).add(CreateAppUserPostLike)
+    return createAppUserPostLikeCollectionReference({appUserId,appUserPostId}).add(createAppUserPostLike)
   }
 
   /**
    * Sets a appUserPostLike document.
    * @param appUserPostLikeId - The ID of the appUserPostLike document to set.
-   * @param CreateAppUserPostLike - The appUserPostLike details to set.
+   * @param createAppUserPostLike - The appUserPostLike details to set.
    * @param options - Options for the set operation.
    */
   async set({
       appUserId,
 appUserPostId,
       appUserPostLikeId,
-      CreateAppUserPostLike,
+      createAppUserPostLike,
       options
   }: {
       appUserId: string
 appUserPostId: string,
       appUserPostLikeId: string
-      CreateAppUserPostLike: CreateAppUserPostLike
+      createAppUserPostLike: CreateAppUserPostLike
       options?: FirebaseFirestore.SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
@@ -456,37 +459,37 @@ appUserPostId: string,
             appUserId,
 appUserPostId,
             appUserPostLikeId
-          }).set(CreateAppUserPostLike)
+          }).set(createAppUserPostLike)
       } else {
           return createAppUserPostLikeDocumentReference({ 
             appUserId,
 appUserPostId,
             appUserPostLikeId 
-            }).set(CreateAppUserPostLike, options)
+            }).set(createAppUserPostLike, options)
       }
   }
 
   /**
    * Updates a specific appUserPostLike document.
    * @param appUserPostLikeId - The ID of the appUserPostLike document to update.
-   * @param UpdateAppUserPostLike - The details for updating the appUserPostLike.
+   * @param updateAppUserPostLike - The details for updating the appUserPostLike.
    */
   async update({
     appUserId,
 appUserPostId,
     appUserPostLikeId,
-    UpdateAppUserPostLike
+    updateAppUserPostLike
   }: {
     appUserId: string
 appUserPostId: string,
     appUserPostLikeId: string
-    UpdateAppUserPostLike: UpdateAppUserPostLike
+    updateAppUserPostLike: UpdateAppUserPostLike
   }): Promise<WriteResult> {
       return updateAppUserPostLikeDocumentReference({ 
         appUserId,
 appUserPostId,
         appUserPostLikeId 
-      }).update(UpdateAppUserPostLike.toJson())
+      }).update(updateAppUserPostLike.toJson())
   }
 
   /**
