@@ -6,6 +6,8 @@ class JsonConverterConfig {
   ///
   const JsonConverterConfig({
     required this.jsonConverterString,
+    required this.fromJsonString,
+    required this.toJsonString,
     required this.clientTypeString,
     required this.firestoreTypeString,
   });
@@ -14,10 +16,36 @@ class JsonConverterConfig {
   final String jsonConverterString;
 
   ///
+  final String fromJsonString;
+
+  ///
+  final String toJsonString;
+
+  ///
   final String clientTypeString;
 
   ///
   final String firestoreTypeString;
+
+  ///
+  String get fromJsonFunctionName {
+    final input = '${jsonConverterString}FromJson';
+    final result = input.replaceAll(RegExp('^_?[^a-zA-Z0-9]*'), '');
+    return result[0].toLowerCase() + result.substring(1);
+  }
+
+  ///
+  String get toJsonFunctionName {
+    final input = '${jsonConverterString}ToJson';
+    final result = input.replaceAll(RegExp('^_?[^a-zA-Z0-9]*'), '');
+    return result[0].toLowerCase() + result.substring(1);
+  }
+
+  ///
+  String get fromJsonFunction => '$fromJsonFunctionName$fromJsonString';
+
+  ///
+  String get toJsonFunction => '$toJsonFunctionName$toJsonString';
 }
 
 ///

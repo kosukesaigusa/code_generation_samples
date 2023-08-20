@@ -30,7 +30,14 @@ export class ${config.updateClassName} {
 
   ${_parseEffectiveFields()}
 
+  ${_jsonConverterConfigs.map((e) {
+      return '''
+private static ${e.toJsonFunction}
+''';
+    }).join('\n')}
+
   ${ToJsonTemplate(
+      config: config,
       fields: fields,
       defaultValueStrings: visitor.updateDefaultValueStrings,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
@@ -43,14 +50,14 @@ export class ${config.updateClassName} {
   }
 
   String _parseConstructor() {
-    if (effectiveEntries.isEmpty) {
+    if (_effectiveEntries.isEmpty) {
       return 'constructor() {}';
     }
     return '''
 constructor({
-    ${effectiveEntries.map((entry) => '${entry.key},').join('\n')}
+    ${_effectiveEntries.map((entry) => '${entry.key},').join('\n')}
   }: {
-    ${effectiveEntries.map((entry) {
+    ${_effectiveEntries.map((entry) {
       return toTypeScriptFieldDefinitionString(
         dartTypeNameString: entry.value.ensureUndefinedable(),
         dartFieldNameString: entry.key,
@@ -65,7 +72,7 @@ constructor({
   }
 
   String _parseEffectiveFields() {
-    return effectiveEntries.map((entry) {
+    return _effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
       final isFieldValueAllowed =
@@ -80,18 +87,24 @@ constructor({
   }
 
   String _parseEffectiveEntries() {
-    return effectiveEntries.map((entry) {
+    return _effectiveEntries.map((entry) {
       final fieldNameString = entry.key;
       return 'this.$fieldNameString = $fieldNameString';
     }).join('\n');
   }
 
   ///
-  Iterable<MapEntry<String, String>> get effectiveEntries =>
+  Iterable<MapEntry<String, String>> get _effectiveEntries =>
       fields.entries.where(
         (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
             .contains(
           entry.key,
         ),
       );
+
+  List<JsonConverterConfig> get _jsonConverterConfigs => fields.entries
+      .map((entry) => visitor.jsonConverterConfigs[entry.key])
+      .where((jsonConverterConfig) => jsonConverterConfig != null)
+      .whereType<JsonConverterConfig>()
+      .toList();
 }

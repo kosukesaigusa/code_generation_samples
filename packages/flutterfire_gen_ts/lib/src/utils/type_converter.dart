@@ -123,6 +123,7 @@ String toTypeScriptDefaultValueString({
   // Map 型の処理
   if (typeNameString.startsWith('Map<') ||
       typeNameString.startsWith('Record<')) {
+    // TODO: 全部空の map になるので正しくない。
     return '{}';
   }
 
@@ -144,8 +145,11 @@ String toTypeScriptDefaultValueString({
         'new ',
       );
     default:
-      print('🔴 Cannot convert the Dart default value '
-          '($typeNameString $dartDefaultValueString) to TypeScript.');
+      print(
+        '🔴 Cannot convert the Dart default value to TypeScript\n'
+        'Type: $typeNameString\n'
+        'Default value: $dartDefaultValueString',
+      );
       return '';
   }
 }

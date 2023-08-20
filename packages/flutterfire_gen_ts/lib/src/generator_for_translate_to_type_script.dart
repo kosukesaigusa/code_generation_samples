@@ -3,14 +3,14 @@ import 'package:build/build.dart';
 import 'package:flutterfire_gen_ts_annotation/flutterfire_gen_ts_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'custom_typescript_document_visitor.dart';
+import 'translate_to_typescript_document_visitor.dart';
 import 'utils/type_converter.dart';
 
-/// A generator for [CustomTypeScript] annotation.
-class GeneratorForCustomTypeScript
-    extends GeneratorForAnnotation<CustomTypeScript> {
-  /// A [CustomTypeScriptVisitor].
-  final visitor = CustomTypeScriptVisitor();
+/// A generator for [TranslateToTypeScript] annotation.
+class GeneratorForTranslateToTypeScript
+    extends GeneratorForAnnotation<TranslateToTypeScript> {
+  /// A [TranslateToTypeScriptVisitor].
+  final visitor = TranslateToTypeScriptVisitor();
 
   @override
   String generateForAnnotatedElement(
@@ -20,7 +20,7 @@ class GeneratorForCustomTypeScript
   ) {
     element.visitChildren(visitor);
 
-    const matcher = TypeChecker.fromRuntime(CustomTypeScript);
+    const matcher = TypeChecker.fromRuntime(TranslateToTypeScript);
     final firestoreDocumentAnnotation = element.metadata.where((meta) {
       final obj = meta.computeConstantValue();
       if (obj == null) {
@@ -31,7 +31,7 @@ class GeneratorForCustomTypeScript
 
     if (firestoreDocumentAnnotation == null) {
       throw InvalidGenerationSourceError(
-        'No @CustomTypeScript annotation is found. '
+        'No @TranslateToTypeScript annotation is found. '
         'Failing element: ${element.name}',
         element: element,
       );
@@ -79,7 +79,7 @@ export class $_className {
     required String source,
   }) {
     final match =
-        RegExp(CustomTypeScript.isEnumRegExpSource).firstMatch(source);
+        RegExp(TranslateToTypeScript.isEnumRegExpSource).firstMatch(source);
     if (match == null) {
       return false;
     }

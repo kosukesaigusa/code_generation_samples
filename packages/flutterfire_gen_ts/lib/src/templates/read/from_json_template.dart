@@ -72,17 +72,23 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
           )}'
         : '';
 
-    // TODO: jsonConverter は使えないはずなのでいったんコメントアウト
-    // if (jsonConverterConfig != null) {
-    //   final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
-    //       "fromJson(json['$fieldNameString']"
-    //       ' as ${jsonConverterConfig.firestoreTypeString})';
-    //   if (defaultValueString != null) {
-    //     return "json['$fieldNameString'] == null ? $defaultValueString : $fromJsonString";
-    //   } else {
-    //     return fromJsonString;
-    //   }
-    // }
+    if (jsonConverterConfig != null) {
+      final (typeScriptTypeNameString, _) =
+          returnsTypeScriptTypeStringAndUndefinedAllowed(
+        jsonConverterConfig.firestoreTypeString,
+      );
+      final fromJsonString = '${config.readClassName}.'
+          '${jsonConverterConfig.fromJsonFunctionName}'
+          "(json['$fieldNameString'] as $typeScriptTypeNameString)";
+
+      if (defaultValueString != null) {
+        return "json['$fieldNameString'] == undefined "
+            '? $defaultValueString : '
+            '$fromJsonString';
+      } else {
+        return fromJsonString;
+      }
+    }
 
     final effectiveParsedKey =
         isFirstLoop ? "json['$fieldNameString']" : parsedKey;
@@ -119,30 +125,8 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
     // TODO: 修正する
     final nullableMapMatch =
         RegExp(r'^Map<String, (.*)>\?$').firstMatch(typeNameString);
-    // if (nullableMapMatch != null) {
-    //   final mapValueType = nullableMapMatch.group(1)!;
-    //   final parsedMapValueType = _parseType(
-    //     fieldNameString,
-    //     mapValueType,
-    //     defaultValueString: defaultValueString,
-    //     isFirstLoop: false,
-    //     parsedKey: 'v',
-    //   );
-    //   return '($effectiveParsedKey ? Object.fromEntries(Object.entries($effectiveParsedKey as Record<string, Record<string, string>>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([k, v]) => [k, v] as [string, string]))])) : {})$defaultValueExpression';
-    // }
-
     final mapMatch = RegExp(r'^Map<String, (.*)>$').firstMatch(typeNameString);
-    // if (mapMatch != null) {
-    //   final mapValueType = mapMatch.group(1)!;
-    //   final parsedMapValueType = _parseType(
-    //     fieldNameString,
-    //     mapValueType,
-    //     defaultValueString: defaultValueString,
-    //     isFirstLoop: false,
-    //     parsedKey: 'v',
-    //   );
-    //   return 'Object.fromEntries(Object.entries($effectiveParsedKey as Record<string, Record<string, string>>).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([k, v]) => [k, v] as [string, string]))]))$defaultValueExpression';
-    // }
+
     if (nullableMapMatch != null || mapMatch != null) {
       final mapValueType = (nullableMapMatch?.group(1) ?? mapMatch?.group(1))!;
       final parsedMapValueType = _parseType(

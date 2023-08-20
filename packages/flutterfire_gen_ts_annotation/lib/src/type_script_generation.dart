@@ -1,5 +1,0 @@
-///
-class GenerateCustomTypeScript {
-  ///
-  const GenerateCustomTypeScript();
-}

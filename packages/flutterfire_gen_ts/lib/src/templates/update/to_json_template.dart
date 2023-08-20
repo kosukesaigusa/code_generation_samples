@@ -3,17 +3,22 @@
 import 'package:meta/meta.dart';
 
 import '../../config.dart';
+import '../../utils/type_converter.dart';
 
 ///
 class ToJsonTemplate {
   ///
   const ToJsonTemplate({
+    required this.config,
     required this.fields,
     required this.defaultValueStrings,
     required this.fieldValueAllowedFields,
     required this.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
     required this.jsonConverterConfigs,
   });
+
+  ///
+  final FirestoreDocumentConfig config;
 
   ///
   final Map<String, String> fields;
@@ -80,16 +85,45 @@ toJson(): Record<string, any> {
     if (isAlwaysUseFieldValueServerTimestampWhenUpdating) {
       return "json['$fieldNameString'] = FieldValue.serverTimestamp()";
     }
-    // TODO: JsonConverter 対応はできていない
-    // if (jsonConverterConfig != null) {
-    //   if (hasDefaultValue) {
-    //     return '$fieldNameString: $fieldNameString == null '
-    //         '? $defaultValueString '
-    //         ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
-    //   }
-    //   return 'if ($fieldNameString != undefined) $fieldNameString: ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
-    // }
-    // NOTE: FieldValue 対応はない
+    if (jsonConverterConfig != null) {
+      final toJsonString = '${config.updateClassName}.'
+          '${jsonConverterConfig.toJsonFunctionName}(this.$fieldNameString)';
+
+      if (hasDefaultValue) {
+        // TODO: ここは未対応。
+        if (isFieldValueAllowed) {
+          throw UnimplementedError();
+        } else {
+          return '''
+if (this.$fieldNameString !== undefined) {
+  json['$fieldNameString'] = $toJsonString
+} else {
+  json['$fieldNameString'] = ${toTypeScriptDefaultValueString(
+            dartTypeNameString: jsonConverterConfig.firestoreTypeString,
+            dartDefaultValueString: defaultValueString!,
+          )}
+}
+''';
+        }
+      } else {
+        if (isFieldValueAllowed) {
+          return '''
+if (this.$fieldNameString != undefined) {
+  json['$fieldNameString'] = this.$fieldNameString instanceof FieldValue
+      ? this.$fieldNameString
+      : $toJsonString
+}
+''';
+        } else {
+          return '''
+if (this.$fieldNameString != undefined) {
+  json['$fieldNameString'] = $toJsonString
+}
+''';
+        }
+      }
+    }
+    // TODO: FieldValue 対応もできるようにするべき
     if (hasDefaultValue) {
       return "json['$fieldNameString'] = $defaultValueString";
     }

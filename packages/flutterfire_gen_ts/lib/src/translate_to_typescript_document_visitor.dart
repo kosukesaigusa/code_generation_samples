@@ -1,12 +1,12 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 
-/// A [SimpleElementVisitor] to visit [CustomTypeScript] annotated class.
-class CustomTypeScriptVisitor extends SimpleElementVisitor<void> {
-  /// A name of visited [CustomTypeScript] annotated class.
+/// A [SimpleElementVisitor] to visit [TranslateToTypeScript] annotated class.
+class TranslateToTypeScriptVisitor extends SimpleElementVisitor<void> {
+  /// A name of visited [TranslateToTypeScript] annotated class.
   String className = '';
 
-  /// Fields of visited [CustomTypeScript] annotated class.
+  /// Fields of visited [TranslateToTypeScript] annotated class.
   final Map<String, Map<String, String>> fieldsByClassName = {};
 
   @override

@@ -2,6 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
+import 'package:flutterfire_gen_ts_annotation/flutterfire_gen_ts_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
@@ -76,15 +77,18 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   void _parseAnnotations(FieldElement element) {
     const defaultTypeChecker = TypeChecker.fromRuntime(Default);
     const jsonConverterTypeChecker = TypeChecker.fromRuntime(JsonConverter);
+    const translateJsonConverterToTypeScriptTypeChecker =
+        TypeChecker.fromRuntime(TranslateJsonConverterToTypeScript);
     const allowFieldValueTypeChecker = TypeChecker.fromRuntime(AllowFieldValue);
     const alwaysUseFieldValueServerTimestampWhenCreatingTypeChecker =
         TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenCreating);
     const alwaysUseFieldValueServerTimestampWhenUpdatingTypeChecker =
         TypeChecker.fromRuntime(AlwaysUseFieldValueServerTimestampWhenUpdating);
 
+    final fieldName = element.name;
     final metadata = element.metadata;
+
     for (final meta in metadata) {
-      final fieldName = element.name;
       final source = meta.toSource();
       final object = meta.computeConstantValue()!;
       final objectType = object.type!;
@@ -96,6 +100,24 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         );
       }
       if (jsonConverterTypeChecker.isAssignableFromType(objectType)) {
+        final translateJsonConverterMeta = metadata.firstWhere(
+          (meta) => translateJsonConverterToTypeScriptTypeChecker
+              .isAssignableFromType(meta.computeConstantValue()!.type!),
+          orElse: () => throw InvalidGenerationSourceError(
+            '🔴 No @TranslateJsonConverterToTypeScript annotation is found',
+          ),
+        );
+
+        final fromJsonString = translateJsonConverterMeta
+            .computeConstantValue()!
+            .getField('fromJson')!
+            .toStringValue()!;
+
+        final toJsonString = translateJsonConverterMeta
+            .computeConstantValue()!
+            .getField('toJson')!
+            .toStringValue()!;
+
         final interfaceTypes = (objectType.element! as ClassElement)
             .allSupertypes
             .where((t) => jsonConverterTypeChecker.isExactlyType(t));
@@ -105,6 +127,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
           final firestoreType = typeArguments[1];
           parseJsonConverterAnnotation(
             fieldName: fieldName,
+            typeScriptFromJsonString: fromJsonString,
+            typeScriptToJsonString: toJsonString,
             source: source,
             clientType: clientType,
             firestoreType: firestoreType,
@@ -162,6 +186,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   @visibleForTesting
   void parseJsonConverterAnnotation({
     required String fieldName,
+    required String typeScriptFromJsonString,
+    required String typeScriptToJsonString,
     required String source,
     required DartType clientType,
     required DartType firestoreType,
@@ -171,6 +197,8 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
     if (match != null) {
       jsonConverterConfigs[fieldName] = JsonConverterConfig(
         jsonConverterString: match.group(1)!,
+        fromJsonString: typeScriptFromJsonString,
+        toJsonString: typeScriptToJsonString,
         clientTypeString: clientType.getDisplayString(withNullability: true),
         firestoreTypeString:
             firestoreType.getDisplayString(withNullability: true),

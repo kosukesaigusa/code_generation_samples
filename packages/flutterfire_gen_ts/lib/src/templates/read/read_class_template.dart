@@ -60,6 +60,12 @@ export class ${config.readClassName} {
       )}';
     }).join('\n\n')}
 
+  ${_jsonConverterConfigs.map((e) {
+      return '''
+private static ${e.fromJsonFunction}
+''';
+    }).join('\n')}
+
   ${FromJsonTemplate(
       config: config,
       fields: fields,
@@ -71,4 +77,10 @@ export class ${config.readClassName} {
 }
 ''';
   }
+
+  List<JsonConverterConfig> get _jsonConverterConfigs => fields.entries
+      .map((entry) => visitor.jsonConverterConfigs[entry.key])
+      .where((jsonConverterConfig) => jsonConverterConfig != null)
+      .whereType<JsonConverterConfig>()
+      .toList();
 }

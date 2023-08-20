@@ -3,17 +3,22 @@
 import 'package:meta/meta.dart';
 
 import '../../config.dart';
+import '../../utils/type_converter.dart';
 
 ///
 class ToJsonTemplate {
   ///
   const ToJsonTemplate({
+    required this.config,
     required this.fields,
     required this.defaultValueStrings,
     required this.fieldValueAllowedFields,
     required this.alwaysUseFieldValueServerTimestampWhenCreatingFields,
     required this.jsonConverterConfigs,
   });
+
+  ///
+  final FirestoreDocumentConfig config;
 
   ///
   final Map<String, String> fields;
@@ -80,16 +85,43 @@ toJson(): Record<string, unknown> {
     if (isAlwaysUseFieldValueServerTimestampWhenCreating) {
       return "'$fieldNameString': FieldValue.serverTimestamp(),";
     }
-    // TODO: JsonConverter 対応はできていない
-    // if (jsonConverterConfig != null) {
-    //   if (hasDefaultValue && isNullableType) {
-    //     return '$fieldNameString: $fieldNameString == null '
-    //         '? $defaultValueString '
-    //         ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
-    //   }
-    //   return "'$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString),";
-    // }
+
+    if (jsonConverterConfig != null) {
+      final toJsonString = '${config.createClassName}.'
+          '${jsonConverterConfig.toJsonFunctionName}(this.$fieldNameString)';
+
+      if (hasDefaultValue && isNullableType) {
+        // TODO: ここは未対応。
+        if (isFieldValueAllowed) {
+          throw UnimplementedError();
+        } else {
+          return '$fieldNameString: this.$fieldNameString === undefined '
+              '? ${toTypeScriptDefaultValueString(
+            dartTypeNameString: jsonConverterConfig.firestoreTypeString,
+            dartDefaultValueString: defaultValueString!,
+          )} '
+              ': $toJsonString,';
+        }
+      }
+      if (isFieldValueAllowed) {
+        return '''
+tokenAndDevices:
+  this.$fieldNameString instanceof FieldValue
+      ? this.$fieldNameString
+      : $toJsonString,
+''';
+      } else {
+        return '''
+tokenAndDevices:
+  this.$fieldNameString instanceof FieldValue
+      ? this.$fieldNameString
+      : $toJsonString,
+''';
+      }
+    }
+
     // NOTE: FieldValue 対応はない
+    // TODO: ↑ 本当はある可能性があるかも？ FieldValue.serverTimestamp() など？
     if (isNullableType && hasDefaultValue) {
       return '$fieldNameString: this.$fieldNameString ?? $defaultValueString,';
     } else {
