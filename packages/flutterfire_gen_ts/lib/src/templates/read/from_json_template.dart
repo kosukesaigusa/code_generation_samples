@@ -83,7 +83,10 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
 
       if (defaultValueString != null) {
         return "json['$fieldNameString'] == undefined "
-            '? $defaultValueString : '
+            '? ${toTypeScriptDefaultValueString(
+          dartTypeNameString: typeNameString,
+          dartDefaultValueString: defaultValueString,
+        )}: '
             '$fromJsonString';
       } else {
         return fromJsonString;

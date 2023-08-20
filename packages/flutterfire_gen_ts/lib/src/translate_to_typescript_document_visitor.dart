@@ -19,6 +19,7 @@ class TranslateToTypeScriptVisitor extends SimpleElementVisitor<void> {
   void visitFieldElement(FieldElement element) {
     final enclosingElementName = element.enclosingElement.name;
     if (enclosingElementName == null) {
+      print('🔴 No enclosing element is found for element: $element.');
       return;
     }
     if (fieldsByClassName.containsKey(enclosingElementName)) {

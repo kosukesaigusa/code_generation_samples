@@ -20,8 +20,12 @@ class GeneratorForTranslateToTypeScript
   ) {
     element.visitChildren(visitor);
 
+    final className = visitor.className;
+    final fieldsByClassName = visitor.fieldsByClassName;
+    final fields = fieldsByClassName[className] ?? {};
+
     const matcher = TypeChecker.fromRuntime(TranslateToTypeScript);
-    final firestoreDocumentAnnotation = element.metadata.where((meta) {
+    final translateToTypeScriptAnnotation = element.metadata.where((meta) {
       final obj = meta.computeConstantValue();
       if (obj == null) {
         return false;
@@ -29,7 +33,7 @@ class GeneratorForTranslateToTypeScript
       return matcher.isExactlyType(obj.type!);
     }).firstOrNull;
 
-    if (firestoreDocumentAnnotation == null) {
+    if (translateToTypeScriptAnnotation == null) {
       throw InvalidGenerationSourceError(
         'No @TranslateToTypeScript annotation is found. '
         'Failing element: ${element.name}',
@@ -37,33 +41,33 @@ class GeneratorForTranslateToTypeScript
       );
     }
 
-    final source = firestoreDocumentAnnotation.toSource();
+    final source = translateToTypeScriptAnnotation.toSource();
 
     final isEnum = _isEnum(element: element, source: source);
 
     if (isEnum) {
       return '''
-export type $_className = ${_enumEffectiveEntries(_fields).map((entry) => "'${entry.key}'").join(' | ')}
+export type $className = ${_enumEffectiveEntries(fields).map((entry) => "'${entry.key}'").join(' | ')}
 ''';
-    } else if (_fields.isEmpty) {
-      return 'export class $_className {}';
+    } else if (fields.isEmpty) {
+      return 'export class $className {}';
     } else {
       return '''
-export class $_className {
+export class $className {
   constructor({
-    ${_fields.entries.map((entry) => '${entry.key},').join('\n')}
+    ${fields.entries.map((entry) => '${entry.key},').join('\n')}
   }: {
-    ${_fields.entries.map((entry) {
+    ${fields.entries.map((entry) {
         return toTypeScriptFieldDefinitionString(
           dartTypeNameString: entry.value,
           dartFieldNameString: entry.key,
         );
       }).join('\n')}
   }) {
-    ${_fields.entries.map((entry) => 'this.${entry.key} = ${entry.key}').join('\n')}
+    ${fields.entries.map((entry) => 'this.${entry.key} = ${entry.key}').join('\n')}
   }
 
-  ${_fields.entries.map((entry) {
+  ${fields.entries.map((entry) {
         return 'readonly ${toTypeScriptFieldDefinitionString(
           dartTypeNameString: entry.value,
           dartFieldNameString: entry.key,
@@ -85,13 +89,6 @@ export class $_className {
     }
     return match.group(1) == 'true';
   }
-
-  String get _className => visitor.className;
-
-  Map<String, Map<String, String>> get _fieldsByClassName =>
-      visitor.fieldsByClassName;
-
-  Map<String, String> get _fields => _fieldsByClassName[_className] ?? {};
 
   Iterable<MapEntry<String, String>> _enumEffectiveEntries(
     Map<String, String> fields,

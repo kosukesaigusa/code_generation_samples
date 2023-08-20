@@ -111,12 +111,7 @@ tokenAndDevices:
       : $toJsonString,
 ''';
       } else {
-        return '''
-tokenAndDevices:
-  this.$fieldNameString instanceof FieldValue
-      ? this.$fieldNameString
-      : $toJsonString,
-''';
+        return 'tokenAndDevices: $toJsonString,';
       }
     }
 

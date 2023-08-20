@@ -36,6 +36,9 @@ String toTypeScriptFieldDefinitionString({
   // Dart の List<T> の文字列を表す正規表現
   final listTypeRegExp = RegExp(r'^List<(.*)>$');
 
+  // Dart の Set<T> の文字列を表す正規表現
+  final setTypeRegExp = RegExp(r'^Set<(.*)>$');
+
   if (typeNameString == 'dynamic') {
     return ('unknown', isUndefinedAllowed);
   } else if (typeNameString == 'bool') {
@@ -59,6 +62,18 @@ String toTypeScriptFieldDefinitionString({
       return ('($nestedTypeNameString | undefined)[]', isUndefinedAllowed);
     } else {
       return ('$nestedTypeNameString[]', isUndefinedAllowed);
+    }
+  } else if (typeNameString == 'Set') {
+    return ('Set<unknown>', isUndefinedAllowed);
+  } else if (setTypeRegExp.hasMatch(typeNameString)) {
+    final match = setTypeRegExp.firstMatch(typeNameString);
+    final typeArg = match!.group(1);
+    final (nestedTypeNameString, nestedIsUndefinedAllowed) =
+        returnsTypeScriptTypeStringAndUndefinedAllowed(typeArg!);
+    if (nestedIsUndefinedAllowed) {
+      return ('Set<$nestedTypeNameString | undefined>', isUndefinedAllowed);
+    } else {
+      return ('Set<$nestedTypeNameString>', isUndefinedAllowed);
     }
   } else if (typeNameString == 'Map') {
     return ('Record<string, unknown>', isUndefinedAllowed);
@@ -125,6 +140,12 @@ String toTypeScriptDefaultValueString({
       typeNameString.startsWith('Record<')) {
     // TODO: 全部空の map になるので正しくない。
     return '{}';
+  }
+
+  // Set 型の処理
+  if (typeNameString.startsWith('Set<') || typeNameString.endsWith('{}')) {
+    // TOOD: 本当は正規表現で...
+    return 'new Set()';
   }
 
   switch (typeNameString) {
