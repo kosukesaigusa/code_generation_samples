@@ -144,8 +144,8 @@ String toTypeScriptDefaultValueString({
         'new ',
       );
     default:
-      // その他の型に対してのエラー処理
-      print('🚧 変換エラー $typeNameString $dartDefaultValueString');
+      print('🔴 Cannot convert the Dart default value '
+          '($typeNameString $dartDefaultValueString) to TypeScript.');
       return '';
   }
 }

@@ -286,6 +286,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1-dev.1"
+  flutterfire_gen_ts_annotation:
+    dependency: transitive
+    description:
+      path: "../../flutterfire_gen_ts_annotation"
+      relative: true
+    source: path
+    version: "0.0.1-dev.1"
   frontend_server_client:
     dependency: transitive
     description:

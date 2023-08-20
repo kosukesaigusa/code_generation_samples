@@ -15,7 +15,8 @@ import 'templates/refs_template.dart';
 import 'templates/update/update_class_template.dart';
 
 /// A generator for [FirestoreDocument] annotation.
-class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
+class GeneratorForFirestoreDocument
+    extends GeneratorForAnnotation<FirestoreDocument> {
   /// A [FirestoreDocumentVisitor].
   final visitor = FirestoreDocumentVisitor();
 

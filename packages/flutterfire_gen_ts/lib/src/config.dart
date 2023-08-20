@@ -1,4 +1,4 @@
-import 'flutterfire_gen_ts.dart';
+import 'generator_for_firestore_document.dart';
 import 'utils/string.dart';
 
 ///
