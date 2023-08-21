@@ -105,13 +105,13 @@ toJson(): Record<string, unknown> {
       }
       if (isFieldValueAllowed) {
         return '''
-tokenAndDevices:
+$fieldNameString:
   this.$fieldNameString instanceof FieldValue
       ? this.$fieldNameString
       : $toJsonString,
 ''';
       } else {
-        return 'tokenAndDevices: $toJsonString,';
+        return '$fieldNameString: $toJsonString,';
       }
     }
 

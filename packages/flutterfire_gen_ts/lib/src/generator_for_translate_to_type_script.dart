@@ -46,9 +46,15 @@ class GeneratorForTranslateToTypeScript
     final isEnum = _isEnum(element: element, source: source);
 
     if (isEnum) {
-      return '''
-export type $className = ${_enumEffectiveEntries(fields).map((entry) => "'${entry.key}'").join(' | ')}
+      final enumEffectiveEntries =
+          _enumEffectiveEntries(className: className, fields: fields);
+      if (enumEffectiveEntries.isNotEmpty) {
+        return '''
+export type $className = ${enumEffectiveEntries.map((entry) => "'${entry.key}'").join(' | ')}
 ''';
+      } else {
+        return '';
+      }
     } else if (fields.isEmpty) {
       return 'export class $className {}';
     } else {
@@ -90,8 +96,9 @@ export class $className {
     return match.group(1) == 'true';
   }
 
-  Iterable<MapEntry<String, String>> _enumEffectiveEntries(
-    Map<String, String> fields,
-  ) =>
-      fields.entries.where((entry) => entry.key != 'values');
+  Iterable<MapEntry<String, String>> _enumEffectiveEntries({
+    required String className,
+    required Map<String, String> fields,
+  }) =>
+      fields.entries.where((entry) => entry.value == className);
 }
