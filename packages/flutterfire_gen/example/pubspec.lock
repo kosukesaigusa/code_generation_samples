@@ -310,14 +310,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1-dev.8"
+    version: "0.0.1-dev.9"
   flutterfire_gen_annotation:
     dependency: "direct main"
     description:
       path: "../../flutterfire_gen_annotation"
       relative: true
     source: path
-    version: "0.1.0-dev.3"
+    version: "0.1.0-dev.4"
   flutterfire_gen_utils:
     dependency: "direct main"
     description:

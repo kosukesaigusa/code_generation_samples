@@ -1,3 +1,7 @@
+## 0.0.1-dev.9
+
+* Enable to use `JsonPostProcessor` annotation.
+
 ## 0.0.1-dev.8
 
 * Fix create and update class template.
