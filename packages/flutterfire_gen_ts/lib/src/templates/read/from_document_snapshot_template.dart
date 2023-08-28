@@ -14,7 +14,7 @@ class FromDocumentSnapshotTemplate {
   String toString() {
     return '''
 static fromDocumentSnapshot(
-    ds: FirebaseFirestore.DocumentSnapshot
+    ds: DocumentSnapshot
   ): ${config.readClassName} {
       const data = ds.data()!
       const cleanedData: Record<string, unknown> = {}

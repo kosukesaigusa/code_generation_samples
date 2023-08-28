@@ -30,7 +30,7 @@ class RefsTemplate {
  * Provides a reference to the ${config.collectionName} collection for ${referenceClassType.toIng()}.
  */
 ''')
-      ..writeln(_collectionReference(referenceClassType));
+      ..write(_collectionReference(referenceClassType));
     if (config.firestorePathSegments.length == 1) {
       buffer.writeln('db');
     } else {
@@ -91,18 +91,18 @@ export const ${_documentReferenceName(referenceClassType)} = ({
   ${config.documentName}Id
 }: {
   ${config.documentName}Id: string
-}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
+}): DocumentReference<${_className(referenceClassType)}> =>
     ${_collectionReferenceName(referenceClassType)}.doc(${config.documentName}Id);
 ''';
     }
     return '''
 export const ${_documentReferenceName(referenceClassType)} = ({
-  ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join('\n')},
+  ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join(',\n')},
   ${config.documentName}Id,
 }: {
   ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => '$documentId: string').join('\n')},
   ${config.documentName}Id: string
-}): FirebaseFirestore.DocumentReference<${_className(referenceClassType)}> =>
+}): DocumentReference<${_className(referenceClassType)}> =>
     ${_collectionReferenceName(referenceClassType)}({
       ${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => documentId).join(',\n')}
     }).doc(${config.documentName}Id);
@@ -127,7 +127,7 @@ export const ${_documentReferenceName(referenceClassType)} = ({
       case ReferenceClassType.read:
         return '''
 .withConverter<${_className(referenceClassType)}>({
-  fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ${_className(referenceClassType)} => {
+  fromFirestore: (ds: DocumentSnapshot): ${_className(referenceClassType)} => {
     return ${_className(referenceClassType)}.fromDocumentSnapshot(ds)
   },
   toFirestore: () => {
@@ -142,7 +142,7 @@ export const ${_documentReferenceName(referenceClassType)} = ({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for ${_className(referenceClassType)}`)
   },
-  toFirestore: (obj: ${_className(referenceClassType)}): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: ${_className(referenceClassType)}): DocumentData => {
       return obj.toJson()
   }
 })
@@ -153,7 +153,7 @@ export const ${_documentReferenceName(referenceClassType)} = ({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for ${_className(referenceClassType)}`)
   },
-  toFirestore: (): FirebaseFirestore.DocumentData => {
+  toFirestore: (): DocumentData => {
     throw new Error(`toFirestore is not implemented for ${_className(referenceClassType)}`)
   }
 })
@@ -206,5 +206,5 @@ export const ${_documentReferenceName(referenceClassType)} = ({
   String _collectionReferenceTypeAnnotation(
     ReferenceClassType referenceClassType,
   ) =>
-      'FirebaseFirestore.CollectionReference<${_className(referenceClassType)}>';
+      'CollectionReference<${_className(referenceClassType)}>';
 }

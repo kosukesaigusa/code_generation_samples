@@ -42,15 +42,10 @@ class _FlutterfireGenBuilder implements Builder {
     await buildStep.writeAsString(
       outputId,
       '''
-import * as admin from 'firebase-admin'
-import {
-    DocumentReference,
-    FieldValue,
-    GeoPoint,
-    QueryDocumentSnapshot,
-    QuerySnapshot,
-    WriteResult
-} from 'firebase-admin/firestore'
+${_import([
+            translateToTypeScriptCodeBuffer.toString(),
+            firestoreGeneratedCode,
+          ])}
 
 $translateToTypeScriptCodeBuffer
 
@@ -91,4 +86,38 @@ $firestoreGeneratedCode
       }),
     );
   }
+
+  String _import(List<String> codes) {
+    final modules = _extractModulesFromFirebaseAdminFirestore(codes);
+    return '''
+import * as admin from 'firebase-admin'
+import {
+    ${modules.map((e) => e).join(',\n')}
+} from 'firebase-admin/firestore'
+''';
+  }
+
+  /// 入力された文字列から、[_importModulesFromFirebaseAdminFirestore] の各要素の
+  /// モジュール名のいずれかが含まれているものを抽出する。
+  List<String> _extractModulesFromFirebaseAdminFirestore(List<String> codes) =>
+      _importModulesFromFirebaseAdminFirestore
+          .where(
+            (module) => codes.any((string) => string.contains(module)),
+          )
+          .toList();
+
+  static const _importModulesFromFirebaseAdminFirestore = [
+    'CollectionReference',
+    'DocumentData',
+    'DocumentReference',
+    'DocumentSnapshot',
+    'FieldValue',
+    'GeoPoint',
+    'Query',
+    'QueryDocumentSnapshot',
+    'QuerySnapshot',
+    'SetOptions',
+    'Timestamp',
+    'WriteResult',
+  ];
 }

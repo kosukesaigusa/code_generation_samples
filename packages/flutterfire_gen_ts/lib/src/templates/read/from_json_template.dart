@@ -145,9 +145,9 @@ private static fromJson(json: Record<string, unknown>): ${config.readClassName} 
     final dateTimeMatch = RegExp(r'^DateTime\??$').firstMatch(typeNameString);
     if (dateTimeMatch != null) {
       if (typeNameString.endsWith('?')) {
-        return '($effectiveParsedKey as FirebaseFirestore.Timestamp | undefined)?.toDate()';
+        return '($effectiveParsedKey as Timestamp | undefined)?.toDate()';
       } else {
-        return '($effectiveParsedKey as FirebaseFirestore.Timestamp).toDate()';
+        return '($effectiveParsedKey as Timestamp).toDate()';
       }
     }
     final (typeScriptTypeString, isUndefinedAllowed) =

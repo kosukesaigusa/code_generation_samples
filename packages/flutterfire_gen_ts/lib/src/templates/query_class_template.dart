@@ -29,11 +29,11 @@ export class ${config.baseClassName}Query {
   }: {
       ${_parentDocumentIdArgumentTypes()}
       queryBuilder?: (
-          query: FirebaseFirestore.Query<${config.readClassName}>
-      ) => FirebaseFirestore.Query<${config.readClassName}>
+          query: Query<${config.readClassName}>
+      ) => Query<${config.readClassName}>
       compare?: (lhs: ${config.readClassName}, rhs: ${config.readClassName}) => number
   }): Promise<${config.readClassName}[]> {
-      let query: FirebaseFirestore.Query<${config.readClassName}> =
+      let query: Query<${config.readClassName}> =
           ${_collectionReference(ReferenceClassType.read)}
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
@@ -95,7 +95,7 @@ export class ${config.baseClassName}Query {
       ${_parentDocumentIdArgumentTypes()}
       ${config.documentIdFieldName}: string
       ${config.createClassInstanceName}: ${config.createClassName}
-      options?: FirebaseFirestore.SetOptions
+      options?: SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return ${config.createDocumentReferenceName}({
