@@ -1,12 +1,20 @@
 import * as admin from 'firebase-admin'
 import {
-    DocumentReference,
-    FieldValue,
-    GeoPoint,
-    QueryDocumentSnapshot,
-    QuerySnapshot,
-    WriteResult
+    CollectionReference,
+DocumentData,
+DocumentReference,
+DocumentSnapshot,
+FieldValue,
+Query,
+QueryDocumentSnapshot,
+QuerySnapshot,
+SetOptions,
+Timestamp,
+WriteResult
 } from 'firebase-admin/firestore'
+
+
+
 
 export class ReadReadStatus {
   constructor ({
@@ -29,17 +37,19 @@ export class ReadReadStatus {
 
   readonly lastReadAt?: Date
 
+  
+
   private static fromJson(json: Record<string, unknown>): ReadReadStatus {
     return new ReadReadStatus({
       readStatusId: json['readStatusId'] as string,
       path: json['path'] as string,
-      lastReadAt: (json['lastReadAt'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
+      lastReadAt: (json['lastReadAt'] as Timestamp | undefined)?.toDate(),
     })
   }
 
 
   static fromDocumentSnapshot(
-    ds: FirebaseFirestore.DocumentSnapshot
+    ds: DocumentSnapshot
   ): ReadReadStatus {
       const data = ds.data()!
       const cleanedData: Record<string, unknown> = {}
@@ -60,6 +70,8 @@ export class CreateReadStatus {
 
   
 
+  
+
   toJson(): Record<string, unknown> {
   return {
     'lastReadAt': FieldValue.serverTimestamp(),
@@ -70,6 +82,8 @@ export class CreateReadStatus {
 
 export class UpdateReadStatus {
   constructor() {}
+
+  
 
   
 
@@ -100,11 +114,10 @@ export const readReadStatusCollectionReference = (
 }: {
   chatRoomId: string
 }
-): FirebaseFirestore.CollectionReference<ReadReadStatus>
-
+): CollectionReference<ReadReadStatus>
 => { return db
 .collection('chatRooms').doc(chatRoomId).collection('readStatuses').withConverter<ReadReadStatus>({
-  fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadReadStatus => {
+  fromFirestore: (ds: DocumentSnapshot): ReadReadStatus => {
     return ReadReadStatus.fromDocumentSnapshot(ds)
   },
   toFirestore: () => {
@@ -123,7 +136,7 @@ export const readReadStatusDocumentReference = ({
 }: {
   chatRoomId: string,
   readStatusId: string
-}): FirebaseFirestore.DocumentReference<ReadReadStatus> =>
+}): DocumentReference<ReadReadStatus> =>
     readReadStatusCollectionReference({
       chatRoomId
     }).doc(readStatusId);
@@ -138,14 +151,13 @@ export const createReadStatusCollectionReference = (
 }: {
   chatRoomId: string
 }
-): FirebaseFirestore.CollectionReference<CreateReadStatus>
-
+): CollectionReference<CreateReadStatus>
 => { return db
 .collection('chatRooms').doc(chatRoomId).collection('readStatuses').withConverter<CreateReadStatus>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateReadStatus`)
   },
-  toFirestore: (obj: CreateReadStatus): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: CreateReadStatus): DocumentData => {
       return obj.toJson()
   }
 })
@@ -161,7 +173,7 @@ export const createReadStatusDocumentReference = ({
 }: {
   chatRoomId: string,
   readStatusId: string
-}): FirebaseFirestore.DocumentReference<CreateReadStatus> =>
+}): DocumentReference<CreateReadStatus> =>
     createReadStatusCollectionReference({
       chatRoomId
     }).doc(readStatusId);
@@ -176,14 +188,13 @@ export const updateReadStatusCollectionReference = (
 }: {
   chatRoomId: string
 }
-): FirebaseFirestore.CollectionReference<UpdateReadStatus>
-
+): CollectionReference<UpdateReadStatus>
 => { return db
 .collection('chatRooms').doc(chatRoomId).collection('readStatuses').withConverter<UpdateReadStatus>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateReadStatus`)
   },
-  toFirestore: (obj: UpdateReadStatus): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: UpdateReadStatus): DocumentData => {
       return obj.toJson()
   }
 })
@@ -199,7 +210,7 @@ export const updateReadStatusDocumentReference = ({
 }: {
   chatRoomId: string,
   readStatusId: string
-}): FirebaseFirestore.DocumentReference<UpdateReadStatus> =>
+}): DocumentReference<UpdateReadStatus> =>
     updateReadStatusCollectionReference({
       chatRoomId
     }).doc(readStatusId);
@@ -214,14 +225,13 @@ export const deleteReadStatusCollectionReference = (
 }: {
   chatRoomId: string
 }
-): FirebaseFirestore.CollectionReference<DeleteReadStatus>
-
+): CollectionReference<DeleteReadStatus>
 => { return db
 .collection('chatRooms').doc(chatRoomId).collection('readStatuses').withConverter<DeleteReadStatus>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteReadStatus`)
   },
-  toFirestore: (): FirebaseFirestore.DocumentData => {
+  toFirestore: (): DocumentData => {
     throw new Error(`toFirestore is not implemented for DeleteReadStatus`)
   }
 })
@@ -237,7 +247,7 @@ export const deleteReadStatusDocumentReference = ({
 }: {
   chatRoomId: string,
   readStatusId: string
-}): FirebaseFirestore.DocumentReference<DeleteReadStatus> =>
+}): DocumentReference<DeleteReadStatus> =>
     deleteReadStatusCollectionReference({
       chatRoomId
     }).doc(readStatusId);
@@ -260,11 +270,11 @@ export class ReadStatusQuery {
   }: {
       chatRoomId: string,
       queryBuilder?: (
-          query: FirebaseFirestore.Query<ReadReadStatus>
-      ) => FirebaseFirestore.Query<ReadReadStatus>
+          query: Query<ReadReadStatus>
+      ) => Query<ReadReadStatus>
       compare?: (lhs: ReadReadStatus, rhs: ReadReadStatus) => number
   }): Promise<ReadReadStatus[]> {
-      let query: FirebaseFirestore.Query<ReadReadStatus> =
+      let query: Query<ReadReadStatus> =
           readReadStatusCollectionReference({chatRoomId})
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
@@ -326,7 +336,7 @@ export class ReadStatusQuery {
       chatRoomId: string,
       readStatusId: string
       createReadStatus: CreateReadStatus
-      options?: FirebaseFirestore.SetOptions
+      options?: SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createReadStatusDocumentReference({

@@ -1,12 +1,20 @@
 import * as admin from 'firebase-admin'
 import {
-    DocumentReference,
-    FieldValue,
-    GeoPoint,
-    QueryDocumentSnapshot,
-    QuerySnapshot,
-    WriteResult
+    CollectionReference,
+DocumentData,
+DocumentReference,
+DocumentSnapshot,
+FieldValue,
+Query,
+QueryDocumentSnapshot,
+QuerySnapshot,
+SetOptions,
+Timestamp,
+WriteResult
 } from 'firebase-admin/firestore'
+
+
+
 
 export class ReadAppUserPost {
   constructor ({
@@ -39,19 +47,21 @@ readonly numbers: number[]
 
 readonly updatedAt?: Date
 
+  
+
   private static fromJson(json: Record<string, unknown>): ReadAppUserPost {
     return new ReadAppUserPost({
       appUserPostId: json['appUserPostId'] as string,
       path: json['path'] as string,
       content: (json['content'] as string | undefined) ?? '',
 numbers: (json['numbers'] as unknown[] | undefined)?.map((e) => e as number) ?? [],
-updatedAt: (json['updatedAt'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
+updatedAt: (json['updatedAt'] as Timestamp | undefined)?.toDate(),
     })
   }
 
 
   static fromDocumentSnapshot(
-    ds: FirebaseFirestore.DocumentSnapshot
+    ds: DocumentSnapshot
   ): ReadAppUserPost {
       const data = ds.data()!
       const cleanedData: Record<string, unknown> = {}
@@ -89,6 +99,8 @@ readonly numbers: number[] | FieldValue
 
 readonly updatedAt?: Date
 
+  
+
   toJson(): Record<string, unknown> {
   return {
     content: this.content,
@@ -120,6 +132,8 @@ this.updatedAt = updatedAt
 readonly numbers?: number[] | FieldValue
 
 readonly updatedAt?: Date
+
+  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 toJson(): Record<string, any> {
@@ -157,11 +171,10 @@ export const readAppUserPostCollectionReference = (
 }: {
   appUserId: string
 }
-): FirebaseFirestore.CollectionReference<ReadAppUserPost>
-
+): CollectionReference<ReadAppUserPost>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<ReadAppUserPost>({
-  fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadAppUserPost => {
+  fromFirestore: (ds: DocumentSnapshot): ReadAppUserPost => {
     return ReadAppUserPost.fromDocumentSnapshot(ds)
   },
   toFirestore: () => {
@@ -180,7 +193,7 @@ export const readAppUserPostDocumentReference = ({
 }: {
   appUserId: string,
   appUserPostId: string
-}): FirebaseFirestore.DocumentReference<ReadAppUserPost> =>
+}): DocumentReference<ReadAppUserPost> =>
     readAppUserPostCollectionReference({
       appUserId
     }).doc(appUserPostId);
@@ -195,14 +208,13 @@ export const createAppUserPostCollectionReference = (
 }: {
   appUserId: string
 }
-): FirebaseFirestore.CollectionReference<CreateAppUserPost>
-
+): CollectionReference<CreateAppUserPost>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<CreateAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateAppUserPost`)
   },
-  toFirestore: (obj: CreateAppUserPost): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: CreateAppUserPost): DocumentData => {
       return obj.toJson()
   }
 })
@@ -218,7 +230,7 @@ export const createAppUserPostDocumentReference = ({
 }: {
   appUserId: string,
   appUserPostId: string
-}): FirebaseFirestore.DocumentReference<CreateAppUserPost> =>
+}): DocumentReference<CreateAppUserPost> =>
     createAppUserPostCollectionReference({
       appUserId
     }).doc(appUserPostId);
@@ -233,14 +245,13 @@ export const updateAppUserPostCollectionReference = (
 }: {
   appUserId: string
 }
-): FirebaseFirestore.CollectionReference<UpdateAppUserPost>
-
+): CollectionReference<UpdateAppUserPost>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<UpdateAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateAppUserPost`)
   },
-  toFirestore: (obj: UpdateAppUserPost): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: UpdateAppUserPost): DocumentData => {
       return obj.toJson()
   }
 })
@@ -256,7 +267,7 @@ export const updateAppUserPostDocumentReference = ({
 }: {
   appUserId: string,
   appUserPostId: string
-}): FirebaseFirestore.DocumentReference<UpdateAppUserPost> =>
+}): DocumentReference<UpdateAppUserPost> =>
     updateAppUserPostCollectionReference({
       appUserId
     }).doc(appUserPostId);
@@ -271,14 +282,13 @@ export const deleteAppUserPostCollectionReference = (
 }: {
   appUserId: string
 }
-): FirebaseFirestore.CollectionReference<DeleteAppUserPost>
-
+): CollectionReference<DeleteAppUserPost>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').withConverter<DeleteAppUserPost>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteAppUserPost`)
   },
-  toFirestore: (): FirebaseFirestore.DocumentData => {
+  toFirestore: (): DocumentData => {
     throw new Error(`toFirestore is not implemented for DeleteAppUserPost`)
   }
 })
@@ -294,7 +304,7 @@ export const deleteAppUserPostDocumentReference = ({
 }: {
   appUserId: string,
   appUserPostId: string
-}): FirebaseFirestore.DocumentReference<DeleteAppUserPost> =>
+}): DocumentReference<DeleteAppUserPost> =>
     deleteAppUserPostCollectionReference({
       appUserId
     }).doc(appUserPostId);
@@ -317,11 +327,11 @@ export class AppUserPostQuery {
   }: {
       appUserId: string,
       queryBuilder?: (
-          query: FirebaseFirestore.Query<ReadAppUserPost>
-      ) => FirebaseFirestore.Query<ReadAppUserPost>
+          query: Query<ReadAppUserPost>
+      ) => Query<ReadAppUserPost>
       compare?: (lhs: ReadAppUserPost, rhs: ReadAppUserPost) => number
   }): Promise<ReadAppUserPost[]> {
-      let query: FirebaseFirestore.Query<ReadAppUserPost> =
+      let query: Query<ReadAppUserPost> =
           readAppUserPostCollectionReference({appUserId})
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
@@ -383,7 +393,7 @@ export class AppUserPostQuery {
       appUserId: string,
       appUserPostId: string
       createAppUserPost: CreateAppUserPost
-      options?: FirebaseFirestore.SetOptions
+      options?: SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createAppUserPostDocumentReference({

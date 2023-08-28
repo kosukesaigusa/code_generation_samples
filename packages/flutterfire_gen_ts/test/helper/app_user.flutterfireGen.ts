@@ -1,12 +1,18 @@
 import * as admin from 'firebase-admin'
 import {
-    DocumentReference,
-    FieldValue,
-    GeoPoint,
-    QueryDocumentSnapshot,
-    QuerySnapshot,
-    WriteResult
+    CollectionReference,
+DocumentData,
+DocumentReference,
+DocumentSnapshot,
+Query,
+QueryDocumentSnapshot,
+QuerySnapshot,
+SetOptions,
+WriteResult
 } from 'firebase-admin/firestore'
+
+
+
 
 export class ReadAppUser {
   constructor ({
@@ -34,6 +40,8 @@ this.imageUrl = imageUrl
 
 readonly imageUrl: string
 
+  
+
   private static fromJson(json: Record<string, unknown>): ReadAppUser {
     return new ReadAppUser({
       appUserId: json['appUserId'] as string,
@@ -45,7 +53,7 @@ imageUrl: (json['imageUrl'] as string | undefined) ?? '',
 
 
   static fromDocumentSnapshot(
-    ds: FirebaseFirestore.DocumentSnapshot
+    ds: DocumentSnapshot
   ): ReadAppUser {
       const data = ds.data()!
       const cleanedData: Record<string, unknown> = {}
@@ -78,6 +86,8 @@ this.imageUrl = imageUrl
 
 readonly imageUrl: string
 
+  
+
   toJson(): Record<string, unknown> {
   return {
     name: this.name,
@@ -103,6 +113,8 @@ this.imageUrl = imageUrl
   readonly name?: string
 
 readonly imageUrl?: string
+
+  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 toJson(): Record<string, any> {
@@ -131,10 +143,9 @@ db.settings({ ignoreUndefinedProperties: true })
 /**
  * Provides a reference to the appUsers collection for reading.
  */
-export const readAppUserCollectionReference = 
-db
+export const readAppUserCollectionReference = db
 .collection('appUsers').withConverter<ReadAppUser>({
-  fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadAppUser => {
+  fromFirestore: (ds: DocumentSnapshot): ReadAppUser => {
     return ReadAppUser.fromDocumentSnapshot(ds)
   },
   toFirestore: () => {
@@ -151,20 +162,19 @@ export const readAppUserDocumentReference = ({
   appUserId
 }: {
   appUserId: string
-}): FirebaseFirestore.DocumentReference<ReadAppUser> =>
+}): DocumentReference<ReadAppUser> =>
     readAppUserCollectionReference.doc(appUserId);
 
 
 /**
  * Provides a reference to the appUsers collection for creating.
  */
-export const createAppUserCollectionReference = 
-db
+export const createAppUserCollectionReference = db
 .collection('appUsers').withConverter<CreateAppUser>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateAppUser`)
   },
-  toFirestore: (obj: CreateAppUser): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: CreateAppUser): DocumentData => {
       return obj.toJson()
   }
 })
@@ -178,20 +188,19 @@ export const createAppUserDocumentReference = ({
   appUserId
 }: {
   appUserId: string
-}): FirebaseFirestore.DocumentReference<CreateAppUser> =>
+}): DocumentReference<CreateAppUser> =>
     createAppUserCollectionReference.doc(appUserId);
 
 
 /**
  * Provides a reference to the appUsers collection for updating.
  */
-export const updateAppUserCollectionReference = 
-db
+export const updateAppUserCollectionReference = db
 .collection('appUsers').withConverter<UpdateAppUser>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateAppUser`)
   },
-  toFirestore: (obj: UpdateAppUser): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: UpdateAppUser): DocumentData => {
       return obj.toJson()
   }
 })
@@ -205,20 +214,19 @@ export const updateAppUserDocumentReference = ({
   appUserId
 }: {
   appUserId: string
-}): FirebaseFirestore.DocumentReference<UpdateAppUser> =>
+}): DocumentReference<UpdateAppUser> =>
     updateAppUserCollectionReference.doc(appUserId);
 
 
 /**
  * Provides a reference to the appUsers collection for deleting.
  */
-export const deleteAppUserCollectionReference = 
-db
+export const deleteAppUserCollectionReference = db
 .collection('appUsers').withConverter<DeleteAppUser>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteAppUser`)
   },
-  toFirestore: (): FirebaseFirestore.DocumentData => {
+  toFirestore: (): DocumentData => {
     throw new Error(`toFirestore is not implemented for DeleteAppUser`)
   }
 })
@@ -232,7 +240,7 @@ export const deleteAppUserDocumentReference = ({
   appUserId
 }: {
   appUserId: string
-}): FirebaseFirestore.DocumentReference<DeleteAppUser> =>
+}): DocumentReference<DeleteAppUser> =>
     deleteAppUserCollectionReference.doc(appUserId);
 
 
@@ -253,11 +261,11 @@ export class AppUserQuery {
   }: {
       
       queryBuilder?: (
-          query: FirebaseFirestore.Query<ReadAppUser>
-      ) => FirebaseFirestore.Query<ReadAppUser>
+          query: Query<ReadAppUser>
+      ) => Query<ReadAppUser>
       compare?: (lhs: ReadAppUser, rhs: ReadAppUser) => number
   }): Promise<ReadAppUser[]> {
-      let query: FirebaseFirestore.Query<ReadAppUser> =
+      let query: Query<ReadAppUser> =
           readAppUserCollectionReference
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
@@ -319,7 +327,7 @@ export class AppUserQuery {
       
       appUserId: string
       createAppUser: CreateAppUser
-      options?: FirebaseFirestore.SetOptions
+      options?: SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createAppUserDocumentReference({

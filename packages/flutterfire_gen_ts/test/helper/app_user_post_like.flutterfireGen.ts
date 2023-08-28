@@ -1,12 +1,19 @@
 import * as admin from 'firebase-admin'
 import {
-    DocumentReference,
-    FieldValue,
-    GeoPoint,
-    QueryDocumentSnapshot,
-    QuerySnapshot,
-    WriteResult
+    CollectionReference,
+DocumentData,
+DocumentReference,
+DocumentSnapshot,
+Query,
+QueryDocumentSnapshot,
+QuerySnapshot,
+SetOptions,
+Timestamp,
+WriteResult
 } from 'firebase-admin/firestore'
+
+
+
 
 export class ReadAppUserPostLike {
   constructor ({
@@ -49,6 +56,8 @@ readonly nullableStringWithDefaultValue?: string
 
 readonly likedAt?: Date
 
+  
+
   private static fromJson(json: Record<string, unknown>): ReadAppUserPostLike {
     return new ReadAppUserPostLike({
       appUserPostLikeId: json['appUserPostLikeId'] as string,
@@ -57,13 +66,13 @@ readonly likedAt?: Date
 stringWithDefaultValue: (json['stringWithDefaultValue'] as string | undefined) ?? 'defaultText',
 nullableString: json['nullableString'] as string | undefined,
 nullableStringWithDefaultValue: (json['nullableStringWithDefaultValue'] as string | undefined) ?? 'defaultText',
-likedAt: (json['likedAt'] as FirebaseFirestore.Timestamp | undefined)?.toDate(),
+likedAt: (json['likedAt'] as Timestamp | undefined)?.toDate(),
     })
   }
 
 
   static fromDocumentSnapshot(
-    ds: FirebaseFirestore.DocumentSnapshot
+    ds: DocumentSnapshot
   ): ReadAppUserPostLike {
       const data = ds.data()!
       const cleanedData: Record<string, unknown> = {}
@@ -111,6 +120,8 @@ readonly nullableStringWithDefaultValue?: string
 
 readonly likedAt?: Date
 
+  
+
   toJson(): Record<string, unknown> {
   return {
     likedByAppUserId: this.likedByAppUserId,
@@ -154,6 +165,8 @@ readonly nullableString?: string
 readonly nullableStringWithDefaultValue?: string
 
 readonly likedAt?: Date
+
+  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 toJson(): Record<string, any> {
@@ -199,11 +212,10 @@ appUserPostId
   appUserId: string,
 appUserPostId: string
 }
-): FirebaseFirestore.CollectionReference<ReadAppUserPostLike>
-
+): CollectionReference<ReadAppUserPostLike>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').doc(appUserPostId).collection('appUserPostLikes').withConverter<ReadAppUserPostLike>({
-  fromFirestore: (ds: FirebaseFirestore.DocumentSnapshot): ReadAppUserPostLike => {
+  fromFirestore: (ds: DocumentSnapshot): ReadAppUserPostLike => {
     return ReadAppUserPostLike.fromDocumentSnapshot(ds)
   },
   toFirestore: () => {
@@ -217,14 +229,14 @@ appUserPostId: string
  * @param appUserPostLikeId - The ID of the appUserPostLike document to read.
  */
 export const readAppUserPostLikeDocumentReference = ({
-  appUserId
+  appUserId,
 appUserPostId,
   appUserPostLikeId,
 }: {
   appUserId: string
 appUserPostId: string,
   appUserPostLikeId: string
-}): FirebaseFirestore.DocumentReference<ReadAppUserPostLike> =>
+}): DocumentReference<ReadAppUserPostLike> =>
     readAppUserPostLikeCollectionReference({
       appUserId,
 appUserPostId
@@ -242,14 +254,13 @@ appUserPostId
   appUserId: string,
 appUserPostId: string
 }
-): FirebaseFirestore.CollectionReference<CreateAppUserPostLike>
-
+): CollectionReference<CreateAppUserPostLike>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').doc(appUserPostId).collection('appUserPostLikes').withConverter<CreateAppUserPostLike>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for CreateAppUserPostLike`)
   },
-  toFirestore: (obj: CreateAppUserPostLike): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: CreateAppUserPostLike): DocumentData => {
       return obj.toJson()
   }
 })
@@ -260,14 +271,14 @@ appUserPostId: string
  * @param appUserPostLikeId - The ID of the appUserPostLike document to read.
  */
 export const createAppUserPostLikeDocumentReference = ({
-  appUserId
+  appUserId,
 appUserPostId,
   appUserPostLikeId,
 }: {
   appUserId: string
 appUserPostId: string,
   appUserPostLikeId: string
-}): FirebaseFirestore.DocumentReference<CreateAppUserPostLike> =>
+}): DocumentReference<CreateAppUserPostLike> =>
     createAppUserPostLikeCollectionReference({
       appUserId,
 appUserPostId
@@ -285,14 +296,13 @@ appUserPostId
   appUserId: string,
 appUserPostId: string
 }
-): FirebaseFirestore.CollectionReference<UpdateAppUserPostLike>
-
+): CollectionReference<UpdateAppUserPostLike>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').doc(appUserPostId).collection('appUserPostLikes').withConverter<UpdateAppUserPostLike>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for UpdateAppUserPostLike`)
   },
-  toFirestore: (obj: UpdateAppUserPostLike): FirebaseFirestore.DocumentData => {
+  toFirestore: (obj: UpdateAppUserPostLike): DocumentData => {
       return obj.toJson()
   }
 })
@@ -303,14 +313,14 @@ appUserPostId: string
  * @param appUserPostLikeId - The ID of the appUserPostLike document to read.
  */
 export const updateAppUserPostLikeDocumentReference = ({
-  appUserId
+  appUserId,
 appUserPostId,
   appUserPostLikeId,
 }: {
   appUserId: string
 appUserPostId: string,
   appUserPostLikeId: string
-}): FirebaseFirestore.DocumentReference<UpdateAppUserPostLike> =>
+}): DocumentReference<UpdateAppUserPostLike> =>
     updateAppUserPostLikeCollectionReference({
       appUserId,
 appUserPostId
@@ -328,14 +338,13 @@ appUserPostId
   appUserId: string,
 appUserPostId: string
 }
-): FirebaseFirestore.CollectionReference<DeleteAppUserPostLike>
-
+): CollectionReference<DeleteAppUserPostLike>
 => { return db
 .collection('appUsers').doc(appUserId).collection('appUserPosts').doc(appUserPostId).collection('appUserPostLikes').withConverter<DeleteAppUserPostLike>({
   fromFirestore: () => {
     throw new Error(`fromFirestore is not implemented for DeleteAppUserPostLike`)
   },
-  toFirestore: (): FirebaseFirestore.DocumentData => {
+  toFirestore: (): DocumentData => {
     throw new Error(`toFirestore is not implemented for DeleteAppUserPostLike`)
   }
 })
@@ -346,14 +355,14 @@ appUserPostId: string
  * @param appUserPostLikeId - The ID of the appUserPostLike document to read.
  */
 export const deleteAppUserPostLikeDocumentReference = ({
-  appUserId
+  appUserId,
 appUserPostId,
   appUserPostLikeId,
 }: {
   appUserId: string
 appUserPostId: string,
   appUserPostLikeId: string
-}): FirebaseFirestore.DocumentReference<DeleteAppUserPostLike> =>
+}): DocumentReference<DeleteAppUserPostLike> =>
     deleteAppUserPostLikeCollectionReference({
       appUserId,
 appUserPostId
@@ -379,11 +388,11 @@ appUserPostId,
       appUserId: string
 appUserPostId: string,
       queryBuilder?: (
-          query: FirebaseFirestore.Query<ReadAppUserPostLike>
-      ) => FirebaseFirestore.Query<ReadAppUserPostLike>
+          query: Query<ReadAppUserPostLike>
+      ) => Query<ReadAppUserPostLike>
       compare?: (lhs: ReadAppUserPostLike, rhs: ReadAppUserPostLike) => number
   }): Promise<ReadAppUserPostLike[]> {
-      let query: FirebaseFirestore.Query<ReadAppUserPostLike> =
+      let query: Query<ReadAppUserPostLike> =
           readAppUserPostLikeCollectionReference({appUserId,appUserPostId})
       if (queryBuilder != undefined) {
           query = queryBuilder(query)
@@ -452,7 +461,7 @@ appUserPostId,
 appUserPostId: string,
       appUserPostLikeId: string
       createAppUserPostLike: CreateAppUserPostLike
-      options?: FirebaseFirestore.SetOptions
+      options?: SetOptions
   }): Promise<WriteResult> {
       if (options == undefined) {
           return createAppUserPostLikeDocumentReference({
