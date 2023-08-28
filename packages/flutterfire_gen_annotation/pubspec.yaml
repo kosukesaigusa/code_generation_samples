@@ -1,7 +1,7 @@
 name: flutterfire_gen_annotation
 description: flutterfire_gen_annotation
-version: 0.1.0-dev.3
-homepage: https://github.com/KosukeSaigusa/flutterfire_gen
+version: 0.1.0-dev.4
+homepage: https://github.com/kosukesaigusa/flutterfire_gen
 
 environment:
   sdk: '>=3.0.0 <4.0.0'

@@ -5,14 +5,14 @@ updates:
     schedule:
       interval: "daily"
     assignees:
-      - "KosukeSaigusa"
+      - "kosukesaigusa"
     reviewers:
-      - "KosukeSaigusa"
+      - "kosukesaigusa"
   - package-ecosystem: "pub"
     directory: "/example"
     schedule:
       interval: "daily"
     assignees:
-      - "KosukeSaigusa"
+      - "kosukesaigusa"
     reviewers:
-      - "KosukeSaigusa"
+      - "kosukesaigusa"

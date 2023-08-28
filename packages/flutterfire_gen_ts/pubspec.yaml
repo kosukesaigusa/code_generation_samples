@@ -1,7 +1,7 @@
 name: flutterfire_gen_ts
 description: flutterfire_gen_ts
 version: 0.0.1-dev.1
-homepage: https://github.com/KosukeSaigusa/flutterfire_gen
+homepage: https://github.com/kosukesaigusa/flutterfire_gen
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
