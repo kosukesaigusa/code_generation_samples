@@ -24,14 +24,18 @@ class ReadAppUserPost {
   final DateTime? updatedAt;
 
   factory ReadAppUserPost._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadAppUserPost(
-      appUserPostId: json['appUserPostId'] as String,
-      path: json['path'] as String,
-      content: json['content'] as String? ?? '',
-      numbers:
-          (json['numbers'] as List<dynamic>?)?.map((e) => e as int).toList() ??
-              const <int>[],
-      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      appUserPostId: extendedJson['appUserPostId'] as String,
+      path: extendedJson['path'] as String,
+      content: extendedJson['content'] as String? ?? '',
+      numbers: (extendedJson['numbers'] as List<dynamic>?)
+              ?.map((e) => e as int)
+              .toList() ??
+          const <int>[],
+      updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -55,10 +59,16 @@ class CreateAppUserPost {
   final FirestoreData<List<int>> numbers;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'content': content,
       'numbers': numbers.value,
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -73,10 +83,16 @@ class UpdateAppUserPost {
   final FirestoreData<List<int>>? numbers;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (content != null) 'content': content,
       if (numbers != null) 'numbers': numbers!.value,
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

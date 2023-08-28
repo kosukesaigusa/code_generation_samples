@@ -24,12 +24,15 @@ class ReadAppUserPostLike {
   final DateTime? updatedAt;
 
   factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadAppUserPostLike(
-      appUserPostLikeId: json['appUserPostLikeId'] as String,
-      path: json['path'] as String,
-      likedByAppUserId: json['likedByAppUserId'] as String,
-      likedAt: (json['likedAt'] as Timestamp?)?.toDate(),
-      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
+      path: extendedJson['path'] as String,
+      likedByAppUserId: extendedJson['likedByAppUserId'] as String,
+      likedAt: (extendedJson['likedAt'] as Timestamp?)?.toDate(),
+      updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -51,10 +54,16 @@ class CreateAppUserPostLike {
   final String likedByAppUserId;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'likedByAppUserId': likedByAppUserId,
       'likedAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -69,10 +78,16 @@ class UpdateAppUserPostLike {
   final DateTime? likedAt;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (likedByAppUserId != null) 'likedByAppUserId': likedByAppUserId,
       if (likedAt != null) 'likedAt': likedAt,
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

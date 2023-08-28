@@ -21,11 +21,14 @@ class ReadAppUser {
   final String imageUrl;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadAppUser(
-      appUserId: json['appUserId'] as String,
-      path: json['path'] as String,
-      name: json['name'] as String? ?? '',
-      imageUrl: json['imageUrl'] as String? ?? '',
+      appUserId: extendedJson['appUserId'] as String,
+      path: extendedJson['path'] as String,
+      name: extendedJson['name'] as String? ?? '',
+      imageUrl: extendedJson['imageUrl'] as String? ?? '',
     );
   }
 
@@ -49,9 +52,15 @@ class CreateAppUser {
   final String imageUrl;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'name': name,
       'imageUrl': imageUrl,
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -66,9 +75,15 @@ class UpdateAppUser {
   final String? imageUrl;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (name != null) 'name': name,
       if (imageUrl != null) 'imageUrl': imageUrl,
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

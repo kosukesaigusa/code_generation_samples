@@ -36,6 +36,7 @@ class ${config.updateClassName} {
       alwaysUseFieldValueServerTimestampWhenUpdatingFields:
           visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
+      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
     )}
 }
 ''';

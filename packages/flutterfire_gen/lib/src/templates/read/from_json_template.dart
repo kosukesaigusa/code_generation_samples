@@ -13,6 +13,7 @@ class FromJsonTemplate {
     required this.fields,
     required this.defaultValueStrings,
     required this.jsonConverterConfigs,
+    required this.jsonPostProcessorConfigs,
   });
 
   ///
@@ -27,18 +28,41 @@ class FromJsonTemplate {
   ///
   final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
+  ///
+  final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs;
+
   @override
   String toString() {
     return '''
 factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+      ${_parseJsonPostProcessors()}
+    };
     return ${config.readClassName}(
-      ${config.documentIdFieldName}: json['${config.documentIdFieldName}'] as String,
-      ${config.documentPathFieldName}: json['${config.documentPathFieldName}'] as String,
-      ${config.includeDocumentReferenceField ? "${config.documentReferenceFieldName}: json['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>," : ''}
+      ${config.documentIdFieldName}: extendedJson['${config.documentIdFieldName}'] as String,
+      ${config.documentPathFieldName}: extendedJson['${config.documentPathFieldName}'] as String,
+      ${config.includeDocumentReferenceField ? "${config.documentReferenceFieldName}: extendedJson['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>," : ''}
       ${_parseFields()}
     );
   }
 ''';
+  }
+
+  ///
+  String _parseJsonPostProcessors() {
+    final buffer = StringBuffer();
+    for (final entry in fields.entries) {
+      final fieldNameString = entry.key;
+      final jsonPostProcessorConfig = jsonPostProcessorConfigs[fieldNameString];
+      if (jsonPostProcessorConfig == null) {
+        continue;
+      }
+      final value = '${jsonPostProcessorConfig.jsonPostProcessorString}.'
+          'fromJson(json)';
+      buffer.writeln("'$fieldNameString': $value,");
+    }
+    return buffer.toString();
   }
 
   ///
@@ -71,17 +95,17 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
 
     if (jsonConverterConfig != null) {
       final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
-          "fromJson(json['$fieldNameString']"
+          "fromJson(extendedJson['$fieldNameString']"
           ' as ${jsonConverterConfig.firestoreTypeString})';
       if (defaultValueString != null) {
-        return "json['$fieldNameString'] == null ? $defaultValueString : $fromJsonString";
+        return "extendedJson['$fieldNameString'] == null ? $defaultValueString : $fromJsonString";
       } else {
         return fromJsonString;
       }
     }
 
     final effectiveParsedKey =
-        isFirstLoop ? "json['$fieldNameString']" : parsedKey;
+        isFirstLoop ? "extendedJson['$fieldNameString']" : parsedKey;
 
     final nullableListMatch =
         RegExp(r'^List<(.*)>\?$').firstMatch(typeNameString);

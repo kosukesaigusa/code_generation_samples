@@ -13,6 +13,7 @@ class ToJsonTemplate {
     required this.fieldValueAllowedFields,
     required this.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
     required this.jsonConverterConfigs,
+    required this.jsonPostProcessorConfigs,
   });
 
   ///
@@ -30,15 +31,42 @@ class ToJsonTemplate {
   ///
   final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
+  ///
+  final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs;
+
   @override
   String toString() {
     return '''
 Map<String, dynamic> toJson() {
-  return {
+  final json = <String, dynamic>{
     ${_parseFields()}
+  };
+  final jsonPostProcessors = <({String key, dynamic value})>[
+    ${_parseJsonPostProcessors()}
+  ];
+  return {
+    ...json,
+    ...Map.fromEntries(jsonPostProcessors
+        .map((record) => MapEntry(record.key, record.value))),
   };
 }
 ''';
+  }
+
+  ///
+  String _parseJsonPostProcessors() {
+    final buffer = StringBuffer();
+    for (final entry in fields.entries) {
+      final fieldNameString = entry.key;
+      final jsonPostProcessorConfig = jsonPostProcessorConfigs[fieldNameString];
+      if (jsonPostProcessorConfig == null) {
+        continue;
+      }
+      buffer.writeln(
+        "if (json.containsKey('$fieldNameString')) ${jsonPostProcessorConfig.jsonPostProcessorString}.toJson(json),",
+      );
+    }
+    return buffer.toString();
   }
 
   String _parseFields() {

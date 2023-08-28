@@ -46,29 +46,33 @@ class ReadChatMessage {
   final DateTime? updatedAt;
 
   factory ReadChatMessage._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadChatMessage(
-      chatMessageId: json['chatMessageId'] as String,
-      path: json['path'] as String,
-      senderId: json['senderId'] as String,
-      map: json['map'] as Map<String, dynamic>? ?? const <String, dynamic>{},
-      nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) =>
-          MapEntry(
+      chatMessageId: extendedJson['chatMessageId'] as String,
+      path: extendedJson['path'] as String,
+      senderId: extendedJson['senderId'] as String,
+      map: extendedJson['map'] as Map<String, dynamic>? ??
+          const <String, dynamic>{},
+      nestedMap: (extendedJson['nestedMap'] as Map<String, dynamic>).map(
+          (k, v) => MapEntry(
               k,
               (v as Map<String, dynamic>)
                   .map((k, v) => MapEntry(k, v as String)))),
-      deeplyNestedMap: (json['deeplyNestedMap'] as Map<String, dynamic>).map((k,
-              v) =>
-          MapEntry(k, v as Map<int, List<Map<String, Map<String, dynamic>>>>)),
-      chatMessageType:
-          _chatMessageTypeConverter.fromJson(json['chatMessageType'] as String),
-      content: json['content'] as String? ?? '',
-      imageUrls: (json['imageUrls'] as List<dynamic>?)
+      deeplyNestedMap: (extendedJson['deeplyNestedMap'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(
+              k, v as Map<int, List<Map<String, Map<String, dynamic>>>>)),
+      chatMessageType: _chatMessageTypeConverter
+          .fromJson(extendedJson['chatMessageType'] as String),
+      content: extendedJson['content'] as String? ?? '',
+      imageUrls: (extendedJson['imageUrls'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
-      isDeleted: json['isDeleted'] as bool? ?? false,
-      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
-      updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
+      isDeleted: extendedJson['isDeleted'] as bool? ?? false,
+      createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
+      updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -105,7 +109,7 @@ class CreateChatMessage {
   final bool isDeleted;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'senderId': senderId,
       'map': map,
       'nestedMap': nestedMap,
@@ -116,6 +120,12 @@ class CreateChatMessage {
       'isDeleted': isDeleted,
       'createdAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -145,7 +155,7 @@ class UpdateChatMessage {
   final DateTime? createdAt;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (senderId != null) 'senderId': senderId,
       if (map != null) 'map': map,
       if (nestedMap != null) 'nestedMap': nestedMap,
@@ -157,6 +167,12 @@ class UpdateChatMessage {
       if (isDeleted != null) 'isDeleted': isDeleted,
       if (createdAt != null) 'createdAt': createdAt,
       'updatedAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

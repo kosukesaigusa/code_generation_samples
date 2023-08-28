@@ -21,6 +21,25 @@ class JsonConverterConfig {
 }
 
 ///
+class JsonPostProcessorConfig {
+  ///
+  const JsonPostProcessorConfig({
+    required this.jsonPostProcessorString,
+    required this.clientTypeString,
+    required this.firestoreTypeString,
+  });
+
+  ///
+  final String jsonPostProcessorString;
+
+  ///
+  final String clientTypeString;
+
+  ///
+  final String firestoreTypeString;
+}
+
+///
 class FirestoreDocumentConfig {
   ///
   FirestoreDocumentConfig({

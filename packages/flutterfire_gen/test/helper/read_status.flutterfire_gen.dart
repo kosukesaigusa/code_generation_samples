@@ -18,10 +18,13 @@ class ReadReadStatus {
   final DateTime? lastReadAt;
 
   factory ReadReadStatus._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadReadStatus(
-      readStatusId: json['readStatusId'] as String,
-      path: json['path'] as String,
-      lastReadAt: (json['lastReadAt'] as Timestamp?)?.toDate(),
+      readStatusId: extendedJson['readStatusId'] as String,
+      path: extendedJson['path'] as String,
+      lastReadAt: (extendedJson['lastReadAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -39,8 +42,14 @@ class CreateReadStatus {
   const CreateReadStatus();
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'lastReadAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -49,8 +58,14 @@ class UpdateReadStatus {
   const UpdateReadStatus();
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'lastReadAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

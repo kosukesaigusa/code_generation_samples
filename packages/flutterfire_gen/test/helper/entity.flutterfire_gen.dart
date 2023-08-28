@@ -155,119 +155,133 @@ class ReadEntity {
   final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
 
   factory ReadEntity._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadEntity(
-      entityId: json['entityId'] as String,
-      path: json['path'] as String,
-      text: json['text'] as String,
+      entityId: extendedJson['entityId'] as String,
+      path: extendedJson['path'] as String,
+      text: extendedJson['text'] as String,
       textWithDefault:
-          json['textWithDefault'] as String? ?? 'requiredWithDefault',
-      nullableText: json['nullableText'] as String? ?? 'defaultText',
-      integer: json['integer'] as int,
-      integerWithDefault: json['integerWithDefault'] as int? ?? 0,
-      nullableInteger: json['nullableInteger'] as int? ?? 0,
-      doubleNumber: json['doubleNumber'] as double,
+          extendedJson['textWithDefault'] as String? ?? 'requiredWithDefault',
+      nullableText: extendedJson['nullableText'] as String? ?? 'defaultText',
+      integer: extendedJson['integer'] as int,
+      integerWithDefault: extendedJson['integerWithDefault'] as int? ?? 0,
+      nullableInteger: extendedJson['nullableInteger'] as int? ?? 0,
+      doubleNumber: extendedJson['doubleNumber'] as double,
       doubleNumberWithDefault:
-          json['doubleNumberWithDefault'] as double? ?? 3.14,
-      nullableDoubleNumber: json['nullableDoubleNumber'] as double? ?? 3.14,
-      isBool: json['isBool'] as bool,
-      isBoolWithDefault: json['isBoolWithDefault'] as bool? ?? false,
-      nullableIsBool: json['nullableIsBool'] as bool? ?? false,
-      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
-      textsWithDefault: (json['textsWithDefault'] as List<dynamic>?)
+          extendedJson['doubleNumberWithDefault'] as double? ?? 3.14,
+      nullableDoubleNumber:
+          extendedJson['nullableDoubleNumber'] as double? ?? 3.14,
+      isBool: extendedJson['isBool'] as bool,
+      isBoolWithDefault: extendedJson['isBoolWithDefault'] as bool? ?? false,
+      nullableIsBool: extendedJson['nullableIsBool'] as bool? ?? false,
+      texts: (extendedJson['texts'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      textsWithDefault: (extendedJson['textsWithDefault'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const <String>['requiredWithDefault'],
-      nullableTexts: (json['nullableTexts'] as List<dynamic>?)
+      nullableTexts: (extendedJson['nullableTexts'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
-      map: json['map'] as Map<String, dynamic>,
-      mapWithDefault: json['mapWithDefault'] as Map<String, dynamic>? ??
+      map: extendedJson['map'] as Map<String, dynamic>,
+      mapWithDefault: extendedJson['mapWithDefault'] as Map<String, dynamic>? ??
           const <String, dynamic>{},
-      nullableMap: json['nullableMap'] as Map<String, dynamic>? ??
+      nullableMap: extendedJson['nullableMap'] as Map<String, dynamic>? ??
           const <String, dynamic>{},
-      stringMap: (json['stringMap'] as Map<String, dynamic>)
+      stringMap: (extendedJson['stringMap'] as Map<String, dynamic>)
           .map((k, v) => MapEntry(k, v as String)),
       stringMapWithDefault:
-          (json['stringMapWithDefault'] as Map<String, dynamic>?)
+          (extendedJson['stringMapWithDefault'] as Map<String, dynamic>?)
                   ?.map((k, v) => MapEntry(k, v as String)) ??
               const <String, String>{},
-      nullableStringMap: (json['nullableStringMap'] as Map<String, dynamic>?)
-              ?.map((k, v) => MapEntry(k, v as String)) ??
-          const <String, String>{},
-      nestedMap: (json['nestedMap'] as Map<String, dynamic>).map((k, v) =>
-          MapEntry(
+      nullableStringMap:
+          (extendedJson['nullableStringMap'] as Map<String, dynamic>?)
+                  ?.map((k, v) => MapEntry(k, v as String)) ??
+              const <String, String>{},
+      nestedMap: (extendedJson['nestedMap'] as Map<String, dynamic>).map(
+          (k, v) => MapEntry(
               k,
               (v as Map<String, dynamic>)
                   .map((k, v) => MapEntry(k, v as int)))),
       nestedMapWithDefault:
-          (json['nestedMapWithDefault'] as Map<String, dynamic>?)?.map((k, v) =>
-                  MapEntry(
+          (extendedJson['nestedMapWithDefault'] as Map<String, dynamic>?)?.map(
+                  (k, v) => MapEntry(
                       k,
                       (v as Map<String, dynamic>)
                           .map((k, v) => MapEntry(k, v as int)))) ??
               const <String, Map<String, int>>{
                 'requiredWithDefault': <String, int>{}
               },
-      nullableNestedMap: (json['nullableNestedMap'] as Map<String, dynamic>?)
-              ?.map((k, v) => MapEntry(
-                  k,
-                  (v as Map<String, dynamic>)
-                      .map((k, v) => MapEntry(k, v as int)))) ??
-          const <String, Map<String, int>>{},
-      listMap: (json['listMap'] as Map<String, dynamic>).map((k, v) =>
+      nullableNestedMap:
+          (extendedJson['nullableNestedMap'] as Map<String, dynamic>?)?.map(
+                  (k, v) => MapEntry(
+                      k,
+                      (v as Map<String, dynamic>)
+                          .map((k, v) => MapEntry(k, v as int)))) ??
+              const <String, Map<String, int>>{},
+      listMap: (extendedJson['listMap'] as Map<String, dynamic>).map((k, v) =>
           MapEntry(k, (v as List<dynamic>).map((e) => e as int).toList())),
-      listMapWithDefault: (json['listMapWithDefault'] as Map<String, dynamic>?)
-              ?.map((k, v) => MapEntry(
-                  k, (v as List<dynamic>).map((e) => e as int).toList())) ??
-          const <String, List<int>>{'requiredWithDefault': <int>[]},
-      nullableListMap: (json['nullableListMap'] as Map<String, dynamic>?)?.map(
-              (k, v) => MapEntry(
-                  k, (v as List<dynamic>).map((e) => e as int).toList())) ??
-          const <String, List<int>>{},
-      mapList: (json['mapList'] as List<dynamic>)
+      listMapWithDefault:
+          (extendedJson['listMapWithDefault'] as Map<String, dynamic>?)?.map(
+                  (k, v) => MapEntry(
+                      k, (v as List<dynamic>).map((e) => e as int).toList())) ??
+              const <String, List<int>>{'requiredWithDefault': <int>[]},
+      nullableListMap:
+          (extendedJson['nullableListMap'] as Map<String, dynamic>?)?.map(
+                  (k, v) => MapEntry(
+                      k, (v as List<dynamic>).map((e) => e as int).toList())) ??
+              const <String, List<int>>{},
+      mapList: (extendedJson['mapList'] as List<dynamic>)
           .map((e) =>
               (e as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int)))
           .toList(),
-      mapListWithDefault: (json['mapListWithDefault'] as List<dynamic>?)
+      mapListWithDefault: (extendedJson['mapListWithDefault'] as List<dynamic>?)
               ?.map((e) => (e as Map<String, dynamic>)
                   .map((k, v) => MapEntry(k, v as int)))
               .toList() ??
           const <Map<String, int>>[
             <String, int>{'requiredWithDefault': 0}
           ],
-      nullableMapList: (json['nullableMapList'] as List<dynamic>?)
+      nullableMapList: (extendedJson['nullableMapList'] as List<dynamic>?)
               ?.map((e) => (e as Map<String, dynamic>)
                   .map((k, v) => MapEntry(k, v as int)))
               .toList() ??
           const <Map<String, int>>[],
-      geoPoint: json['geoPoint'] as GeoPoint,
-      geoPointWithDefault:
-          json['geoPointWithDefault'] as GeoPoint? ?? const GeoPoint(0, 0),
+      geoPoint: extendedJson['geoPoint'] as GeoPoint,
+      geoPointWithDefault: extendedJson['geoPointWithDefault'] as GeoPoint? ??
+          const GeoPoint(0, 0),
       nullableGeoPoint:
-          json['nullableGeoPoint'] as GeoPoint? ?? const GeoPoint(0, 0),
-      dateTime: (json['dateTime'] as Timestamp).toDate(),
-      nullableDateTime: (json['nullableDateTime'] as Timestamp?)?.toDate(),
-      timestamp: json['timestamp'] as Timestamp,
-      nullableTimestamp: json['nullableTimestamp'] as Timestamp?,
+          extendedJson['nullableGeoPoint'] as GeoPoint? ?? const GeoPoint(0, 0),
+      dateTime: (extendedJson['dateTime'] as Timestamp).toDate(),
+      nullableDateTime:
+          (extendedJson['nullableDateTime'] as Timestamp?)?.toDate(),
+      timestamp: extendedJson['timestamp'] as Timestamp,
+      nullableTimestamp: extendedJson['nullableTimestamp'] as Timestamp?,
       documentReference:
-          json['documentReference'] as DocumentReference<Object?>,
-      nullableDocumentReference:
-          json['nullableDocumentReference'] as DocumentReference<Object?>?,
-      foo: _FooJsonConverter().fromJson(json['foo'] as Map<String, dynamic>),
-      fooWithDefault: json['fooWithDefault'] == null
+          extendedJson['documentReference'] as DocumentReference<Object?>,
+      nullableDocumentReference: extendedJson['nullableDocumentReference']
+          as DocumentReference<Object?>?,
+      foo: _FooJsonConverter()
+          .fromJson(extendedJson['foo'] as Map<String, dynamic>),
+      fooWithDefault: extendedJson['fooWithDefault'] == null
           ? const Foo('requiredWithDefault')
           : _FooJsonConverter()
-              .fromJson(json['fooWithDefault'] as Map<String, dynamic>),
+              .fromJson(extendedJson['fooWithDefault'] as Map<String, dynamic>),
       nullableFoo: _nullableFooJsonConverter
-          .fromJson(json['nullableFoo'] as Map<String, dynamic>),
+          .fromJson(extendedJson['nullableFoo'] as Map<String, dynamic>),
       nullableFooWithDefaultAnnotation: _FooJsonConverter().fromJson(
-          json['nullableFooWithDefaultAnnotation'] as Map<String, dynamic>),
-      fieldValueAllowedInt: json['fieldValueAllowedInt'] as int,
+          extendedJson['nullableFooWithDefaultAnnotation']
+              as Map<String, dynamic>),
+      fieldValueAllowedInt: extendedJson['fieldValueAllowedInt'] as int,
       fieldValueAllowedNullableInt:
-          json['fieldValueAllowedNullableInt'] as int?,
+          extendedJson['fieldValueAllowedNullableInt'] as int?,
       fieldValueAllowedNullableIntWithDefaultAnnotation:
-          json['fieldValueAllowedNullableIntWithDefaultAnnotation'] as int?,
+          extendedJson['fieldValueAllowedNullableIntWithDefaultAnnotation']
+              as int?,
     );
   }
 
@@ -380,7 +394,7 @@ class CreateEntity {
   final FirestoreData<int>? fieldValueAllowedNullableIntWithDefaultAnnotation;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'text': text,
       'textWithDefault': textWithDefault,
       'nullableText': nullableText ?? 'createDefault',
@@ -431,6 +445,12 @@ class CreateEntity {
       'fieldValueAllowedNullableInt': fieldValueAllowedNullableInt?.value,
       'fieldValueAllowedNullableIntWithDefaultAnnotation':
           fieldValueAllowedNullableIntWithDefaultAnnotation?.value ?? 0,
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -533,7 +553,7 @@ class UpdateEntity {
   final FirestoreData<int?>? fieldValueAllowedNullableIntWithDefaultAnnotation;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (text != null) 'text': text,
       'textWithDefault': textWithDefault ?? 'updateDefault',
       'nullableText': nullableText ?? 'updateDefault',
@@ -594,6 +614,12 @@ class UpdateEntity {
       if (fieldValueAllowedNullableIntWithDefaultAnnotation != null)
         'fieldValueAllowedNullableIntWithDefaultAnnotation':
             fieldValueAllowedNullableIntWithDefaultAnnotation!.value,
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

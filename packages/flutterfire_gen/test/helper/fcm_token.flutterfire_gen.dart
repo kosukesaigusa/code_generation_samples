@@ -21,12 +21,15 @@ class ReadFcmToken {
   final DateTime? createdAt;
 
   factory ReadFcmToken._fromJson(Map<String, dynamic> json) {
+    final extendedJson = <String, dynamic>{
+      ...json,
+    };
     return ReadFcmToken(
-      fcmTokenId: json['fcmTokenId'] as String,
-      path: json['path'] as String,
+      fcmTokenId: extendedJson['fcmTokenId'] as String,
+      path: extendedJson['path'] as String,
       tokenAndDevices: _tokenAndDevicesConverter
-          .fromJson(json['tokenAndDevices'] as List<dynamic>?),
-      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
+          .fromJson(extendedJson['tokenAndDevices'] as List<dynamic>?),
+      createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
     );
   }
 
@@ -48,10 +51,16 @@ class CreateFcmToken {
   final FirestoreData<List<TokenAndDevice>> tokenAndDevices;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       'tokenAndDevices':
           _tokenAndDevicesConverter.toJson(tokenAndDevices.actualValue),
       'createdAt': FieldValue.serverTimestamp(),
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }
@@ -66,11 +75,17 @@ class UpdateFcmToken {
   final DateTime? createdAt;
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = <String, dynamic>{
       if (tokenAndDevices != null)
         'tokenAndDevices':
             _tokenAndDevicesConverter.toJson(tokenAndDevices!.actualValue),
       if (createdAt != null) 'createdAt': createdAt,
+    };
+    final jsonPostProcessors = <({String key, dynamic value})>[];
+    return {
+      ...json,
+      ...Map.fromEntries(jsonPostProcessors
+          .map((record) => MapEntry(record.key, record.value))),
     };
   }
 }

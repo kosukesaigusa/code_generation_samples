@@ -46,6 +46,7 @@ class ${config.readClassName} {
       fields: fields,
       defaultValueStrings: visitor.readDefaultValueStrings,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
+      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
     )}
 
   ${FromDocumentSnapshotTemplate(config: config)}

@@ -37,6 +37,7 @@ class ${config.createClassName} {
       alwaysUseFieldValueServerTimestampWhenCreatingFields:
           visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
+      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
     )}
 }
 ''';
