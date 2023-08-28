@@ -6,7 +6,9 @@ class TranslateJsonConverterToTypeScript {
     required this.toJson,
   });
 
+  ///
   final String fromJson;
 
+  ///
   final String toJson;
 }
