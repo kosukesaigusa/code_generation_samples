@@ -1,22 +1,23 @@
 import '../../configs/firestore_document_config.dart';
 import '../../firestore_document_visitor.dart';
 import '../constructor_template.dart';
+import '../field_template.dart';
 import 'copy_with_template.dart';
 import 'from_document_snapshot_template.dart';
 import 'from_json_template.dart';
 
-///
+/// A template for a class to read documents from Firestore.
 class ReadClassTemplate {
-  ///
+  /// Creates a [ReadClassTemplate] with the given [config] and [visitor].
   const ReadClassTemplate({
     required this.config,
     required this.visitor,
   });
 
-  ///
+  /// The configuration for the document.
   final FirestoreDocumentConfig config;
 
-  ///
+  /// The visitor for the document.
   final FirestoreDocumentVisitor visitor;
 
   @override
@@ -36,23 +37,31 @@ class ReadClassTemplate {
       optionalFieldNames: [],
     );
 
-    return '''
-class ${config.readClassName} {
-  $constructor
+    final fieldDefinitions = FieldDefinitionsTemplate(fields: fields);
 
-  ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n\n')}
-
-  ${FromJsonTemplate(
+    final fromJson = FromJsonTemplate(
       config: config,
       fields: fields,
       defaultValueStrings: visitor.readDefaultValueStrings,
       jsonConverterConfigs: visitor.jsonConverterConfigs,
       jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
-    )}
+    );
 
-  ${FromDocumentSnapshotTemplate(config: config)}
+    final fromDocumentSnapshot = FromDocumentSnapshotTemplate(config: config);
 
-  ${config.generateCopyWith ? '${CopyWithTemplate(config: config, fields: fields)}' : ''}
+    final copyWith = CopyWithTemplate(config: config, fields: fields);
+
+    return '''
+class ${config.readClassName} {
+  $constructor
+
+  $fieldDefinitions
+
+  $fromJson
+
+  $fromDocumentSnapshot
+
+  $copyWith
 }
 ''';
   }

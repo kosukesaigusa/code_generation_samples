@@ -10,6 +10,8 @@ class ReadAppUserPostLikeTask {
     required this.appUserPostId,
     required this.appUserPostLikeId,
     required this.appUserPostLikeTaskId,
+    required this.path,
+    required this.appUserPostLikeTaskReference,
   });
 
   final String appUserId;
@@ -19,6 +21,10 @@ class ReadAppUserPostLikeTask {
   final String appUserPostLikeId;
 
   final String appUserPostLikeTaskId;
+
+  final String path;
+
+  final DocumentReference<ReadAppUserPostLikeTask> appUserPostLikeTaskReference;
 
   factory ReadAppUserPostLikeTask._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -31,6 +37,9 @@ class ReadAppUserPostLikeTask {
       appUserPostId: extendedJson['appUserPostId'] as String,
       appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
       appUserPostLikeTaskId: extendedJson['appUserPostLikeTaskId'] as String,
+      path: extendedJson['path'] as String,
+      appUserPostLikeTaskReference: extendedJson['appUserPostLikeTaskReference']
+          as DocumentReference<ReadAppUserPostLikeTask>,
     );
   }
 
@@ -40,7 +49,33 @@ class ReadAppUserPostLikeTask {
       ...data,
       'appUserPostLikeTaskId': ds.id,
       'path': ds.reference.path,
+      'appUserPostLikeTaskReference':
+          ds.reference.parent.doc(ds.id).withConverter(
+                fromFirestore: (ds, _) =>
+                    ReadAppUserPostLikeTask.fromDocumentSnapshot(ds),
+                toFirestore: (obj, _) => throw UnimplementedError(),
+              ),
     });
+  }
+
+  ReadAppUserPostLikeTask copyWith({
+    String? appUserId,
+    String? appUserPostId,
+    String? appUserPostLikeId,
+    String? appUserPostLikeTaskId,
+    String? path,
+    DocumentReference<ReadAppUserPostLikeTask>? appUserPostLikeTaskReference,
+  }) {
+    return ReadAppUserPostLikeTask(
+      appUserId: appUserId ?? this.appUserId,
+      appUserPostId: appUserPostId ?? this.appUserPostId,
+      appUserPostLikeId: appUserPostLikeId ?? this.appUserPostLikeId,
+      appUserPostLikeTaskId:
+          appUserPostLikeTaskId ?? this.appUserPostLikeTaskId,
+      path: path ?? this.path,
+      appUserPostLikeTaskReference:
+          appUserPostLikeTaskReference ?? this.appUserPostLikeTaskReference,
+    );
   }
 }
 

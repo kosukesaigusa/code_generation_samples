@@ -9,6 +9,8 @@ class ReadAppUser {
     required this.name,
     required this.imageUrl,
     required this.appUserId,
+    required this.path,
+    required this.appUserReference,
   });
 
   final String name;
@@ -16,6 +18,10 @@ class ReadAppUser {
   final String imageUrl;
 
   final String appUserId;
+
+  final String path;
+
+  final DocumentReference<ReadAppUser> appUserReference;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -25,6 +31,9 @@ class ReadAppUser {
       name: extendedJson['name'] as String? ?? '',
       imageUrl: extendedJson['imageUrl'] as String? ?? '',
       appUserId: extendedJson['appUserId'] as String,
+      path: extendedJson['path'] as String,
+      appUserReference:
+          extendedJson['appUserReference'] as DocumentReference<ReadAppUser>,
     );
   }
 
@@ -34,7 +43,27 @@ class ReadAppUser {
       ...data,
       'appUserId': ds.id,
       'path': ds.reference.path,
+      'appUserReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) => ReadAppUser.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
+  }
+
+  ReadAppUser copyWith({
+    String? name,
+    String? imageUrl,
+    String? appUserId,
+    String? path,
+    DocumentReference<ReadAppUser>? appUserReference,
+  }) {
+    return ReadAppUser(
+      name: name ?? this.name,
+      imageUrl: imageUrl ?? this.imageUrl,
+      appUserId: appUserId ?? this.appUserId,
+      path: path ?? this.path,
+      appUserReference: appUserReference ?? this.appUserReference,
+    );
   }
 }
 

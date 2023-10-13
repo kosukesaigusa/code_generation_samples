@@ -17,6 +17,8 @@ class ReadChatMessage {
     required this.createdAt,
     required this.updatedAt,
     required this.chatMessageId,
+    required this.path,
+    required this.chatMessageReference,
   });
 
   final String senderId;
@@ -41,6 +43,10 @@ class ReadChatMessage {
   final DateTime? updatedAt;
 
   final String chatMessageId;
+
+  final String path;
+
+  final DocumentReference<ReadChatMessage> chatMessageReference;
 
   factory ReadChatMessage._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -69,6 +75,9 @@ class ReadChatMessage {
       createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
       chatMessageId: extendedJson['chatMessageId'] as String,
+      path: extendedJson['path'] as String,
+      chatMessageReference: extendedJson['chatMessageReference']
+          as DocumentReference<ReadChatMessage>,
     );
   }
 
@@ -78,7 +87,44 @@ class ReadChatMessage {
       ...data,
       'chatMessageId': ds.id,
       'path': ds.reference.path,
+      'chatMessageReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) => ReadChatMessage.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
+  }
+
+  ReadChatMessage copyWith({
+    String? senderId,
+    Map<String, dynamic>? map,
+    Map<String, Map<String, String>>? nestedMap,
+    Map<String, Map<int, List<Map<String, Map<String, dynamic>>>>>?
+        deeplyNestedMap,
+    ChatMessageType? chatMessageType,
+    String? content,
+    List<String>? imageUrls,
+    bool? isDeleted,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? chatMessageId,
+    String? path,
+    DocumentReference<ReadChatMessage>? chatMessageReference,
+  }) {
+    return ReadChatMessage(
+      senderId: senderId ?? this.senderId,
+      map: map ?? this.map,
+      nestedMap: nestedMap ?? this.nestedMap,
+      deeplyNestedMap: deeplyNestedMap ?? this.deeplyNestedMap,
+      chatMessageType: chatMessageType ?? this.chatMessageType,
+      content: content ?? this.content,
+      imageUrls: imageUrls ?? this.imageUrls,
+      isDeleted: isDeleted ?? this.isDeleted,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      chatMessageId: chatMessageId ?? this.chatMessageId,
+      path: path ?? this.path,
+      chatMessageReference: chatMessageReference ?? this.chatMessageReference,
+    );
   }
 }
 

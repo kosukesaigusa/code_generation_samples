@@ -10,6 +10,8 @@ class ReadAppUserPostLike {
     required this.likedAt,
     required this.updatedAt,
     required this.appUserPostLikeId,
+    required this.path,
+    required this.appUserPostLikeReference,
   });
 
   final String likedByAppUserId;
@@ -20,6 +22,10 @@ class ReadAppUserPostLike {
 
   final String appUserPostLikeId;
 
+  final String path;
+
+  final DocumentReference<ReadAppUserPostLike> appUserPostLikeReference;
+
   factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
@@ -29,6 +35,9 @@ class ReadAppUserPostLike {
       likedAt: (extendedJson['likedAt'] as Timestamp?)?.toDate(),
       updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
       appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
+      path: extendedJson['path'] as String,
+      appUserPostLikeReference: extendedJson['appUserPostLikeReference']
+          as DocumentReference<ReadAppUserPostLike>,
     );
   }
 
@@ -38,7 +47,31 @@ class ReadAppUserPostLike {
       ...data,
       'appUserPostLikeId': ds.id,
       'path': ds.reference.path,
+      'appUserPostLikeReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) =>
+                ReadAppUserPostLike.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
+  }
+
+  ReadAppUserPostLike copyWith({
+    String? likedByAppUserId,
+    DateTime? likedAt,
+    DateTime? updatedAt,
+    String? appUserPostLikeId,
+    String? path,
+    DocumentReference<ReadAppUserPostLike>? appUserPostLikeReference,
+  }) {
+    return ReadAppUserPostLike(
+      likedByAppUserId: likedByAppUserId ?? this.likedByAppUserId,
+      likedAt: likedAt ?? this.likedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      appUserPostLikeId: appUserPostLikeId ?? this.appUserPostLikeId,
+      path: path ?? this.path,
+      appUserPostLikeReference:
+          appUserPostLikeReference ?? this.appUserPostLikeReference,
+    );
   }
 }
 

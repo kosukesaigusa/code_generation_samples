@@ -8,6 +8,9 @@ part 'entity.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'entities',
   documentName: 'entity',
+  includePathField: true,
+  includeDocumentReferenceField: true,
+  generateCopyWith: true,
 )
 class Entity {
   Entity({
