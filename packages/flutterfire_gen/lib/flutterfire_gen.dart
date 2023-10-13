@@ -1,11 +1,10 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:dart_style/dart_style.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
-import 'package:path/path.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'src/flutterfire_gen.dart';
+import 'src/templates/generated_code_template.dart';
 
 /// Returns a [_FlutterfireGenBuilder] instance.
 Builder flutterfireGenBuilder(BuilderOptions _) => _FlutterfireGenBuilder();
@@ -19,27 +18,23 @@ class _FlutterfireGenBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    final assetId = buildStep.inputId;
-    final outputId = assetId.changeExtension('.flutterfire_gen.dart');
+    final inputAssetId = buildStep.inputId;
+    final outputAssetId = inputAssetId.changeExtension('.flutterfire_gen.dart');
     final library = await buildStep.inputLibrary;
+
     if (!_firestoreDocumentAnnotationFound(library)) {
       return;
     }
+
     final generatedCode =
         await FlutterFireGen().generate(LibraryReader(library), buildStep);
 
     await buildStep.writeAsString(
-      outputId,
-      // TODO: 整形はこれで良いのか確かめる
-      DartFormatter().format('''
-// coverage:ignore-file
-// ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
-
-part of '${basename(buildStep.inputId.path)}';
-
-$generatedCode
-'''),
+      outputAssetId,
+      GeneratedCodeTemplate(
+        generatedCode: generatedCode,
+        inputAssetId: inputAssetId,
+      ).toString(),
     );
   }
 
