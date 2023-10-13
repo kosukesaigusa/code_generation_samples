@@ -1,5 +1,6 @@
 import '../../configs/firestore_document_config.dart';
 import '../../firestore_document_visitor.dart';
+import '../constructor_template.dart';
 import 'copy_with_template.dart';
 import 'from_document_snapshot_template.dart';
 import 'from_json_template.dart';
@@ -29,11 +30,15 @@ class ReadClassTemplate {
             'DocumentReference<${config.readClassName}>',
     };
 
+    final constructor = ConstructorTemplate(
+      className: config.readClassName,
+      requiredFieldNames: fields.entries.map((entry) => entry.key).toList(),
+      optionalFieldNames: [],
+    );
+
     return '''
 class ${config.readClassName} {
-  const ${config.readClassName}({
-    ${fields.entries.map((entry) => 'required this.${entry.key},').join('\n')}
-  });
+  $constructor
 
   ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n\n')}
 
