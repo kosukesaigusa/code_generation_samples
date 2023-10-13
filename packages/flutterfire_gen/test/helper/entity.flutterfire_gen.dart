@@ -4,8 +4,6 @@
 
 part of 'entity.dart';
 
-final fakeDb = FakeFirebaseFirestore();
-
 class ReadEntity {
   const ReadEntity({
     required this.entityId,
@@ -628,7 +626,7 @@ class DeleteEntity {}
 
 /// Provides a reference to the entities collection for reading.
 final readEntityCollectionReference =
-    fakeDb.collection('entities').withConverter<ReadEntity>(
+    FirebaseFirestore.instance.collection('entities').withConverter<ReadEntity>(
           fromFirestore: (ds, _) => ReadEntity.fromDocumentSnapshot(ds),
           toFirestore: (_, __) => throw UnimplementedError(),
         );
@@ -640,11 +638,12 @@ DocumentReference<ReadEntity> readEntityDocumentReference({
     readEntityCollectionReference.doc(entityId);
 
 /// Provides a reference to the entities collection for creating.
-final createEntityCollectionReference =
-    fakeDb.collection('entities').withConverter<CreateEntity>(
-          fromFirestore: (_, __) => throw UnimplementedError(),
-          toFirestore: (obj, _) => obj.toJson(),
-        );
+final createEntityCollectionReference = FirebaseFirestore.instance
+    .collection('entities')
+    .withConverter<CreateEntity>(
+      fromFirestore: (_, __) => throw UnimplementedError(),
+      toFirestore: (obj, _) => obj.toJson(),
+    );
 
 /// Provides a reference to a entity document for creating.
 DocumentReference<CreateEntity> createEntityDocumentReference({
@@ -653,11 +652,12 @@ DocumentReference<CreateEntity> createEntityDocumentReference({
     createEntityCollectionReference.doc(entityId);
 
 /// Provides a reference to the entities collection for updating.
-final updateEntityCollectionReference =
-    fakeDb.collection('entities').withConverter<UpdateEntity>(
-          fromFirestore: (_, __) => throw UnimplementedError(),
-          toFirestore: (obj, _) => obj.toJson(),
-        );
+final updateEntityCollectionReference = FirebaseFirestore.instance
+    .collection('entities')
+    .withConverter<UpdateEntity>(
+      fromFirestore: (_, __) => throw UnimplementedError(),
+      toFirestore: (obj, _) => obj.toJson(),
+    );
 
 /// Provides a reference to a entity document for updating.
 DocumentReference<UpdateEntity> updateEntityDocumentReference({
@@ -666,11 +666,12 @@ DocumentReference<UpdateEntity> updateEntityDocumentReference({
     updateEntityCollectionReference.doc(entityId);
 
 /// Provides a reference to the entities collection for deleting.
-final deleteEntityCollectionReference =
-    fakeDb.collection('entities').withConverter<DeleteEntity>(
-          fromFirestore: (_, __) => throw UnimplementedError(),
-          toFirestore: (_, __) => throw UnimplementedError(),
-        );
+final deleteEntityCollectionReference = FirebaseFirestore.instance
+    .collection('entities')
+    .withConverter<DeleteEntity>(
+      fromFirestore: (_, __) => throw UnimplementedError(),
+      toFirestore: (_, __) => throw UnimplementedError(),
+    );
 
 /// Provides a reference to a entity document for deleting.
 DocumentReference<DeleteEntity> deleteEntityDocumentReference({

@@ -2,7 +2,7 @@
 
 import 'package:meta/meta.dart';
 
-import '../../config.dart';
+import '../../configs/firestore_document_config.dart';
 import '../../utils/string.dart';
 
 ///

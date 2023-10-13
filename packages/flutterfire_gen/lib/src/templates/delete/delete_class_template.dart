@@ -1,4 +1,4 @@
-import '../../config.dart';
+import '../../configs/firestore_document_config.dart';
 
 ///
 class DeleteClassTemplate {

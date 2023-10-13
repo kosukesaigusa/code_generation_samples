@@ -1,6 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import '../config.dart';
+import '../configs/firestore_document_config.dart';
 
 /// Returns Query class template.
 class QueryClassTemplate {

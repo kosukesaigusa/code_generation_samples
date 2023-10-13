@@ -1,4 +1,4 @@
-import '../../config.dart';
+import '../../configs/firestore_document_config.dart';
 import '../../firestore_document_visitor.dart';
 import '../../utils/string.dart';
 import 'to_json_template.dart';

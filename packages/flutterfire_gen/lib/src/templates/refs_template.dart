@@ -1,6 +1,6 @@
 // ignore_for_file: comment_references, lines_longer_than_80_chars
 
-import '../config.dart';
+import '../configs/firestore_document_config.dart';
 
 /// Returns [CollectionReference] and [DocumentReference] template.
 class RefsTemplate {
@@ -67,9 +67,6 @@ ${_collectionReferenceTypeAnnotation(referenceClassType)} ${_collectionReference
   }
 
   String _firestoreInstance() {
-    if (config.useFakeFirebaseFirestore) {
-      return 'fakeDb';
-    }
     return 'FirebaseFirestore.instance';
   }
 

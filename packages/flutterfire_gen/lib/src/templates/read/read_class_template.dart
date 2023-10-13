@@ -1,4 +1,4 @@
-import '../../config.dart';
+import '../../configs/firestore_document_config.dart';
 import '../../firestore_document_visitor.dart';
 import 'copy_with_template.dart';
 import 'from_document_snapshot_template.dart';
