@@ -9,7 +9,7 @@ class UpdateClassTemplate {
   const UpdateClassTemplate({
     required this.config,
     required this.visitor,
-    required this.fields,
+    // required this.fields,
   });
 
   ///
@@ -19,7 +19,7 @@ class UpdateClassTemplate {
   final FirestoreDocumentVisitor visitor;
 
   ///
-  final Map<String, String> fields;
+  Map<String, String> get fields => visitor.fields;
 
   @override
   String toString() {

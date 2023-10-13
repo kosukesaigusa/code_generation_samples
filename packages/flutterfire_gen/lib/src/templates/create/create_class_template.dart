@@ -10,7 +10,6 @@ class CreateClassTemplate {
   const CreateClassTemplate({
     required this.config,
     required this.visitor,
-    required this.fields,
   });
 
   ///
@@ -19,8 +18,7 @@ class CreateClassTemplate {
   ///
   final FirestoreDocumentVisitor visitor;
 
-  ///
-  final Map<String, String> fields;
+  Map<String, String> get _fields => visitor.fields;
 
   @override
   String toString() {
@@ -31,7 +29,7 @@ class ${config.createClassName} {
   ${_parseFields()}
 
   ${ToJsonTemplate(
-      fields: fields,
+      fields: _fields,
       defaultValueStrings: visitor.createDefaultValueStrings,
       fieldValueAllowedFields: visitor.fieldValueAllowedFields,
       alwaysUseFieldValueServerTimestampWhenCreatingFields:
@@ -121,7 +119,7 @@ const ${config.createClassName}({
 
   ///
   Iterable<MapEntry<String, String>> get effectiveEntries =>
-      fields.entries.where(
+      _fields.entries.where(
         (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields
             .contains(
           entry.key,

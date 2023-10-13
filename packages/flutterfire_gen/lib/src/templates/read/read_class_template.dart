@@ -10,7 +10,6 @@ class ReadClassTemplate {
   const ReadClassTemplate({
     required this.config,
     required this.visitor,
-    required this.fields,
   });
 
   ///
@@ -19,11 +18,9 @@ class ReadClassTemplate {
   ///
   final FirestoreDocumentVisitor visitor;
 
-  ///
-  final Map<String, String> fields;
-
   @override
   String toString() {
+    final fields = visitor.fields;
     return '''
 class ${config.readClassName} {
   const ${config.readClassName}({

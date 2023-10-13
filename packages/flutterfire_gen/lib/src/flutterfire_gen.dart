@@ -1,7 +1,5 @@
-// ignore_for_file: implementation_imports
-
 import 'package:analyzer/dart/element/element.dart';
-import 'package:build/src/builder/build_step.dart';
+import 'package:build/build.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -17,19 +15,17 @@ import 'templates/update/update_class_template.dart';
 
 /// A generator for [FirestoreDocument] annotation.
 class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
-  /// A [FirestoreDocumentVisitor].
-  final visitor = FirestoreDocumentVisitor();
-
   @override
   String generateForAnnotatedElement(
     Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
+    final visitor = FirestoreDocumentVisitor();
+
     element.visitChildren(visitor);
 
     final baseClassName = visitor.className;
-    final fields = visitor.fields;
     final config = _parseFirestoreDocumentAnnotation(
       baseClassName: baseClassName,
       element: element,
@@ -38,13 +34,13 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     final buffer = StringBuffer()
       ..writeln(FakeFirebaseFirestoreTemplate(config: config))
       ..writeln(
-        ReadClassTemplate(config: config, visitor: visitor, fields: fields),
+        ReadClassTemplate(config: config, visitor: visitor),
       )
       ..writeln(
-        CreateClassTemplate(config: config, visitor: visitor, fields: fields),
+        CreateClassTemplate(config: config, visitor: visitor),
       )
       ..writeln(
-        UpdateClassTemplate(config: config, visitor: visitor, fields: fields),
+        UpdateClassTemplate(config: config, visitor: visitor),
       )
       ..writeln(DeleteClassTemplate(config: config))
       ..writeln(RefsTemplate(config: config))
