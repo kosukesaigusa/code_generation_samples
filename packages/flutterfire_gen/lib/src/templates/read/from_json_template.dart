@@ -3,6 +3,7 @@
 import 'package:meta/meta.dart';
 
 import '../../configs/firestore_document_config.dart';
+import '../../configs/json_converter_config.dart';
 import '../../utils/string.dart';
 
 ///

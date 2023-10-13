@@ -1,46 +1,8 @@
 import '../utils/string.dart';
 
-///
-class JsonConverterConfig {
-  ///
-  const JsonConverterConfig({
-    required this.jsonConverterString,
-    required this.clientTypeString,
-    required this.firestoreTypeString,
-  });
-
-  ///
-  final String jsonConverterString;
-
-  ///
-  final String clientTypeString;
-
-  ///
-  final String firestoreTypeString;
-}
-
-///
-class JsonPostProcessorConfig {
-  ///
-  const JsonPostProcessorConfig({
-    required this.jsonPostProcessorString,
-    required this.clientTypeString,
-    required this.firestoreTypeString,
-  });
-
-  ///
-  final String jsonPostProcessorString;
-
-  ///
-  final String clientTypeString;
-
-  ///
-  final String firestoreTypeString;
-}
-
-///
+/// A class to represent the configuration for a Firestore document.
 class FirestoreDocumentConfig {
-  ///
+  /// Creates a Firestore document configuration.
   FirestoreDocumentConfig({
     required this.includeDocumentReferenceField,
     required this.generateCopyWith,
@@ -49,116 +11,116 @@ class FirestoreDocumentConfig {
     required this.documentName,
   }) : firestorePathSegments = parseFirestorePath(path);
 
-  ///
+  /// Whether to include a document reference field in the document class.
   final bool includeDocumentReferenceField;
 
-  ///
+  /// Whether to generate a copyWith method for the document class.
   final bool generateCopyWith;
 
-  ///
+  /// The Firestore path for the document.
   final String path;
 
-  ///
+  /// The Firestore path segments for the document.
   final List<FirestorePathSegment> firestorePathSegments;
 
-  ///
+  /// The base class name for the document.
   final String baseClassName;
 
-  ///
+  /// The name of collection of the document.
   String get collectionName => firestorePathSegments.last.collectionName;
 
-  ///
+  /// The name of the document.
   final String documentName;
 
-  ///
+  /// The capitalized collection name of the document.
   String get capitalizedCollectionName => collectionName.capitalize();
 
-  ///
+  /// The capitalized document name of the document.
   String get capitalizedDocumentName => documentName.capitalize();
 
-  ///
+  /// The name of the document class for reading.
   String get readClassName => 'Read$baseClassName';
 
-  ///
+  /// The name of the document class for creating.
   String get createClassName => 'Create$baseClassName';
 
-  ///
+  /// The name of the document class for updating.
   String get updateClassName => 'Update$baseClassName';
 
-  ///
+  /// The name of the document class for deleting.
   String get deleteClassName => 'Delete$baseClassName';
 
-  ///
+  /// The name of the instance variable for the document class for creating.
   String get createClassInstanceName => 'create$baseClassName';
 
-  ///
+  /// The name of the instance variable for the document class for updating.
   String get updateClassInstanceName => 'update$baseClassName';
 
-  ///
+  /// The name of the instance variable for the document class for deleting.
   String get deleteClassInstanceName => 'delete$baseClassName';
 
-  ///
+  /// The document ID field name.
   String get documentIdFieldName => '${documentName}Id';
 
-  ///
+  /// The document path field name.
   String get documentPathFieldName => 'path';
 
-  ///
+  /// The document reference field name.
   String get documentReferenceFieldName => '${documentName}Reference';
 
-  ///
+  /// The collection reference name of the document for reading.
   String get readCollectionReferenceName =>
       'read${baseClassName}CollectionReference';
 
-  ///
+  /// The document reference name of the document for reading.
   String get readDocumentReferenceName =>
       'read${baseClassName}DocumentReference';
 
-  ///
+  /// The collection reference name of the document for creating.
   String get createCollectionReferenceName =>
       'create${baseClassName}CollectionReference';
 
-  ///
+  /// The document reference name of the document for creating.
   String collectionReferenceName(ReferenceClassType referenceClassType) =>
       '${referenceClassType.name}${baseClassName}CollectionReference';
 
-  ///
+  /// The collection reference name of the document for updating.
   String get createDocumentReferenceName =>
       'create${baseClassName}DocumentReference';
 
-  ///
+  /// The collection reference name of the document for updating.
   String get updateCollectionReferenceName =>
       'update${baseClassName}CollectionReference';
 
-  ///
+  /// The document reference name of the document for updating.
   String get updateDocumentReferenceName =>
       'update${baseClassName}DocumentReference';
 
-  ///
+  /// The collection reference name of the document for deleting.
   String get deleteCollectionReferenceName =>
       'delete${baseClassName}CollectionReference';
 
-  ///
+  /// The document reference name of the document for deleting.
   String get deleteDocumentReferenceName =>
       'delete${baseClassName}DocumentReference';
 }
 
-///
+/// An enum to represent the type of a reference class.
 enum ReferenceClassType {
-  ///
+  /// A reference class for reading.
   read,
 
-  ///
+  /// A reference class for creating.
   create,
 
-  ///
+  /// A reference class for updating.
   update,
 
-  ///
+  /// A reference class for deleting.
   delete,
   ;
 
-  ///
+  /// The name of the reference class type.
   String toIng() {
     switch (this) {
       case ReferenceClassType.read:
@@ -235,14 +197,6 @@ List<FirestorePathSegment> parseFirestorePath(String path) {
   final pattern = RegExp(r'(\w+)(\/\{(\w+)\})?');
   final matches = pattern.allMatches(path);
 
-  // TODO: 上記の正規表現にあてはまらない入力のときに適切にエラーをスローする
-  // TODO: このくらいのチェックで良いのか悩む...
-  // if (matches.length.isEven) {
-  //   throw ArgumentError('Invalid Firestore path: $path');
-  // }
-
-  // TODO: データの持ち方は本当にこれで良いか検討する
-  // TODO: CollectionDocumentName 型 or FirestorePath 型に toString は不要か考える
   final firestorePath = matches.map((match) {
     final collectionName = match.group(1)!;
     final documentName = match.group(3);

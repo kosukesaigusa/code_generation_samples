@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'configs/firestore_document_config.dart';
+import 'configs/json_converter_config.dart';
 
 /// A [SimpleElementVisitor] to visit [FirestoreDocument] annotated class.
 class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
