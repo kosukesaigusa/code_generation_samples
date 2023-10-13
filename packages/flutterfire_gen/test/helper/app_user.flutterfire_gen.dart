@@ -6,29 +6,25 @@ part of 'app_user.dart';
 
 class ReadAppUser {
   const ReadAppUser({
-    required this.appUserId,
-    required this.path,
     required this.name,
     required this.imageUrl,
+    required this.appUserId,
   });
-
-  final String appUserId;
-
-  final String path;
 
   final String name;
 
   final String imageUrl;
+
+  final String appUserId;
 
   factory ReadAppUser._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadAppUser(
-      appUserId: extendedJson['appUserId'] as String,
-      path: extendedJson['path'] as String,
       name: extendedJson['name'] as String? ?? '',
       imageUrl: extendedJson['imageUrl'] as String? ?? '',
+      appUserId: extendedJson['appUserId'] as String,
     );
   }
 

@@ -6,7 +6,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'entity.flutterfire_gen.dart';
 
 @FirestoreDocument(
-  useFakeFirebaseFirestore: true,
   path: 'entities',
   documentName: 'entity',
 )

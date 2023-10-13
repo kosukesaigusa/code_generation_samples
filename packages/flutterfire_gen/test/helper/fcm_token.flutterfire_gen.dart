@@ -6,30 +6,26 @@ part of 'fcm_token.dart';
 
 class ReadFcmToken {
   const ReadFcmToken({
-    required this.fcmTokenId,
-    required this.path,
     required this.tokenAndDevices,
     required this.createdAt,
+    required this.fcmTokenId,
   });
-
-  final String fcmTokenId;
-
-  final String path;
 
   final List<TokenAndDevice> tokenAndDevices;
 
   final DateTime? createdAt;
+
+  final String fcmTokenId;
 
   factory ReadFcmToken._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadFcmToken(
-      fcmTokenId: extendedJson['fcmTokenId'] as String,
-      path: extendedJson['path'] as String,
       tokenAndDevices: _tokenAndDevicesConverter
           .fromJson(extendedJson['tokenAndDevices'] as List<dynamic>?),
       createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
+      fcmTokenId: extendedJson['fcmTokenId'] as String,
     );
   }
 

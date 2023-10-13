@@ -41,9 +41,6 @@ factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
       ${_parseJsonPostProcessors()}
     };
     return ${config.readClassName}(
-      ${config.documentIdFieldName}: extendedJson['${config.documentIdFieldName}'] as String,
-      ${config.documentPathFieldName}: extendedJson['${config.documentPathFieldName}'] as String,
-      ${config.includeDocumentReferenceField ? "${config.documentReferenceFieldName}: extendedJson['${config.documentReferenceFieldName}'] as DocumentReference<${config.readClassName}>," : ''}
       ${_parseFields()}
     );
   }

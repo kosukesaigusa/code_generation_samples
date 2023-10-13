@@ -20,21 +20,20 @@ class ReadClassTemplate {
 
   @override
   String toString() {
-    final fields = visitor.fields;
+    final fields = <String, String>{
+      ...visitor.fields,
+      config.documentIdFieldName: 'String',
+      if (config.includePathField) config.documentPathFieldName: 'String',
+      if (config.includeDocumentReferenceField)
+        config.documentReferenceFieldName:
+            'DocumentReference<${config.readClassName}>',
+    };
+
     return '''
 class ${config.readClassName} {
   const ${config.readClassName}({
-    required this.${config.documentIdFieldName},
-    required this.${config.documentPathFieldName},
-    ${config.includeDocumentReferenceField ? 'required this.${config.documentReferenceFieldName},' : ''}
     ${fields.entries.map((entry) => 'required this.${entry.key},').join('\n')}
   });
-
-  final String ${config.documentIdFieldName};
-
-  final String ${config.documentPathFieldName};
-
-  ${config.includeDocumentReferenceField ? 'final DocumentReference<${config.readClassName}> ${config.documentReferenceFieldName};' : ''}
 
   ${fields.entries.map((entry) => 'final ${entry.value} ${entry.key};').join('\n\n')}
 

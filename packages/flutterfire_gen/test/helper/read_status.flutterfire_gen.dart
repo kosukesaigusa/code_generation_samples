@@ -6,25 +6,21 @@ part of 'read_status.dart';
 
 class ReadReadStatus {
   const ReadReadStatus({
-    required this.readStatusId,
-    required this.path,
     required this.lastReadAt,
+    required this.readStatusId,
   });
 
-  final String readStatusId;
-
-  final String path;
-
   final DateTime? lastReadAt;
+
+  final String readStatusId;
 
   factory ReadReadStatus._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadReadStatus(
-      readStatusId: extendedJson['readStatusId'] as String,
-      path: extendedJson['path'] as String,
       lastReadAt: (extendedJson['lastReadAt'] as Timestamp?)?.toDate(),
+      readStatusId: extendedJson['readStatusId'] as String,
     );
   }
 

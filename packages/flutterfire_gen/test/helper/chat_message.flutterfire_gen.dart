@@ -6,8 +6,6 @@ part of 'chat_message.dart';
 
 class ReadChatMessage {
   const ReadChatMessage({
-    required this.chatMessageId,
-    required this.path,
     required this.senderId,
     required this.map,
     required this.nestedMap,
@@ -18,11 +16,8 @@ class ReadChatMessage {
     required this.isDeleted,
     required this.createdAt,
     required this.updatedAt,
+    required this.chatMessageId,
   });
-
-  final String chatMessageId;
-
-  final String path;
 
   final String senderId;
 
@@ -45,13 +40,13 @@ class ReadChatMessage {
 
   final DateTime? updatedAt;
 
+  final String chatMessageId;
+
   factory ReadChatMessage._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadChatMessage(
-      chatMessageId: extendedJson['chatMessageId'] as String,
-      path: extendedJson['path'] as String,
       senderId: extendedJson['senderId'] as String,
       map: extendedJson['map'] as Map<String, dynamic>? ??
           const <String, dynamic>{},
@@ -73,6 +68,7 @@ class ReadChatMessage {
       isDeleted: extendedJson['isDeleted'] as bool? ?? false,
       createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
+      chatMessageId: extendedJson['chatMessageId'] as String,
     );
   }
 

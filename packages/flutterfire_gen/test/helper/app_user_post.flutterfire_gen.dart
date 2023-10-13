@@ -6,16 +6,11 @@ part of 'app_user_post.dart';
 
 class ReadAppUserPost {
   const ReadAppUserPost({
-    required this.appUserPostId,
-    required this.path,
     required this.content,
     required this.numbers,
     required this.updatedAt,
+    required this.appUserPostId,
   });
-
-  final String appUserPostId;
-
-  final String path;
 
   final String content;
 
@@ -23,19 +18,20 @@ class ReadAppUserPost {
 
   final DateTime? updatedAt;
 
+  final String appUserPostId;
+
   factory ReadAppUserPost._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadAppUserPost(
-      appUserPostId: extendedJson['appUserPostId'] as String,
-      path: extendedJson['path'] as String,
       content: extendedJson['content'] as String? ?? '',
       numbers: (extendedJson['numbers'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
           const <int>[],
       updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
+      appUserPostId: extendedJson['appUserPostId'] as String,
     );
   }
 

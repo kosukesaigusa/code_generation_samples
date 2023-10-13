@@ -6,8 +6,6 @@ part of 'entity.dart';
 
 class ReadEntity {
   const ReadEntity({
-    required this.entityId,
-    required this.path,
     required this.text,
     required this.textWithDefault,
     required this.nullableText,
@@ -54,11 +52,8 @@ class ReadEntity {
     required this.fieldValueAllowedInt,
     required this.fieldValueAllowedNullableInt,
     required this.fieldValueAllowedNullableIntWithDefaultAnnotation,
+    required this.entityId,
   });
-
-  final String entityId;
-
-  final String path;
 
   final String text;
 
@@ -152,13 +147,13 @@ class ReadEntity {
 
   final int? fieldValueAllowedNullableIntWithDefaultAnnotation;
 
+  final String entityId;
+
   factory ReadEntity._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadEntity(
-      entityId: extendedJson['entityId'] as String,
-      path: extendedJson['path'] as String,
       text: extendedJson['text'] as String,
       textWithDefault:
           extendedJson['textWithDefault'] as String? ?? 'requiredWithDefault',
@@ -280,6 +275,7 @@ class ReadEntity {
       fieldValueAllowedNullableIntWithDefaultAnnotation:
           extendedJson['fieldValueAllowedNullableIntWithDefaultAnnotation']
               as int?,
+      entityId: extendedJson['entityId'] as String,
     );
   }
 

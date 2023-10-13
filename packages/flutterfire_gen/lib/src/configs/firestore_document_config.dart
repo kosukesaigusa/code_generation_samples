@@ -4,12 +4,16 @@ import '../utils/string.dart';
 class FirestoreDocumentConfig {
   /// Creates a Firestore document configuration.
   FirestoreDocumentConfig({
+    required this.includePathField,
     required this.includeDocumentReferenceField,
     required this.generateCopyWith,
     required this.path,
     required this.baseClassName,
     required this.documentName,
   }) : firestorePathSegments = parseFirestorePath(path);
+
+  /// Whether to include a path field in the document class.
+  final bool includePathField;
 
   /// Whether to include a document reference field in the document class.
   final bool includeDocumentReferenceField;

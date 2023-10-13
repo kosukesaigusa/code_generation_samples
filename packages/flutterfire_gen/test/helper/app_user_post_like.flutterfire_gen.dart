@@ -6,16 +6,11 @@ part of 'app_user_post_like.dart';
 
 class ReadAppUserPostLike {
   const ReadAppUserPostLike({
-    required this.appUserPostLikeId,
-    required this.path,
     required this.likedByAppUserId,
     required this.likedAt,
     required this.updatedAt,
+    required this.appUserPostLikeId,
   });
-
-  final String appUserPostLikeId;
-
-  final String path;
 
   final String likedByAppUserId;
 
@@ -23,16 +18,17 @@ class ReadAppUserPostLike {
 
   final DateTime? updatedAt;
 
+  final String appUserPostLikeId;
+
   factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
     return ReadAppUserPostLike(
-      appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
-      path: extendedJson['path'] as String,
       likedByAppUserId: extendedJson['likedByAppUserId'] as String,
       likedAt: (extendedJson['likedAt'] as Timestamp?)?.toDate(),
       updatedAt: (extendedJson['updatedAt'] as Timestamp?)?.toDate(),
+      appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
     );
   }
 

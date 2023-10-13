@@ -6,22 +6,19 @@ part of 'app_user_post_like_task.dart';
 
 class ReadAppUserPostLikeTask {
   const ReadAppUserPostLikeTask({
-    required this.appUserPostLikeTaskId,
-    required this.path,
     required this.appUserId,
     required this.appUserPostId,
     required this.appUserPostLikeId,
+    required this.appUserPostLikeTaskId,
   });
-
-  final String appUserPostLikeTaskId;
-
-  final String path;
 
   final String appUserId;
 
   final String appUserPostId;
 
   final String appUserPostLikeId;
+
+  final String appUserPostLikeTaskId;
 
   factory ReadAppUserPostLikeTask._fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -30,11 +27,10 @@ class ReadAppUserPostLikeTask {
       'appUserPostId': _AppUserPostIdRefJsonPostProcessor().fromJson(json),
     };
     return ReadAppUserPostLikeTask(
-      appUserPostLikeTaskId: extendedJson['appUserPostLikeTaskId'] as String,
-      path: extendedJson['path'] as String,
       appUserId: extendedJson['appUserId'] as String,
       appUserPostId: extendedJson['appUserPostId'] as String,
       appUserPostLikeId: extendedJson['appUserPostLikeId'] as String,
+      appUserPostLikeTaskId: extendedJson['appUserPostLikeTaskId'] as String,
     );
   }
 

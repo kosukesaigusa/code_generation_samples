@@ -41,6 +41,7 @@ class FirestoreDocumentAnnotationParser {
     final source = firestoreDocumentAnnotation.toSource();
 
     return FirestoreDocumentConfig(
+      includePathField: _includePathField(element: element, source: source),
       includeDocumentReferenceField:
           _includeDocumentReferenceField(element: element, source: source),
       generateCopyWith: _generateCopyWith(element: element, source: source),
@@ -48,6 +49,19 @@ class FirestoreDocumentAnnotationParser {
       path: _path(element: element, source: source),
       documentName: _documentName(element: element, source: source),
     );
+  }
+
+  bool _includePathField({
+    required Element element,
+    required String source,
+  }) {
+    final match =
+        RegExp(FirestoreDocument.includeDocumentReferenceFieldRegExpSource)
+            .firstMatch(source);
+    if (match == null) {
+      return false;
+    }
+    return match.group(1) == 'true';
   }
 
   bool _includeDocumentReferenceField({
