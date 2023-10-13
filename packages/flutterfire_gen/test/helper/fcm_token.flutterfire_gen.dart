@@ -17,7 +17,7 @@ class ReadFcmToken {
 
   final String fcmTokenId;
 
-  factory ReadFcmToken._fromJson(Map<String, dynamic> json) {
+  factory ReadFcmToken.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -31,7 +31,7 @@ class ReadFcmToken {
 
   factory ReadFcmToken.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadFcmToken._fromJson(<String, dynamic>{
+    return ReadFcmToken.fromJson(<String, dynamic>{
       ...data,
       'fcmTokenId': ds.id,
       'path': ds.reference.path,

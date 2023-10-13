@@ -48,7 +48,7 @@ class ReadChatMessage {
 
   final DocumentReference<ReadChatMessage> chatMessageReference;
 
-  factory ReadChatMessage._fromJson(Map<String, dynamic> json) {
+  factory ReadChatMessage.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -83,7 +83,7 @@ class ReadChatMessage {
 
   factory ReadChatMessage.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadChatMessage._fromJson(<String, dynamic>{
+    return ReadChatMessage.fromJson(<String, dynamic>{
       ...data,
       'chatMessageId': ds.id,
       'path': ds.reference.path,

@@ -26,7 +26,7 @@ class ReadAppUserPostLike {
 
   final DocumentReference<ReadAppUserPostLike> appUserPostLikeReference;
 
-  factory ReadAppUserPostLike._fromJson(Map<String, dynamic> json) {
+  factory ReadAppUserPostLike.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -43,7 +43,7 @@ class ReadAppUserPostLike {
 
   factory ReadAppUserPostLike.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadAppUserPostLike._fromJson(<String, dynamic>{
+    return ReadAppUserPostLike.fromJson(<String, dynamic>{
       ...data,
       'appUserPostLikeId': ds.id,
       'path': ds.reference.path,

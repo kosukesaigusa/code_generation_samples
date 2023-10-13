@@ -14,7 +14,7 @@ class ReadReadStatus {
 
   final String readStatusId;
 
-  factory ReadReadStatus._fromJson(Map<String, dynamic> json) {
+  factory ReadReadStatus.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -26,7 +26,7 @@ class ReadReadStatus {
 
   factory ReadReadStatus.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadReadStatus._fromJson(<String, dynamic>{
+    return ReadReadStatus.fromJson(<String, dynamic>{
       ...data,
       'readStatusId': ds.id,
       'path': ds.reference.path,

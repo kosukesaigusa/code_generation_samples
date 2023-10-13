@@ -155,7 +155,7 @@ class ReadEntity {
 
   final DocumentReference<ReadEntity> entityReference;
 
-  factory ReadEntity._fromJson(Map<String, dynamic> json) {
+  factory ReadEntity.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -290,7 +290,7 @@ class ReadEntity {
 
   factory ReadEntity.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadEntity._fromJson(<String, dynamic>{
+    return ReadEntity.fromJson(<String, dynamic>{
       ...data,
       'entityId': ds.id,
       'path': ds.reference.path,

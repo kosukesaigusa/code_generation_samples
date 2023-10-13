@@ -6,9 +6,9 @@ import '../../configs/firestore_document_config.dart';
 import '../../configs/json_converter_config.dart';
 import '../../utils/string.dart';
 
-///
+/// A template for a class to read documents from Firestore.
 class FromJsonTemplate {
-  ///
+  /// Creates a [FromJsonTemplate].
   FromJsonTemplate({
     required this.config,
     required this.fields,
@@ -17,25 +17,25 @@ class FromJsonTemplate {
     required this.jsonPostProcessorConfigs,
   });
 
-  ///
+  /// The configuration for the document.
   final FirestoreDocumentConfig config;
 
-  ///
+  /// The fields for the document.
   final Map<String, String> fields;
 
-  ///
+  /// The default value strings for the document.
   final Map<String, String> defaultValueStrings;
 
-  ///
+  /// The JSON converter configs for the document.
   final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
-  ///
+  /// The JSON post processor configs for the document.
   final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs;
 
   @override
   String toString() {
     return '''
-factory ${config.readClassName}._fromJson(Map<String, dynamic> json) {
+factory ${config.readClassName}.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
       ${_parseJsonPostProcessors()}

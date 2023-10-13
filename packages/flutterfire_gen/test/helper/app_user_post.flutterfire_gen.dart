@@ -26,7 +26,7 @@ class ReadAppUserPost {
 
   final DocumentReference<ReadAppUserPost> appUserPostReference;
 
-  factory ReadAppUserPost._fromJson(Map<String, dynamic> json) {
+  factory ReadAppUserPost.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
     };
@@ -46,7 +46,7 @@ class ReadAppUserPost {
 
   factory ReadAppUserPost.fromDocumentSnapshot(DocumentSnapshot ds) {
     final data = ds.data()! as Map<String, dynamic>;
-    return ReadAppUserPost._fromJson(<String, dynamic>{
+    return ReadAppUserPost.fromJson(<String, dynamic>{
       ...data,
       'appUserPostId': ds.id,
       'path': ds.reference.path,
