@@ -4,6 +4,10 @@
 
 part of 'read_status.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadReadStatus {
   const ReadReadStatus({
     required this.lastReadAt,

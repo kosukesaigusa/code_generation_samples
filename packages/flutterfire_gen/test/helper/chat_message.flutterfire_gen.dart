@@ -4,6 +4,10 @@
 
 part of 'chat_message.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadChatMessage {
   const ReadChatMessage({
     required this.senderId,

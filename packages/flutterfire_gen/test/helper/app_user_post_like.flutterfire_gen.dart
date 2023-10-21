@@ -4,6 +4,10 @@
 
 part of 'app_user_post_like.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadAppUserPostLike {
   const ReadAppUserPostLike({
     required this.likedByAppUserId,

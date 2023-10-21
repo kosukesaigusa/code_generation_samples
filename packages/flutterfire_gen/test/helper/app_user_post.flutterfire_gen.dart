@@ -4,6 +4,10 @@
 
 part of 'app_user_post.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadAppUserPost {
   const ReadAppUserPost({
     required this.content,

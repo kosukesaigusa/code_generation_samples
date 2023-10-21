@@ -11,7 +11,6 @@ dependencies:
   analyzer: ^6.1.0
   build: ^2.4.1
   cloud_firestore: ^4.8.4
-  dart_style: ^2.3.2
   flutter:
     sdk: flutter
   flutterfire_gen_annotation: ^0.1.0-dev.4

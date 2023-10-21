@@ -4,6 +4,10 @@
 
 part of 'fcm_token.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadFcmToken {
   const ReadFcmToken({
     required this.tokenAndDevices,

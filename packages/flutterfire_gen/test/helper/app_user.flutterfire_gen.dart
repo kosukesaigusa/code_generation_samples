@@ -4,6 +4,10 @@
 
 part of 'app_user.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadAppUser {
   const ReadAppUser({
     required this.name,

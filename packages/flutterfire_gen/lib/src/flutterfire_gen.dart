@@ -20,6 +20,14 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
+    if (element is! ClassElement) {
+      throw InvalidGenerationSourceError(
+        '@FirestoreDocument can only be applied on classes. '
+        'Failing element: ${element.name}',
+        element: element,
+      );
+    }
+
     final visitor = FirestoreDocumentVisitor();
 
     element.visitChildren(visitor);

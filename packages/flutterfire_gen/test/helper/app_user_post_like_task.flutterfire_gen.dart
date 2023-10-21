@@ -4,6 +4,10 @@
 
 part of 'app_user_post_like_task.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadAppUserPostLikeTask {
   const ReadAppUserPostLikeTask({
     required this.appUserId,

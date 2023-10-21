@@ -4,6 +4,10 @@
 
 part of 'entity.dart';
 
+// **************************************************************************
+// Generator: FlutterFireGen
+// **************************************************************************
+
 class ReadEntity {
   const ReadEntity({
     required this.text,
