@@ -17,7 +17,7 @@ targets:
 
 builders:
   flutterfire_gen:
-    import: "package:flutterfire_gen/flutterfire_gen.dart"
+    import: "package:flutterfire_gen/builder.dart"
     builder_factories: ["flutterfireGenBuilder"]
     build_extensions: {".dart": [".flutterfire_gen.dart"]}
     auto_apply: dependents
