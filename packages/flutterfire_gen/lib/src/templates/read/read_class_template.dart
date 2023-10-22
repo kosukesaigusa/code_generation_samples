@@ -25,7 +25,7 @@ class ReadClassTemplate {
     final fieldDefinitions = FieldDefinitionsTemplate(fields: config.allFields);
 
     final fromJson = FromJsonTemplate(
-      config: config,
+      className: config.readClassName,
       fields: config.allFields,
       defaultValueStrings: config.readDefaultValueStrings,
       jsonConverterConfigs: config.jsonConverterConfigs,
@@ -34,7 +34,10 @@ class ReadClassTemplate {
 
     final fromDocumentSnapshot = FromDocumentSnapshotTemplate(config: config);
 
-    final copyWith = CopyWithTemplate(config: config, fields: config.allFields);
+    final copyWith = CopyWithTemplate(
+      className: config.readClassName,
+      fields: config.allFields,
+    );
 
     return '''
 class ${config.readClassName} {

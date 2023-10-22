@@ -2,7 +2,7 @@ import '../../configs/code_generation_config.dart';
 import '../../utils/string.dart';
 import 'to_json_template.dart';
 
-/// Returns Create class template.
+/// A template for a class to update documents in Firestore.
 class UpdateClassTemplate {
   /// Creates a [UpdateClassTemplate].
   const UpdateClassTemplate(this.config);

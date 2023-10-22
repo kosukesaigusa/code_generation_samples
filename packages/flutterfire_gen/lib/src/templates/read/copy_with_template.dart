@@ -1,16 +1,15 @@
-import '../../configs/code_generation_config.dart';
 import '../../utils/string.dart';
 
 /// A template for a copyWith method for a document class.
 class CopyWithTemplate {
-  /// Creates a [CopyWithTemplate] with the given [config] and [fields].
+  /// Creates a [CopyWithTemplate] with the given [className] and [fields].
   const CopyWithTemplate({
-    required this.config,
+    required this.className,
     required this.fields,
   });
 
-  /// The configuration for the document.
-  final CodeGenerationConfig config;
+  /// The name of the document class.
+  final String className;
 
   /// The fields of the document.
   final Map<String, String> fields;
@@ -19,18 +18,15 @@ class CopyWithTemplate {
   /// return empty string if `config.generateCopyWith` is false.
   @override
   String toString() {
-    if (!config.generateCopyWith) {
-      return '';
-    }
     return '''
-${config.readClassName} copyWith({
+$className copyWith({
     ${fields.entries.map((entry) {
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
       return '${typeNameString.ensureNullable()} $fieldNameString,';
     }).join('\n')}
   }) {
-    return ${config.readClassName}(
+    return $className(
       ${fields.entries.map((entry) => '${entry.key}: ${entry.key} ?? this.${entry.key},').join('\n')}
     );
   }

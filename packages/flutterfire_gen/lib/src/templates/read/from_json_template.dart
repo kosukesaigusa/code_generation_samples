@@ -2,7 +2,6 @@
 
 import 'package:meta/meta.dart';
 
-import '../../configs/code_generation_config.dart';
 import '../../configs/json_converter_config.dart';
 import '../../configs/json_post_processor_config.dart';
 import '../../utils/string.dart';
@@ -12,15 +11,15 @@ import '../json/json_post_processor_template.dart';
 class FromJsonTemplate {
   /// Creates a [FromJsonTemplate].
   FromJsonTemplate({
-    required this.config,
+    required this.className,
     required this.fields,
     required this.defaultValueStrings,
     required this.jsonConverterConfigs,
     required this.jsonPostProcessorConfigs,
   });
 
-  /// The configuration for the document.
-  final CodeGenerationConfig config;
+  /// The name of the document class.
+  final String className;
 
   /// The fields for the document.
   final Map<String, String> fields;
@@ -41,12 +40,12 @@ class FromJsonTemplate {
       jsonPostProcessorConfigs: jsonPostProcessorConfigs,
     ).fromJsonTemplate();
     return '''
-factory ${config.readClassName}.fromJson(Map<String, dynamic> json) {
+factory $className.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
       ...json,
       $jsonPostProcessors
     };
-    return ${config.readClassName}(
+    return $className(
       ${_parseFields()}
     );
   }

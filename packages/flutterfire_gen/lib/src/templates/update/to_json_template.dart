@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import '../../configs/json_converter_config.dart';
 import '../../configs/json_post_processor_config.dart';
 
-///
+/// A template for `toJson` method when updating documents in Firestore.
 class ToJsonTemplate {
   /// Creates a [ToJsonTemplate].
   const ToJsonTemplate({
@@ -15,22 +15,22 @@ class ToJsonTemplate {
     required this.jsonPostProcessorConfigs,
   });
 
-  ///
+  /// The fields for the document.
   final Map<String, String> fields;
 
-  ///
+  /// The default value strings for the document.
   final Map<String, String> defaultValueStrings;
 
-  ///
+  /// The fields that are allowed to be `FieldValue`.
   final Set<String> fieldValueAllowedFields;
 
-  ///
+  /// The fields that are always `FieldValue.serverTimestamp()`.
   final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields;
 
-  ///
+  /// The JSON converter configs for the document.
   final Map<String, JsonConverterConfig> jsonConverterConfigs;
 
-  ///
+  /// The JSON post processor configs for the document.
   final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs;
 
   @override

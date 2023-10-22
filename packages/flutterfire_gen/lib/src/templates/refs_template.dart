@@ -124,7 +124,6 @@ ${_documentReferenceTypeAnnotation(referenceClassType)} ${_documentReferenceName
   String _documentIdParameters() =>
       "${config.firestorePathSegments.map((segment) => segment.documentName).whereType<String>().map((documentId) => 'required String $documentId').join(',\n')},";
 
-  ///
   String _className(ReferenceClassType referenceClassType) {
     switch (referenceClassType) {
       case ReferenceClassType.read:
@@ -152,7 +151,6 @@ ${_documentReferenceTypeAnnotation(referenceClassType)} ${_documentReferenceName
     }
   }
 
-  ///
   String _documentReferenceName(ReferenceClassType referenceClassType) {
     switch (referenceClassType) {
       case ReferenceClassType.read:

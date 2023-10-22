@@ -1,6 +1,6 @@
 import '../../configs/code_generation_config.dart';
 
-/// Returns Delete class template.
+/// A template for a class to delete documents in Firestore.
 class DeleteClassTemplate {
   /// Creates a [DeleteClassTemplate].
   const DeleteClassTemplate(this.config);
