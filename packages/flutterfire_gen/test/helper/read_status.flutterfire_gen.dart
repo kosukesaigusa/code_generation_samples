@@ -12,11 +12,17 @@ class ReadReadStatus {
   const ReadReadStatus({
     required this.lastReadAt,
     required this.readStatusId,
+    required this.path,
+    required this.readStatusReference,
   });
 
   final DateTime? lastReadAt;
 
   final String readStatusId;
+
+  final String path;
+
+  final DocumentReference<ReadReadStatus> readStatusReference;
 
   factory ReadReadStatus.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -25,6 +31,9 @@ class ReadReadStatus {
     return ReadReadStatus(
       lastReadAt: (extendedJson['lastReadAt'] as Timestamp?)?.toDate(),
       readStatusId: extendedJson['readStatusId'] as String,
+      path: extendedJson['path'] as String,
+      readStatusReference: extendedJson['readStatusReference']
+          as DocumentReference<ReadReadStatus>,
     );
   }
 
@@ -34,7 +43,25 @@ class ReadReadStatus {
       ...data,
       'readStatusId': ds.id,
       'path': ds.reference.path,
+      'readStatusReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) => ReadReadStatus.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
+  }
+
+  ReadReadStatus copyWith({
+    DateTime? lastReadAt,
+    String? readStatusId,
+    String? path,
+    DocumentReference<ReadReadStatus>? readStatusReference,
+  }) {
+    return ReadReadStatus(
+      lastReadAt: lastReadAt ?? this.lastReadAt,
+      readStatusId: readStatusId ?? this.readStatusId,
+      path: path ?? this.path,
+      readStatusReference: readStatusReference ?? this.readStatusReference,
+    );
   }
 }
 

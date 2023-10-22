@@ -6,9 +6,6 @@ part 'app_user.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'appUsers',
   documentName: 'appUser',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class AppUser {
   AppUser({

@@ -6,9 +6,6 @@ part 'app_user_post_like.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'appUsers/{appUserId}/appUserPosts/{appUserPostId}/appUserPostLikes',
   documentName: 'appUserPostLike',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class AppUserPostLike {
   AppUserPostLike({

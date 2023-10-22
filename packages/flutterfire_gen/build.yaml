@@ -22,3 +22,8 @@ builders:
     build_extensions: {".dart": [".flutterfire_gen.dart"]}
     auto_apply: dependents
     build_to: source
+    defaults:
+      options:
+        includePathField: true
+        includeDocumentReferenceField: true
+        generateCopyWith: true

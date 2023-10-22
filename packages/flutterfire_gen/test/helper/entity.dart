@@ -8,9 +8,6 @@ part 'entity.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'entities',
   documentName: 'entity',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class Entity {
   Entity({
@@ -143,7 +140,7 @@ class Entity {
   final List<Map<String, int>> mapList;
 
   @ReadDefault(<Map<String, int>>[
-    <String, int>{'requiredWithDefault': 0}
+    <String, int>{'requiredWithDefault': 0},
   ])
   final List<Map<String, int>> mapListWithDefault;
 

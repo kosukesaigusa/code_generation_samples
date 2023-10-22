@@ -6,9 +6,6 @@ part 'app_user_post_like_task.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'appUserPostLikeTasks',
   documentName: 'appUserPostLikeTask',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class AppUserPostLikeTask {
   const AppUserPostLikeTask({

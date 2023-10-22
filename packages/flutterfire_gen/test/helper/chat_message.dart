@@ -7,9 +7,6 @@ part 'chat_message.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'chatRooms/{chatRoomId}/chatMessages',
   documentName: 'chatMessage',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class ChatMessage {
   const ChatMessage({

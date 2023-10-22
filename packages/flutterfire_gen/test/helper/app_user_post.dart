@@ -7,9 +7,6 @@ part 'app_user_post.flutterfire_gen.dart';
 @FirestoreDocument(
   path: 'appUsers/{appUserId}/appUserPosts',
   documentName: 'appUserPost',
-  includePathField: true,
-  includeDocumentReferenceField: true,
-  generateCopyWith: true,
 )
 class AppUserPost {
   AppUserPost({

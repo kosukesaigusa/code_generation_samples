@@ -13,6 +13,8 @@ class ReadFcmToken {
     required this.tokenAndDevices,
     required this.createdAt,
     required this.fcmTokenId,
+    required this.path,
+    required this.fcmTokenReference,
   });
 
   final List<TokenAndDevice> tokenAndDevices;
@@ -20,6 +22,10 @@ class ReadFcmToken {
   final DateTime? createdAt;
 
   final String fcmTokenId;
+
+  final String path;
+
+  final DocumentReference<ReadFcmToken> fcmTokenReference;
 
   factory ReadFcmToken.fromJson(Map<String, dynamic> json) {
     final extendedJson = <String, dynamic>{
@@ -30,6 +36,9 @@ class ReadFcmToken {
           .fromJson(extendedJson['tokenAndDevices'] as List<dynamic>?),
       createdAt: (extendedJson['createdAt'] as Timestamp?)?.toDate(),
       fcmTokenId: extendedJson['fcmTokenId'] as String,
+      path: extendedJson['path'] as String,
+      fcmTokenReference:
+          extendedJson['fcmTokenReference'] as DocumentReference<ReadFcmToken>,
     );
   }
 
@@ -39,7 +48,27 @@ class ReadFcmToken {
       ...data,
       'fcmTokenId': ds.id,
       'path': ds.reference.path,
+      'fcmTokenReference': ds.reference.parent.doc(ds.id).withConverter(
+            fromFirestore: (ds, _) => ReadFcmToken.fromDocumentSnapshot(ds),
+            toFirestore: (obj, _) => throw UnimplementedError(),
+          ),
     });
+  }
+
+  ReadFcmToken copyWith({
+    List<TokenAndDevice>? tokenAndDevices,
+    DateTime? createdAt,
+    String? fcmTokenId,
+    String? path,
+    DocumentReference<ReadFcmToken>? fcmTokenReference,
+  }) {
+    return ReadFcmToken(
+      tokenAndDevices: tokenAndDevices ?? this.tokenAndDevices,
+      createdAt: createdAt ?? this.createdAt,
+      fcmTokenId: fcmTokenId ?? this.fcmTokenId,
+      path: path ?? this.path,
+      fcmTokenReference: fcmTokenReference ?? this.fcmTokenReference,
+    );
   }
 }
 

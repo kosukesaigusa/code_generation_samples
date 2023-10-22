@@ -66,7 +66,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         final defaultValueCode = parameter.defaultValueCode;
         if (defaultValueCode != null) {
           print(
-            '🟡 The default value $defaultValueCode for $className.$fieldName is '
+            'The default value $defaultValueCode for $className.$fieldName is '
             'set in the constructor of $className, but it has no meaning. '
             'Use @ReadDefault, @CreateDefault, or @UpdateDefault instead.',
           );
