@@ -1,3 +1,7 @@
+## 0.1.0-dev.5
+
+* Update `FirestoreDocument` annotation.
+
 ## 0.1.0-dev.4
 
 * Add `JsonPostProcessor` annotation.
