@@ -1,24 +1,13 @@
-// ignore_for_file: lines_longer_than_80_chars
-
-import '../../configs/firestore_document_config.dart';
-import '../../firestore_document_visitor.dart';
+import '../../configs/code_generation_config.dart';
 import 'to_json_template.dart';
 
-///
+/// Returns Create class template.
 class CreateClassTemplate {
-  ///
-  const CreateClassTemplate({
-    required this.config,
-    required this.visitor,
-  });
+  /// Creates a [CreateClassTemplate].
+  const CreateClassTemplate(this.config);
 
-  ///
-  final FirestoreDocumentConfig config;
-
-  ///
-  final FirestoreDocumentVisitor visitor;
-
-  Map<String, String> get _fields => visitor.fields;
+  /// Configurations for code generation.
+  final CodeGenerationConfig config;
 
   @override
   String toString() {
@@ -29,13 +18,13 @@ class ${config.createClassName} {
   ${_parseFields()}
 
   ${ToJsonTemplate(
-      fields: _fields,
-      defaultValueStrings: visitor.createDefaultValueStrings,
-      fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      fields: config.selfDefinedFields,
+      defaultValueStrings: config.createDefaultValueStrings,
+      fieldValueAllowedFields: config.fieldValueAllowedFields,
       alwaysUseFieldValueServerTimestampWhenCreatingFields:
-          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
-      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
+          config.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+      jsonConverterConfigs: config.jsonConverterConfigs,
+      jsonPostProcessorConfigs: config.jsonPostProcessorConfigs,
     )}
 }
 ''';
@@ -59,9 +48,9 @@ const ${config.createClassName}({
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
-      final defaultValueStrings = visitor.createDefaultValueStrings;
+      final defaultValueStrings = config.createDefaultValueStrings;
       final isFieldValueAllowed =
-          visitor.fieldValueAllowedFields.contains(entry.key);
+          config.fieldValueAllowedFields.contains(entry.key);
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -84,7 +73,8 @@ const ${config.createClassName}({
     if (hasDefaultValue || isNullable) {
       if (hasDefaultValue) {
         if (isFieldValueAllowed) {
-          return 'this.$fieldNameString = const ActualValue($defaultValueString),';
+          return 'this.$fieldNameString = '
+              'const ActualValue($defaultValueString),';
         } else {
           return 'this.$fieldNameString = $defaultValueString,';
         }
@@ -102,7 +92,7 @@ const ${config.createClassName}({
       final typeNameString = entry.value;
       final nullableTypeMatch = RegExp(r'(\w+)\?').firstMatch(typeNameString);
       final isFieldValueAllowed =
-          visitor.fieldValueAllowedFields.contains(entry.key);
+          config.fieldValueAllowedFields.contains(entry.key);
 
       if (isFieldValueAllowed) {
         if (nullableTypeMatch != null) {
@@ -119,10 +109,8 @@ const ${config.createClassName}({
 
   ///
   Iterable<MapEntry<String, String>> get effectiveEntries =>
-      _fields.entries.where(
-        (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields
-            .contains(
-          entry.key,
-        ),
+      config.selfDefinedFields.entries.where(
+        (entry) => !config.alwaysUseFieldValueServerTimestampWhenCreatingFields
+            .contains(entry.key),
       );
 }

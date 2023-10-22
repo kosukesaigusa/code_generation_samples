@@ -1,4 +1,4 @@
-import '../../configs/json_converter_config.dart';
+import '../../configs/json_post_processor_config.dart';
 
 /// A template for JSON post processors.
 class JsonPostProcessorTemplate {

@@ -1,4 +1,4 @@
-name: example
+name: flutterfire_gen_example
 description: A new Flutter project.
 publish_to: 'none'
 version: 0.0.1
@@ -8,7 +8,7 @@ environment:
   flutter: '>=3.10.0'
 
 dependencies:
-  cloud_firestore: ^4.8.2
+  cloud_firestore: ^4.11.0
   flutter:
     sdk: flutter
   flutterfire_gen_annotation:

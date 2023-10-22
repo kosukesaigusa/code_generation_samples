@@ -1,14 +1,14 @@
 // ignore_for_file: comment_references, lines_longer_than_80_chars
 
-import '../configs/firestore_document_config.dart';
+import '../configs/code_generation_config.dart';
 
 /// Returns [CollectionReference] and [DocumentReference] template.
 class RefsTemplate {
   /// Creates a [RefsTemplate].
-  const RefsTemplate({required this.config});
+  const RefsTemplate(this.config);
 
-  ///
-  final FirestoreDocumentConfig config;
+  /// Configurations for code generation.
+  final CodeGenerationConfig config;
 
   @override
   String toString() {

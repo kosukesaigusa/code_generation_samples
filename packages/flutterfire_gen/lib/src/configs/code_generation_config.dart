@@ -1,15 +1,27 @@
 import '../utils/string.dart';
+import 'json_converter_config.dart';
+import 'json_post_processor_config.dart';
 
 /// A class to represent the configuration for a Firestore document.
-class FirestoreDocumentConfig {
+class CodeGenerationConfig {
   /// Creates a Firestore document configuration.
-  FirestoreDocumentConfig({
+  CodeGenerationConfig({
     required this.includePathField,
     required this.includeDocumentReferenceField,
     required this.generateCopyWith,
     required this.path,
     required this.baseClassName,
     required this.documentName,
+    required this.selfDefinedFields,
+    required this.allFields,
+    required this.readDefaultValueStrings,
+    required this.createDefaultValueStrings,
+    required this.updateDefaultValueStrings,
+    required this.fieldValueAllowedFields,
+    required this.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+    required this.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+    required this.jsonConverterConfigs,
+    required this.jsonPostProcessorConfigs,
   }) : firestorePathSegments = parseFirestorePath(path);
 
   /// Whether to include a path field in the document class.
@@ -35,6 +47,41 @@ class FirestoreDocumentConfig {
 
   /// The name of the document.
   final String documentName;
+
+  /// Self-defined fields of visited FirestoreDocument annotated class.
+  final Map<String, String> selfDefinedFields;
+
+  /// All fields of self-defined fields and flutterfire_gen added fields.
+  final Map<String, String> allFields;
+
+  /// Default value strings of each field when reading Cloud Firestore
+  /// documents.
+  final Map<String, String> readDefaultValueStrings;
+
+  /// Default value strings of each field when creating Cloud Firestore
+  /// documents.
+  final Map<String, String> createDefaultValueStrings;
+
+  /// Default value strings of each field when updating Cloud Firestore
+  /// documents.
+  final Map<String, String> updateDefaultValueStrings;
+
+  /// A set of strings of FieldValue allowed fields.
+  final Set<String> fieldValueAllowedFields;
+
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// creating.
+  final Set<String> alwaysUseFieldValueServerTimestampWhenCreatingFields;
+
+  /// A set of strings of fields always use `FieldValue.serverTimestamp()` when
+  /// updating.
+  final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields;
+
+  /// JsonConverter configurations of each field.
+  final Map<String, JsonConverterConfig> jsonConverterConfigs;
+
+  /// JsonPostProcessor configurations of each field.
+  final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs;
 
   /// The capitalized collection name of the document.
   String get capitalizedCollectionName => collectionName.capitalize();
@@ -67,7 +114,7 @@ class FirestoreDocumentConfig {
   String get documentIdFieldName => '${documentName}Id';
 
   /// The document path field name.
-  String get documentPathFieldName => 'path';
+  // final String documentPathFieldName = 'path';
 
   /// The document reference field name.
   String get documentReferenceFieldName => '${documentName}Reference';

@@ -3,6 +3,7 @@
 import 'package:meta/meta.dart';
 
 import '../../configs/json_converter_config.dart';
+import '../../configs/json_post_processor_config.dart';
 
 ///
 class ToJsonTemplate {

@@ -1,4 +1,4 @@
-import '../../configs/firestore_document_config.dart';
+import '../../configs/code_generation_config.dart';
 
 /// A template for a class to read documents from Firestore.
 class FromDocumentSnapshotTemplate {
@@ -6,7 +6,7 @@ class FromDocumentSnapshotTemplate {
   const FromDocumentSnapshotTemplate({required this.config});
 
   /// The configuration for the document.
-  final FirestoreDocumentConfig config;
+  final CodeGenerationConfig config;
 
   @override
   String toString() {
@@ -16,7 +16,7 @@ factory ${config.readClassName}.fromDocumentSnapshot(DocumentSnapshot ds) {
     return ${config.readClassName}.fromJson(<String, dynamic>{
       ...data,
       '${config.documentIdFieldName}': ds.id,
-      '${config.documentPathFieldName}': ds.reference.path,
+      'path': ds.reference.path,
       ${_documentReferenceField()}
     });
   }

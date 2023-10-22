@@ -53,7 +53,7 @@ class TokenAndDevicesConverter
           .map(
             (tokenAndDevice) => {
               'token': tokenAndDevice.token,
-              'deviceInfo': tokenAndDevice.deviceInfo
+              'deviceInfo': tokenAndDevice.deviceInfo,
             },
           )
           .toList();

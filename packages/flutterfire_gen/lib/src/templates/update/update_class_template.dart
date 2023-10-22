@@ -1,25 +1,14 @@
-import '../../configs/firestore_document_config.dart';
-import '../../firestore_document_visitor.dart';
+import '../../configs/code_generation_config.dart';
 import '../../utils/string.dart';
 import 'to_json_template.dart';
 
-///
+/// Returns Create class template.
 class UpdateClassTemplate {
   /// Creates a [UpdateClassTemplate].
-  const UpdateClassTemplate({
-    required this.config,
-    required this.visitor,
-    // required this.fields,
-  });
+  const UpdateClassTemplate(this.config);
 
-  ///
-  final FirestoreDocumentConfig config;
-
-  ///
-  final FirestoreDocumentVisitor visitor;
-
-  ///
-  Map<String, String> get fields => visitor.fields;
+  /// Configurations for code generation.
+  final CodeGenerationConfig config;
 
   @override
   String toString() {
@@ -30,13 +19,13 @@ class ${config.updateClassName} {
   ${_parseFields()}
 
   ${ToJsonTemplate(
-      fields: fields,
-      defaultValueStrings: visitor.updateDefaultValueStrings,
-      fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      fields: config.selfDefinedFields,
+      defaultValueStrings: config.updateDefaultValueStrings,
+      fieldValueAllowedFields: config.fieldValueAllowedFields,
       alwaysUseFieldValueServerTimestampWhenUpdatingFields:
-          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
-      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
+          config.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+      jsonConverterConfigs: config.jsonConverterConfigs,
+      jsonPostProcessorConfigs: config.jsonPostProcessorConfigs,
     )}
 }
 ''';
@@ -61,9 +50,9 @@ const ${config.updateClassName}({
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
 
-      final defaultValueStrings = visitor.updateDefaultValueStrings;
+      final defaultValueStrings = config.updateDefaultValueStrings;
       final isFieldValueAllowed =
-          visitor.fieldValueAllowedFields.contains(entry.key);
+          config.fieldValueAllowedFields.contains(entry.key);
 
       final defaultValueString = defaultValueStrings[fieldNameString];
       return _constructorEachField(
@@ -84,7 +73,8 @@ const ${config.updateClassName}({
     final hasDefaultValue = (defaultValueString ?? '').isNotEmpty;
     if (hasDefaultValue) {
       if (isFieldValueAllowed) {
-        return 'this.$fieldNameString = const ActualValue($defaultValueString),';
+        return 'this.$fieldNameString = '
+            'const ActualValue($defaultValueString),';
       }
       return 'this.$fieldNameString = $defaultValueString,';
     }
@@ -96,7 +86,7 @@ const ${config.updateClassName}({
       final fieldNameString = entry.key;
       final typeNameString = entry.value;
       final isFieldValueAllowed =
-          visitor.fieldValueAllowedFields.contains(entry.key);
+          config.fieldValueAllowedFields.contains(entry.key);
 
       if (isFieldValueAllowed) {
         // TODO: typeNameString が nullable になる可能性はある？
@@ -109,8 +99,8 @@ const ${config.updateClassName}({
 
   ///
   Iterable<MapEntry<String, String>> get effectiveEntries =>
-      fields.entries.where(
-        (entry) => !visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields
+      config.selfDefinedFields.entries.where(
+        (entry) => !config.alwaysUseFieldValueServerTimestampWhenUpdatingFields
             .contains(
           entry.key,
         ),

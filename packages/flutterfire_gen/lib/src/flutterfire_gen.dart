@@ -5,7 +5,7 @@ import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'configs/build_yaml_config.dart';
-import 'configs/firestore_document_config.dart';
+import 'configs/code_generation_config.dart';
 import 'firestore_document_visitor.dart';
 import 'templates/create/create_class_template.dart';
 import 'templates/delete/delete_class_template.dart';
@@ -93,7 +93,7 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       ),
     );
 
-    final config = FirestoreDocumentConfig(
+    final config = CodeGenerationConfig(
       baseClassName: visitor.className,
       path: firestoreDocument.path,
       documentName: firestoreDocument.documentName,
@@ -101,21 +101,34 @@ class FlutterFireGen extends GeneratorForAnnotation<FirestoreDocument> {
       includeDocumentReferenceField:
           firestoreDocument.includeDocumentReferenceField ?? false,
       generateCopyWith: firestoreDocument.generateCopyWith ?? false,
+      selfDefinedFields: visitor.fields,
+      allFields: <String, String>{
+        ...visitor.fields,
+        '${firestoreDocument.documentName}Id': 'String',
+        if (firestoreDocument.includePathField ?? false) 'path': 'String',
+        if (firestoreDocument.includeDocumentReferenceField ?? false)
+          '${firestoreDocument.documentName}Reference':
+              'DocumentReference<Read${visitor.className}>',
+      },
+      readDefaultValueStrings: visitor.readDefaultValueStrings,
+      createDefaultValueStrings: visitor.createDefaultValueStrings,
+      updateDefaultValueStrings: visitor.updateDefaultValueStrings,
+      fieldValueAllowedFields: visitor.fieldValueAllowedFields,
+      alwaysUseFieldValueServerTimestampWhenCreatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenCreatingFields,
+      alwaysUseFieldValueServerTimestampWhenUpdatingFields:
+          visitor.alwaysUseFieldValueServerTimestampWhenUpdatingFields,
+      jsonConverterConfigs: visitor.jsonConverterConfigs,
+      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
     );
 
     final buffer = StringBuffer()
-      ..writeln(
-        ReadClassTemplate(config: config, visitor: visitor),
-      )
-      ..writeln(
-        CreateClassTemplate(config: config, visitor: visitor),
-      )
-      ..writeln(
-        UpdateClassTemplate(config: config, visitor: visitor),
-      )
-      ..writeln(DeleteClassTemplate(config: config))
-      ..writeln(RefsTemplate(config: config))
-      ..writeln(QueryClassTemplate(config: config));
+      ..writeln(ReadClassTemplate(config))
+      ..writeln(CreateClassTemplate(config))
+      ..writeln(UpdateClassTemplate(config))
+      ..writeln(DeleteClassTemplate(config))
+      ..writeln(RefsTemplate(config))
+      ..writeln(QueryClassTemplate(config));
 
     return buffer.toString();
   }

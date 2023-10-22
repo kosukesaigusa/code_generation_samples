@@ -2,8 +2,9 @@
 
 import 'package:meta/meta.dart';
 
-import '../../configs/firestore_document_config.dart';
+import '../../configs/code_generation_config.dart';
 import '../../configs/json_converter_config.dart';
+import '../../configs/json_post_processor_config.dart';
 import '../../utils/string.dart';
 import '../json/json_post_processor_template.dart';
 
@@ -19,7 +20,7 @@ class FromJsonTemplate {
   });
 
   /// The configuration for the document.
-  final FirestoreDocumentConfig config;
+  final CodeGenerationConfig config;
 
   /// The fields for the document.
   final Map<String, String> fields;

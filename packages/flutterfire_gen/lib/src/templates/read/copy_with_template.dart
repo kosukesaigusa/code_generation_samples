@@ -1,4 +1,4 @@
-import '../../configs/firestore_document_config.dart';
+import '../../configs/code_generation_config.dart';
 import '../../utils/string.dart';
 
 /// A template for a copyWith method for a document class.
@@ -10,7 +10,7 @@ class CopyWithTemplate {
   });
 
   /// The configuration for the document.
-  final FirestoreDocumentConfig config;
+  final CodeGenerationConfig config;
 
   /// The fields of the document.
   final Map<String, String> fields;

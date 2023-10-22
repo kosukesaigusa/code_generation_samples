@@ -1,14 +1,14 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-import '../configs/firestore_document_config.dart';
+import '../configs/code_generation_config.dart';
 
 /// Returns Query class template.
 class QueryClassTemplate {
   /// Creates a [QueryClassTemplate].
-  const QueryClassTemplate({required this.config});
+  const QueryClassTemplate(this.config);
 
-  ///
-  final FirestoreDocumentConfig config;
+  /// Configurations for code generation.
+  final CodeGenerationConfig config;
 
   @override
   String toString() {

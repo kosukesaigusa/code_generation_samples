@@ -1,5 +1,4 @@
-import '../../configs/firestore_document_config.dart';
-import '../../firestore_document_visitor.dart';
+import '../../configs/code_generation_config.dart';
 import '../constructor_template.dart';
 import '../field_template.dart';
 import 'copy_with_template.dart';
@@ -8,48 +7,34 @@ import 'from_json_template.dart';
 
 /// A template for a class to read documents from Firestore.
 class ReadClassTemplate {
-  /// Creates a [ReadClassTemplate] with the given [config] and [visitor].
-  const ReadClassTemplate({
-    required this.config,
-    required this.visitor,
-  });
+  /// Creates a [ReadClassTemplate] with the given [config].
+  const ReadClassTemplate(this.config);
 
   /// The configuration for the document.
-  final FirestoreDocumentConfig config;
-
-  /// The visitor for the document.
-  final FirestoreDocumentVisitor visitor;
+  final CodeGenerationConfig config;
 
   @override
   String toString() {
-    final fields = <String, String>{
-      ...visitor.fields,
-      config.documentIdFieldName: 'String',
-      if (config.includePathField) config.documentPathFieldName: 'String',
-      if (config.includeDocumentReferenceField)
-        config.documentReferenceFieldName:
-            'DocumentReference<${config.readClassName}>',
-    };
-
     final constructor = ConstructorTemplate(
       className: config.readClassName,
-      requiredFieldNames: fields.entries.map((entry) => entry.key).toList(),
+      requiredFieldNames:
+          config.allFields.entries.map((entry) => entry.key).toList(),
       optionalFieldNames: [],
     );
 
-    final fieldDefinitions = FieldDefinitionsTemplate(fields: fields);
+    final fieldDefinitions = FieldDefinitionsTemplate(fields: config.allFields);
 
     final fromJson = FromJsonTemplate(
       config: config,
-      fields: fields,
-      defaultValueStrings: visitor.readDefaultValueStrings,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
-      jsonPostProcessorConfigs: visitor.jsonPostProcessorConfigs,
+      fields: config.allFields,
+      defaultValueStrings: config.readDefaultValueStrings,
+      jsonConverterConfigs: config.jsonConverterConfigs,
+      jsonPostProcessorConfigs: config.jsonPostProcessorConfigs,
     );
 
     final fromDocumentSnapshot = FromDocumentSnapshotTemplate(config: config);
 
-    final copyWith = CopyWithTemplate(config: config, fields: fields);
+    final copyWith = CopyWithTemplate(config: config, fields: config.allFields);
 
     return '''
 class ${config.readClassName} {

@@ -1,12 +1,11 @@
-// ignore_for_file: lines_longer_than_80_chars
-
 import 'package:meta/meta.dart';
 
 import '../../configs/json_converter_config.dart';
+import '../../configs/json_post_processor_config.dart';
 
 ///
 class ToJsonTemplate {
-  ///
+  /// Creates a [ToJsonTemplate].
   const ToJsonTemplate({
     required this.fields,
     required this.defaultValueStrings,
@@ -53,7 +52,6 @@ Map<String, dynamic> toJson() {
 ''';
   }
 
-  ///
   String _parseJsonPostProcessors() {
     final buffer = StringBuffer();
     for (final entry in fields.entries) {
@@ -63,7 +61,8 @@ Map<String, dynamic> toJson() {
         continue;
       }
       buffer.writeln(
-        "if (json.containsKey('$fieldNameString')) ${jsonPostProcessorConfig.jsonPostProcessorString}.toJson(json),",
+        "if (json.containsKey('$fieldNameString')) "
+        '${jsonPostProcessorConfig.jsonPostProcessorString}.toJson(json),',
       );
     }
     return buffer.toString();
@@ -110,28 +109,37 @@ Map<String, dynamic> toJson() {
         if (isFieldValueAllowed) {
           return "'$fieldNameString': $fieldNameString == null "
               '? $defaultValueString '
-              ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!.actualValue),';
+              ': ${jsonConverterConfig.jsonConverterString}'
+              '.toJson($fieldNameString!.actualValue),';
         } else {
           return "'$fieldNameString': $fieldNameString == null "
               '? $defaultValueString '
-              ': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),';
+              ': ${jsonConverterConfig.jsonConverterString}'
+              '.toJson($fieldNameString!),';
         }
       }
       if (isFieldValueAllowed) {
-        return "if ($fieldNameString != null) '$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!.actualValue),";
+        return "if ($fieldNameString != null) '$fieldNameString': "
+            '${jsonConverterConfig.jsonConverterString}'
+            '.toJson($fieldNameString!.actualValue),';
       } else {
-        return "if ($fieldNameString != null) '$fieldNameString': ${jsonConverterConfig.jsonConverterString}.toJson($fieldNameString!),";
+        return "if ($fieldNameString != null) '$fieldNameString': "
+            '${jsonConverterConfig.jsonConverterString}'
+            '.toJson($fieldNameString!),';
       }
     }
     if (isFieldValueAllowed) {
       if (hasDefaultValue) {
-        return "'$fieldNameString': $fieldNameString?.value ?? $defaultValueString,";
+        return "'$fieldNameString': "
+            '$fieldNameString?.value ?? $defaultValueString,';
       }
-      return "if ($fieldNameString != null) '$fieldNameString': $fieldNameString!.value,";
+      return 'if ($fieldNameString != null) '
+          "'$fieldNameString': $fieldNameString!.value,";
     }
     if (hasDefaultValue) {
       return "'$fieldNameString': $fieldNameString ?? $defaultValueString,";
     }
-    return "if ($fieldNameString != null) '$fieldNameString': $fieldNameString,";
+    return 'if ($fieldNameString != null) '
+        "'$fieldNameString': $fieldNameString,";
   }
 }

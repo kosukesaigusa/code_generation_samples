@@ -3,10 +3,10 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:flutterfire_gen_annotation/flutterfire_gen_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'configs/json_converter_config.dart';
+import 'configs/json_post_processor_config.dart';
 
 /// A [SimpleElementVisitor] to visit [FirestoreDocument] annotated class.
 class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
@@ -39,10 +39,10 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   /// updating.
   final Set<String> alwaysUseFieldValueServerTimestampWhenUpdatingFields = {};
 
-  /// [JsonConverter] strings of each field.
+  /// [JsonConverter] configurations of each field.
   final Map<String, JsonConverterConfig> jsonConverterConfigs = {};
 
-  /// [JsonPostProcessor] strings of each field.
+  /// [JsonPostProcessor] configurations of each field.
   final Map<String, JsonPostProcessorConfig> jsonPostProcessorConfigs = {};
 
   @override
@@ -94,7 +94,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
       final object = meta.computeConstantValue()!;
       final objectType = object.type!;
       if (defaultTypeChecker.isAssignableFromType(objectType)) {
-        parseDefaultAnnotation(
+        _parseDefaultAnnotation(
           fieldName: fieldName,
           source: source,
           objectType: objectType,
@@ -108,7 +108,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         if (typeArguments.length == 2) {
           final clientType = typeArguments[0];
           final firestoreType = typeArguments[1];
-          parseJsonConverterAnnotation(
+          _parseJsonConverterAnnotation(
             fieldName: fieldName,
             source: source,
             clientType: clientType,
@@ -124,7 +124,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
         if (typeArguments.length == 2) {
           final clientType = typeArguments[0];
           final firestoreType = typeArguments[1];
-          parseJsonPostProcessorAnnotation(
+          _parseJsonPostProcessorAnnotation(
             fieldName: fieldName,
             source: source,
             clientType: clientType,
@@ -147,8 +147,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   }
 
   /// Parses [Default] annotation.
-  @visibleForTesting
-  void parseDefaultAnnotation({
+  void _parseDefaultAnnotation({
     required String fieldName,
     required String source,
     required DartType objectType,
@@ -180,8 +179,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   }
 
   /// Parses [JsonConverter] annotation.
-  @visibleForTesting
-  void parseJsonConverterAnnotation({
+  void _parseJsonConverterAnnotation({
     required String fieldName,
     required String source,
     required DartType clientType,
@@ -200,8 +198,7 @@ class FirestoreDocumentVisitor extends SimpleElementVisitor<void> {
   }
 
   /// Parses [JsonPostProcessor] annotation.
-  @visibleForTesting
-  void parseJsonPostProcessorAnnotation({
+  void _parseJsonPostProcessorAnnotation({
     required String fieldName,
     required String source,
     required DartType clientType,
