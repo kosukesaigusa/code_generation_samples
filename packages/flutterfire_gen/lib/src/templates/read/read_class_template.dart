@@ -34,10 +34,12 @@ class ReadClassTemplate {
 
     final fromDocumentSnapshot = FromDocumentSnapshotTemplate(config: config);
 
-    final copyWith = CopyWithTemplate(
-      className: config.readClassName,
-      fields: config.allFields,
-    );
+    final copyWith = config.generateCopyWith
+        ? CopyWithTemplate(
+            className: config.readClassName,
+            fields: config.allFields,
+          )
+        : '';
 
     return '''
 class ${config.readClassName} {
