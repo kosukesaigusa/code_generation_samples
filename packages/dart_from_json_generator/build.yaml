@@ -1,0 +1,24 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      dart_from_json_generator:
+        enabled: true
+        generate_for:
+          exclude:
+            - test
+            - example
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - "type=lint"
+
+builders:
+  dart_from_json_generator:
+    import: "package:dart_from_json_generator/builder.dart"
+    builder_factories: ["fromJsonGenerator"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source
+    defaults:
+      options:

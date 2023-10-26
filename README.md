@@ -1,1 +1,1 @@
-packages/flutterfire_gen/README.md
+# dart_from_json_generator_monorepo
