@@ -43,8 +43,7 @@ class FromJsonVisitor extends SimpleElementVisitor<void> {
         if (defaultValueCode != null) {
           print(
             'The default value $defaultValueCode for $className.$fieldName is '
-            'set in the constructor of $className, but it has no meaning. '
-            'Use @ReadDefault, @CreateDefault, or @UpdateDefault instead.',
+            'set in the constructor of $className.',
           );
         }
       }
