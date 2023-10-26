@@ -8,6 +8,8 @@ targets:
           exclude:
             - test
             - example
+          include:
+            - test/helper/*
       source_gen|combining_builder:
         options:
           ignore_for_file:
@@ -17,7 +19,7 @@ builders:
   dart_from_json_generator:
     import: "package:dart_from_json_generator/builder.dart"
     builder_factories: ["fromJsonGenerator"]
-    build_extensions: {".dart": [".g.dart"]}
+    build_extensions: {".dart": [".dart_from_json_generator.dart"]}
     auto_apply: dependents
     build_to: source
     defaults:

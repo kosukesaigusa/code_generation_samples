@@ -17,3 +17,34 @@ Builder fromJsonGenerator(BuilderOptions options) {
     options: options,
   );
 }
+
+// Builder fromJsonGenerator(BuilderOptions options) => _FromJsonBuilder(options);
+
+// /// A [Builder] class of [FromJsonGenerator] code generator.
+// class _FromJsonBuilder implements Builder {
+//   _FromJsonBuilder(this._options);
+
+//   /// A [BuildYamlConfig] instance.
+//   final BuilderOptions _options;
+
+//   @override
+//   Map<String, List<String>> get buildExtensions => const {
+//         '.dart': ['.dart_from_json_generator.dart'],
+//       };
+
+//   @override
+//   Future<void> build(BuildStep buildStep) async {
+//     final inputAssetId = buildStep.inputId;
+//     final outputAssetId =
+//         inputAssetId.changeExtension('.dart_from_json_generator.dart');
+//     final library = await buildStep.inputLibrary;
+
+//     final generatedCode =
+//         await FromJsonGenerator(BuildYamlConfig.fromBuildYaml(_options.config))
+//             .generate(LibraryReader(library), buildStep);
+
+//     final formattedCode = DartFormatter().format(generatedCode);
+
+//     await buildStep.writeAsString(outputAssetId, formattedCode);
+//   }
+// }

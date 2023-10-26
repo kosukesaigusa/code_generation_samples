@@ -7,6 +7,7 @@ import 'package:source_gen/source_gen.dart';
 import 'configs/build_yaml_config.dart';
 import 'configs/code_generation_config.dart';
 import 'from_json_visitor.dart';
+import 'templates/from_json_template.dart';
 
 /// A generator for [FromJson] annotation.
 class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
@@ -48,7 +49,7 @@ class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
       ),
     );
 
-    final buffer = StringBuffer();
+    final buffer = StringBuffer()..writeln(FromJsonTemplate(config));
 
     return buffer.toString();
   }
