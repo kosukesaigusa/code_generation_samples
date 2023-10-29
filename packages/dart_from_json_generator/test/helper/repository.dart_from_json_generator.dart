@@ -9,8 +9,20 @@ part of 'repository.dart';
 // **************************************************************************
 
 Repository _$RepositoryFromJson(Map<String, dynamic> json) => Repository(
-      id: json['String'] as String,
-      name: json['String'] as String,
-      private: json['bool'] as bool,
-      starGazersCount: json['int'] as int,
+      id: json['id'] as String,
+      name: json['name'] as String,
+      private: json['private'] as bool? ?? false,
+      starGazersCount: json['starGazersCount'] as int,
+      topics: (json['topics'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
+      visibility: _visibilityConverter.fromJson(json['visibility'] as String),
+      permissions: (json['permissions'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(k, v as bool)),
+      securityAndAnalysis: (json['securityAndAnalysis'] as Map<String, dynamic>)
+          .map((k, v) => MapEntry(
+              k,
+              (v as Map<String, dynamic>)
+                  .map((k, v) => MapEntry(k, v as String)))),
     );

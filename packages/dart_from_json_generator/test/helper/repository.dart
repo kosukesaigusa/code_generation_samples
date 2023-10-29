@@ -1,6 +1,7 @@
 // See: https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#get-a-repository
 
 import 'package:dart_from_json_generator_annotation/dart_from_json_generator_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'repository.dart_from_json_generator.dart';
 
@@ -11,6 +12,10 @@ class Repository {
     required this.name,
     required this.private,
     required this.starGazersCount,
+    required this.topics,
+    required this.visibility,
+    required this.permissions,
+    required this.securityAndAnalysis,
   });
 
   factory Repository.fromJson(Map<String, dynamic> json) =>
@@ -20,7 +25,47 @@ class Repository {
 
   final String name;
 
+  @Default(false)
   final bool private;
 
   final int starGazersCount;
+
+  @Default(<String>[])
+  List<String> topics;
+
+  @_visibilityConverter
+  final Visibility visibility;
+
+  final Map<String, bool> permissions;
+
+  final Map<String, Map<String, String>> securityAndAnalysis;
+}
+
+enum Visibility {
+  public,
+  private,
+  ;
+
+  /// 与えられた文字列に対応する [Visibility] を返す。
+  factory Visibility.fromString(String visibilityString) {
+    switch (visibilityString) {
+      case 'public':
+        return Visibility.public;
+      case 'private':
+        return Visibility.private;
+    }
+    throw ArgumentError('Visibility が正しくありません。');
+  }
+}
+
+const _visibilityConverter = _VisibilityConverter();
+
+class _VisibilityConverter implements JsonConverter<Visibility, String> {
+  const _VisibilityConverter();
+
+  @override
+  Visibility fromJson(String json) => Visibility.fromString(json);
+
+  @override
+  String toJson(Visibility visibility) => visibility.name;
 }

@@ -6,7 +6,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'configs/build_yaml_config.dart';
 import 'configs/code_generation_config.dart';
-import 'from_json_visitor.dart';
+import 'parsers/field_element_parser.dart';
 import 'templates/from_json_template.dart';
 
 /// A generator for [FromJson] annotation.
@@ -31,17 +31,12 @@ class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
       );
     }
 
-    final visitor = FromJsonVisitor();
-
-    element.visitChildren(visitor);
-
     final annotation = const TypeChecker.fromRuntime(FromJson)
         .firstAnnotationOf(element, throwOnUnresolved: false)!;
 
     final config = CodeGenerationConfig(
       className: element.name,
-      fields: visitor.fields,
-      jsonConverterConfigs: visitor.jsonConverterConfigs,
+      fieldConfigs: element.fields.map(parseFieldElement).toList(),
       convertSnakeCaseToCamelCase: annotation.decodeField<bool>(
         'convertSnakeToCamel',
         decode: (obj) => obj.toBoolValue()!,
