@@ -3,9 +3,15 @@ import 'package:analyzer/dart/element/type.dart';
 import '../configs/json_converter_config.dart';
 import '../dart_type_util.dart';
 
-/// A parser for a field of a class.
+/// A utility class responsible for generating Dart code for deserializing a
+/// specific class field from a JSON object.
 class FromJsonFieldParser {
-  /// Creates a [FromJsonFieldParser] with the given [name] and [dartType].
+  /// Constructs a [FromJsonFieldParser].
+  ///
+  /// - [name] The name of the class field.
+  /// - [dartType] The Dart type of the field.
+  /// - [defaultValueString] The default value of the field as a string, if any.
+  /// - [jsonConverterConfig] Configuration for JSON conversion, if any.
   const FromJsonFieldParser({
     required this.name,
     required this.dartType,
@@ -13,22 +19,21 @@ class FromJsonFieldParser {
     required this.jsonConverterConfig,
   });
 
-  /// The name of the field.
+  /// The name of the field in the class.
   final String name;
 
-  /// The type of the field.
+  /// The Dart type of the field.
   final DartType dartType;
 
-  /// The default value of the field.
+  /// The default value of the field, represented as a string.
   final String? defaultValueString;
 
-  /// The [JsonConverterConfig] of the field.
+  /// Configuration for converting the field to and from JSON.
   final JsonConverterConfig? jsonConverterConfig;
 
   @override
   String toString() {
-    final result = _parseType(
-      name,
+    final result = _generateFromJsonCodeSnippet(
       dartType,
       defaultValueString: defaultValueString,
       jsonConverterConfig: jsonConverterConfig,
@@ -37,8 +42,24 @@ class FromJsonFieldParser {
     return '$name: $result,';
   }
 
-  String _parseType(
-    String fieldNameString,
+  /// Generates a Dart code snippet for deserializing a field from a JSON
+  /// object.
+  ///
+  /// This method recursively constructs Dart code to deserialize complex types
+  /// like List or Map from a JSON object. The resulting string is meant to be
+  /// used in a `fromJson` factory method.
+  ///
+  /// - [dartType] The type of the field to be deserialized.
+  /// - [isFirstLoop] A flag to indicate whether this is the first recursive
+  /// call.
+  /// - [defaultValueString] A default value for the field, if any.
+  /// - [jsonConverterConfig] Configuration for converting complex types.
+  /// - [parsedKey] The key used in parsing, useful in recursion for nested
+  /// types.
+  ///
+  /// Returns a string of Dart code that can deserialize a field of type
+  /// [dartType] from a JSON object.
+  String _generateFromJsonCodeSnippet(
     DartType dartType, {
     required bool isFirstLoop,
     String? defaultValueString,
@@ -65,8 +86,7 @@ class FromJsonFieldParser {
 
     if (dartType.isDartCoreList) {
       if (dartType.firstTypeArgumentOfList != null) {
-        final parsedListItemType = _parseType(
-          fieldNameString,
+        final parsedListItemType = _generateFromJsonCodeSnippet(
           dartType.firstTypeArgumentOfList!,
           defaultValueString: defaultValueString,
           isFirstLoop: false,
@@ -85,11 +105,14 @@ class FromJsonFieldParser {
       if (dartType.keyValueOfMap != null) {
         final valueType = dartType.keyValueOfMap!.value;
         if (valueType is DynamicType) {
-          return '$effectiveParsedKey '
-              'as Map<String, dynamic>?$defaultValueExpression';
+          if (dartType.isNullableType || defaultValueExpression.isNotEmpty) {
+            return '$effectiveParsedKey '
+                'as Map<String, dynamic>?$defaultValueExpression';
+          } else {
+            return '$effectiveParsedKey as Map<String, dynamic>';
+          }
         }
-        final parsedMapValueType = _parseType(
-          fieldNameString,
+        final parsedMapValueType = _generateFromJsonCodeSnippet(
           valueType,
           defaultValueString: defaultValueString,
           isFirstLoop: false,
