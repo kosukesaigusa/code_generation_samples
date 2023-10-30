@@ -46,7 +46,6 @@ enum Visibility {
   private,
   ;
 
-  /// 与えられた文字列に対応する [Visibility] を返す。
   factory Visibility.fromString(String visibilityString) {
     switch (visibilityString) {
       case 'public':
@@ -54,7 +53,7 @@ enum Visibility {
       case 'private':
         return Visibility.private;
     }
-    throw ArgumentError('Visibility が正しくありません。');
+    throw ArgumentError('visibility is not valid: $visibilityString');
   }
 }
 
