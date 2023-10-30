@@ -21,6 +21,9 @@ class Entity {
     required this.texts,
     required this.textsWithDefault,
     this.nullableTexts,
+    required this.listOfNullableTexts,
+    this.nullableListOfNullableTexts,
+    this.nullableListOfNullableTextsWithDefault,
     required this.map,
     required this.mapWithDefault,
     this.nullableMap,
@@ -82,6 +85,13 @@ class Entity {
 
   @Default(<String>[])
   final List<String>? nullableTexts;
+
+  final List<String?> listOfNullableTexts;
+
+  final List<String?>? nullableListOfNullableTexts;
+
+  @Default(<String?>['requiredWithDefault', null])
+  final List<String?>? nullableListOfNullableTextsWithDefault;
 
   final Map<String, dynamic> map;
 

@@ -32,6 +32,18 @@ Entity _$EntityFromJson(Map<String, dynamic> json) => Entity(
               ?.map((e) => e as String)
               .toList() ??
           const <String>[],
+      listOfNullableTexts: (json['listOfNullableTexts'] as List<dynamic>)
+          .map((e) => e as String?)
+          .toList(),
+      nullableListOfNullableTexts:
+          (json['nullableListOfNullableTexts'] as List<dynamic>?)
+              ?.map((e) => e as String?)
+              .toList(),
+      nullableListOfNullableTextsWithDefault:
+          (json['nullableListOfNullableTextsWithDefault'] as List<dynamic>?)
+                  ?.map((e) => e as String?)
+                  .toList() ??
+              const <String?>['requiredWithDefault', null],
       map: json['map'] as Map<String, dynamic>,
       mapWithDefault: json['mapWithDefault'] as Map<String, dynamic>? ??
           const <String, dynamic>{},
