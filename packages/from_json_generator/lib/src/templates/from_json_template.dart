@@ -26,6 +26,7 @@ ${config.className} _\$${config.className}FromJson(Map<String, dynamic> json) =>
         dartType: fieldConfig.dartType,
         defaultValueString: fieldConfig.defaultValueString,
         jsonConverterConfig: fieldConfig.jsonConverterConfig,
+        convertSnakeToCamel: config.convertSnakeCaseToCamelCase,
       );
       stringBuffer.writeln(result);
     }

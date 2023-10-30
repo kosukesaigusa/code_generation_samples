@@ -1,7 +1,8 @@
 import 'package:analyzer/dart/element/type.dart';
 
 import '../configs/json_converter_config.dart';
-import '../dart_type_util.dart';
+import '../utils/dart_type_util.dart';
+import '../utils/string_util.dart';
 
 /// A utility class responsible for generating Dart code for deserializing a
 /// specific class field from a JSON object.
@@ -17,6 +18,7 @@ class FromJsonFieldParser {
     required this.dartType,
     required this.defaultValueString,
     required this.jsonConverterConfig,
+    required this.convertSnakeToCamel,
   });
 
   /// The name of the field in the class.
@@ -30,6 +32,18 @@ class FromJsonFieldParser {
 
   /// Configuration for converting the field to and from JSON.
   final JsonConverterConfig? jsonConverterConfig;
+
+  /// Whether to convert json response fields' snake case to camel case.
+  final bool convertSnakeToCamel;
+
+  /// The name of the field in the JSON field.
+  String get _jsonFieldName {
+    if (convertSnakeToCamel) {
+      return name.convertToSnakeCaseIfCamelCase();
+    } else {
+      return name;
+    }
+  }
 
   @override
   String toString() {
@@ -72,17 +86,18 @@ class FromJsonFieldParser {
 
     if (jsonConverterConfig != null) {
       final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
-          "fromJson(json['$name']"
+          "fromJson(json['$_jsonFieldName']"
           ' as ${jsonConverterConfig.firestoreTypeString})';
       if (defaultValueString != null) {
-        return "json['$name'] == null "
+        return "json['$_jsonFieldName'] == null "
             '? $defaultValueString : $fromJsonString';
       } else {
         return fromJsonString;
       }
     }
 
-    final effectiveParsedKey = isFirstLoop ? "json['$name']" : parsedKey;
+    final effectiveParsedKey =
+        isFirstLoop ? "json['$_jsonFieldName']" : parsedKey;
 
     if (dartType.isDartCoreList) {
       if (dartType.firstTypeArgumentOfList != null) {

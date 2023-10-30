@@ -6,7 +6,7 @@ class BuildYamlConfig {
   /// Decode the options from a build.yaml.
   factory BuildYamlConfig.fromBuildYaml(Map<String, dynamic> yaml) =>
       BuildYamlConfig(
-        convertSnakeToCamel: yaml['convertSnakeToCamel'] as bool? ?? false,
+        convertSnakeToCamel: (yaml['field_rename'] as String?) == 'snake',
       );
 
   /// Whether to convert field name snake_case to camelCase.
