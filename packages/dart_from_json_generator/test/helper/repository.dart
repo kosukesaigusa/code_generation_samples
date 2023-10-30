@@ -3,7 +3,7 @@
 import 'package:dart_from_json_generator_annotation/dart_from_json_generator_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'repository.dart_from_json_generator.dart';
+part 'repository.from_json.dart';
 
 @FromJson()
 class Repository {

@@ -8,7 +8,7 @@ import 'src/from_json_generator.dart';
 Builder fromJsonGenerator(BuilderOptions options) {
   return PartBuilder(
     [FromJsonGenerator(BuildYamlConfig.fromBuildYaml(options.config))],
-    '.dart_from_json_generator.dart',
+    '.from_json.dart',
     header: '''
 // coverage:ignore-file
 // ignore_for_file: type=lint
@@ -30,14 +30,14 @@ class _FromJsonBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        '.dart': ['.dart_from_json_generator.dart'],
+        '.dart': ['.from_json.dart'],
       };
 
   @override
   Future<void> build(BuildStep buildStep) async {
     final inputAssetId = buildStep.inputId;
     final outputAssetId =
-        inputAssetId.changeExtension('.dart_from_json_generator.dart');
+        inputAssetId.changeExtension('.from_json.dart');
     final library = await buildStep.inputLibrary;
 
     final generatedCode =

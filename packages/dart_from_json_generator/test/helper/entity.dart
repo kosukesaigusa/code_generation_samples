@@ -1,7 +1,7 @@
 import 'package:dart_from_json_generator_annotation/dart_from_json_generator_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'entity.dart_from_json_generator.dart';
+part 'entity.from_json.dart';
 
 @FromJson()
 class Entity {
