@@ -1,0 +1,5 @@
+# melos_managed_dependency_overrides: from_json_generator_annotation,from_json_generator_utils
+dependency_overrides:
+  from_json_generator_annotation:
+    path: ../from_json_generator_annotation
+

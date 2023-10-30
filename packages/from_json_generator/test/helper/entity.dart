@@ -1,4 +1,4 @@
-import 'package:dart_from_json_generator_annotation/dart_from_json_generator_annotation.dart';
+import 'package:from_json_generator_annotation/from_json_generator_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'entity.from_json.dart';

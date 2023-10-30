@@ -1,1 +1,1 @@
-# dart_from_json_generator_monorepo
+# from_json_generator_monorepo

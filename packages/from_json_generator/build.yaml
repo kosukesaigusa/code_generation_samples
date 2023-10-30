@@ -2,7 +2,7 @@
 targets:
   $default:
     builders:
-      dart_from_json_generator:
+      from_json_generator:
         enabled: true
         generate_for:
           exclude:
@@ -16,8 +16,8 @@ targets:
             - "type=lint"
 
 builders:
-  dart_from_json_generator:
-    import: "package:dart_from_json_generator/builder.dart"
+  from_json_generator:
+    import: "package:from_json_generator/builder.dart"
     builder_factories: ["fromJsonGenerator"]
     build_extensions: {".dart": [".from_json.dart"]}
     auto_apply: dependents

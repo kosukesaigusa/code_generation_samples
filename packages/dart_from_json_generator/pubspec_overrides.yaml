@@ -1,5 +1,0 @@
-# melos_managed_dependency_overrides: dart_from_json_generator_annotation,dart_from_json_generator_utils
-dependency_overrides:
-  dart_from_json_generator_annotation:
-    path: ../dart_from_json_generator_annotation
-

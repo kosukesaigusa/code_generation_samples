@@ -1,6 +1,6 @@
-name: dart_from_json_generator
+name: from_json_generator
 
-repository: https://github.com/kosukesaigusa/dart_from_json_generator
+repository: https://github.com/kosukesaigusa/from_json_generator
 
 packages:
   - packages/**
