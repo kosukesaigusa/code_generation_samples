@@ -7,7 +7,11 @@ import 'package:source_gen/source_gen.dart';
 import '../configs/field_config.dart';
 import '../configs/json_converter_config.dart';
 
-/// Parses given [element] and returns [FieldConfig] instance.
+/// Parses a given [FieldElement] to produce a [FieldConfig] instance.
+/// This function examines the metadata annotations of the [FieldElement]
+/// to extract default values and any JsonConverter configurations.
+///
+/// Returns a [FieldConfig] that contains parsed configurations.
 FieldConfig parseFieldElement(FieldElement element) {
   String? defaultValueString;
   JsonConverterConfig? jsonConverterConfig;
@@ -39,7 +43,14 @@ FieldConfig parseFieldElement(FieldElement element) {
   );
 }
 
-/// Parses [Default] annotation.
+/// Parses the [Default] annotation to extract default value for a field.
+///
+/// - [fieldName]: The name of the field being parsed.
+/// - [source]: The source code for the annotation.
+/// - [objectType]: The Dart type of the annotation object.
+///
+/// Returns a string representing the default value for the field.
+/// If the [Default] annotation is not present, returns null.
 String? _parseDefaultAnnotation({
   required String fieldName,
   required String source,
@@ -62,7 +73,14 @@ String? _parseDefaultAnnotation({
   }
 }
 
-/// Parses [JsonConverter] annotation.
+/// Parses the [JsonConverter] annotation to extract converter configurations.
+///
+/// - [fieldName]: The name of the field being parsed.
+/// - [source]: The source code for the annotation.
+/// - [objectType]: The Dart type of the annotation object.
+///
+/// Returns a [JsonConverterConfig] that contains parsed configurations.
+/// If the [JsonConverter] annotation is not present, returns null.
 JsonConverterConfig? _parseJsonConverterAnnotation({
   required String fieldName,
   required String source,
