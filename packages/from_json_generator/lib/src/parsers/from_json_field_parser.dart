@@ -87,7 +87,7 @@ class FromJsonFieldParser {
     if (jsonConverterConfig != null) {
       final fromJsonString = '${jsonConverterConfig.jsonConverterString}.'
           "fromJson(json['$_jsonFieldName']"
-          ' as ${jsonConverterConfig.firestoreTypeString})';
+          ' as ${jsonConverterConfig.jsonTypeString})';
       if (defaultValueString != null) {
         return "json['$_jsonFieldName'] == null "
             '? $defaultValueString : $fromJsonString';

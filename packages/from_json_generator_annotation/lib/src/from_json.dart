@@ -4,5 +4,8 @@
 /// deserializing a JSON object. It doesn't carry any data, serving as a marker.
 class FromJson {
   /// Constructs an instance of [FromJson].
-  const FromJson();
+  const FromJson({this.convertSnakeToCamel = false});
+
+  /// Whether to convert snake case to camel case when deserializing.
+  final bool convertSnakeToCamel;
 }

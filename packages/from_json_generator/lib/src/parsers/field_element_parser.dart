@@ -75,9 +75,9 @@ String? _parseDefaultAnnotation({
 
 /// Parses the [JsonConverter] annotation to extract converter configurations.
 ///
-/// - [fieldName]: The name of the field being parsed.
-/// - [source]: The source code for the annotation.
-/// - [objectType]: The Dart type of the annotation object.
+/// - [fieldName] The name of the field being parsed.
+/// - [source] The source code for the annotation.
+/// - [objectType] The Dart type of the annotation object.
 ///
 /// Returns a [JsonConverterConfig] that contains parsed configurations.
 /// If the [JsonConverter] annotation is not present, returns null.
@@ -96,15 +96,14 @@ JsonConverterConfig? _parseJsonConverterAnnotation({
   final typeArguments = interfaceTypes.first.typeArguments;
   if (typeArguments.length == 2) {
     final clientType = typeArguments[0];
-    final firestoreType = typeArguments[1];
+    final jsonType = typeArguments[1];
     final pattern = RegExp('@(.*)');
     final match = pattern.firstMatch(source);
     if (match != null) {
       return JsonConverterConfig(
         jsonConverterString: match.group(1)!,
         clientTypeString: clientType.getDisplayString(withNullability: true),
-        firestoreTypeString:
-            firestoreType.getDisplayString(withNullability: true),
+        jsonTypeString: jsonType.getDisplayString(withNullability: true),
       );
     }
     return null;

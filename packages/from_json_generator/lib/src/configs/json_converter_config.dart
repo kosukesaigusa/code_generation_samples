@@ -4,7 +4,7 @@ class JsonConverterConfig {
   const JsonConverterConfig({
     required this.jsonConverterString,
     required this.clientTypeString,
-    required this.firestoreTypeString,
+    required this.jsonTypeString,
   });
 
   /// The name string of the json converter.
@@ -14,5 +14,5 @@ class JsonConverterConfig {
   final String clientTypeString;
 
   /// The JSON response field type string of the json converter.
-  final String firestoreTypeString;
+  final String jsonTypeString;
 }
