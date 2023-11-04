@@ -1,0 +1,27 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      copy_builder:
+        enabled: true
+        generate_for:
+          exclude:
+            - test
+            - example
+          include:
+            - test/helper/*
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - "type=lint"
+
+builders:
+  copy_builder:
+    import: "package:copy_builder/builder.dart"
+    builder_factories: ["copyBuilder"]
+    build_extensions: {".dart": [".copy.dart"]}
+    auto_apply: dependents
+    build_to: source
+    defaults:
+      options:
+
