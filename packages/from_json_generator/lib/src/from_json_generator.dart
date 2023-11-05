@@ -1,4 +1,3 @@
-import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:from_json_generator_annotation/from_json_generator_annotation.dart';
@@ -8,6 +7,7 @@ import 'configs/build_yaml_config.dart';
 import 'configs/code_generation_config.dart';
 import 'parsers/field_element_parser.dart';
 import 'templates/from_json_template.dart';
+import 'utils/dart_object_util.dart';
 
 /// A generator for [FromJson] annotation.
 class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
@@ -47,19 +47,5 @@ class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
     final buffer = StringBuffer()..writeln(FromJsonTemplate(config));
 
     return buffer.toString();
-  }
-}
-
-extension on DartObject {
-  T decodeField<T>(
-    String fieldName, {
-    required T Function(DartObject obj) decode,
-    required T Function() orElse,
-  }) {
-    final field = getField(fieldName);
-    if (field == null || field.isNull) {
-      return orElse();
-    }
-    return decode(field);
   }
 }
