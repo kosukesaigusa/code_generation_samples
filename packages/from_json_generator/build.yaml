@@ -10,10 +10,6 @@ targets:
             - example
           include:
             - test/helper/*
-      source_gen|combining_builder:
-        options:
-          ignore_for_file:
-            - "type=lint"
 
 builders:
   from_json_generator:
