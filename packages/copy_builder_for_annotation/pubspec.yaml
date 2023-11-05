@@ -1,0 +1,18 @@
+name: copy_builder_for_annotation
+description: copy_builder_for_annotation
+version: 0.0.1
+homepage: https://github.com/kosukesaigusa/copy_builder_for_annotation
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  analyzer: ^6.1.0
+  build: ^2.4.1
+  copy_builder_annotation:
+    path: ../copy_builder_annotation
+
+dev_dependencies:
+  build_runner: ^2.4.6
+  test: ^1.23.3

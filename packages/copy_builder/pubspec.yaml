@@ -8,12 +8,8 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  analyzer: ^6.1.0
   build: ^2.4.1
-  meta: ^1.9.1
-  path: ^1.8.3
 
 dev_dependencies:
   build_runner: ^2.4.6
-  dart_style: ^2.3.3
   test: ^1.23.3

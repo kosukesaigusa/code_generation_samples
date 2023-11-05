@@ -1,0 +1,16 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  $default:
+    builders:
+      copy_builder_for_annotation:
+        generate_for:
+          include:
+            - test/helper/*
+
+builders:
+  copy_builder_for_annotation:
+    import: "package:copy_builder_for_annotation/builder.dart"
+    builder_factories: ["copyBuilderForAnnotation"]
+    build_extensions: {".dart": [".copy.dart"]}
+    auto_apply: dependents
+    build_to: source

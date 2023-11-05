@@ -1,0 +1,13 @@
+name: copy_builder_annotation
+description: copy_builder_annotation
+version: 0.0.1
+homepage: https://github.com/kosukesaigusa/from_json_generator
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  meta: ^1.9.1
+
+dev_dependencies:
+  test: ^1.23.3
