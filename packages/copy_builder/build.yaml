@@ -3,11 +3,7 @@ targets:
   $default:
     builders:
       copy_builder:
-        enabled: true
         generate_for:
-          exclude:
-            - test
-            - example
           include:
             - test/helper/*
 

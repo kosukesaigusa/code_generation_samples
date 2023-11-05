@@ -3,11 +3,7 @@ targets:
   $default:
     builders:
       from_json_generator:
-        enabled: true
         generate_for:
-          exclude:
-            - test
-            - example
           include:
             - test/helper/*
 
