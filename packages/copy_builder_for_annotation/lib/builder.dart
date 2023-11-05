@@ -58,7 +58,6 @@ class CopyBuilderForAnnotation implements Builder {
     final inputId = buildStep.inputId;
     final content = await buildStep.readAsString(inputId);
     final outputId = inputId.changeExtension('.copy.dart');
-
     final parsedStringResult = parseString(content: content);
     if (_hasCopyAnnotation(parsedStringResult)) {
       await buildStep.writeAsString(outputId, content);
