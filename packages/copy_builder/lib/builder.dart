@@ -14,8 +14,8 @@ class CopyBuilder implements Builder {
   @override
   Future<void> build(BuildStep buildStep) async {
     final inputId = buildStep.inputId;
-    final copy = inputId.changeExtension('.copy.dart');
+    final outputId = inputId.changeExtension('.copy.dart');
     final contents = await buildStep.readAsString(inputId);
-    await buildStep.writeAsString(copy, contents);
+    await buildStep.writeAsString(outputId, contents);
   }
 }
