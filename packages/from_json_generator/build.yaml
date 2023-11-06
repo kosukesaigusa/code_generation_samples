@@ -12,7 +12,6 @@ builders:
     import: "package:from_json_generator/builder.dart"
     builder_factories: ["fromJsonGenerator"]
     build_extensions: {".dart": [".from_json.dart"]}
-    auto_apply: dependents
     build_to: source
     defaults:
       options:

@@ -12,5 +12,4 @@ builders:
     import: "package:copy_builder_for_annotation/builder.dart"
     builder_factories: ["copyBuilderForAnnotation"]
     build_extensions: {".dart": [".copy.dart"]}
-    auto_apply: dependents
     build_to: source

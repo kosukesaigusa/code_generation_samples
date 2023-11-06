@@ -12,5 +12,4 @@ builders:
     import: "package:copy_builder/builder.dart"
     builder_factories: ["copyBuilder"]
     build_extensions: {".dart": [".copy.dart"]}
-    auto_apply: dependents
     build_to: source
