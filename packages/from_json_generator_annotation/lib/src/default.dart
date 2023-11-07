@@ -1,5 +1,5 @@
 /// A class that represents the `@Default` annotation to specify a default value
-///  for a field.
+/// for a field.
 ///
 /// This annotation is used to set the default value of a class property when
 /// deserializing from a JSON object. If the JSON object does not contain the
