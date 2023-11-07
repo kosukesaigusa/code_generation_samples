@@ -13,7 +13,6 @@ dependencies:
   from_json_generator_annotation:
     path: ../from_json_generator_annotation
   json_annotation: ^4.8.1
-  meta: ^1.9.1
   source_gen: ^1.4.0
 
 dev_dependencies:
