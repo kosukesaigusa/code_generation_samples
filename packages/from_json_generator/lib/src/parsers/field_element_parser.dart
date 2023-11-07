@@ -45,9 +45,9 @@ FieldConfig parseFieldElement(FieldElement element) {
 
 /// Parses the [Default] annotation to extract default value for a field.
 ///
-/// - [fieldName]: The name of the field being parsed.
-/// - [source]: The source code for the annotation.
-/// - [objectType]: The Dart type of the annotation object.
+/// - [fieldName] The name of the field being parsed.
+/// - [source] The source code for the annotation.
+/// - [objectType] The Dart type of the annotation object.
 ///
 /// Returns a string representing the default value for the field.
 /// If the [Default] annotation is not present, returns null.
