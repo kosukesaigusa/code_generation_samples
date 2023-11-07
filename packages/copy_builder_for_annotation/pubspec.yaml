@@ -1,7 +1,7 @@
 name: copy_builder_for_annotation
 description: copy_builder_for_annotation
 version: 0.0.1
-homepage: https://github.com/kosukesaigusa/copy_builder_for_annotation
+homepage: https://github.com/kosukesaigusa/dart_from_json_generator
 publish_to: none
 
 environment:

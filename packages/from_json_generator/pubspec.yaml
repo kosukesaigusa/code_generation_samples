@@ -1,7 +1,7 @@
 name: from_json_generator
 description: from_json_generator
 version: 0.0.1
-homepage: https://github.com/kosukesaigusa/from_json_generator
+homepage: https://github.com/kosukesaigusa/dart_from_json_generator
 publish_to: none
 
 environment:
@@ -14,10 +14,7 @@ dependencies:
     path: ../from_json_generator_annotation
   json_annotation: ^4.8.1
   meta: ^1.9.1
-  path: ^1.8.3
   source_gen: ^1.4.0
 
 dev_dependencies:
   build_runner: ^2.4.6
-  dart_style: ^2.3.3
-  test: ^1.23.3

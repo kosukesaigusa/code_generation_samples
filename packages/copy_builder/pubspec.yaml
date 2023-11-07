@@ -1,7 +1,7 @@
 name: copy_builder
 description: copy_builder
 version: 0.0.1
-homepage: https://github.com/kosukesaigusa/copy_builder
+homepage: https://github.com/kosukesaigusa/dart_from_json_generator
 publish_to: none
 
 environment:

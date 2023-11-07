@@ -1,7 +1,7 @@
 name: copy_builder_annotation
 description: copy_builder_annotation
 version: 0.0.1
-homepage: https://github.com/kosukesaigusa/from_json_generator
+homepage: https://github.com/kosukesaigusa/dart_from_json_generator
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
