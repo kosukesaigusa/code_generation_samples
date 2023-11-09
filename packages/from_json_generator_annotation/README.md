@@ -1,1 +1,1 @@
-# from_json_generator_annotation
+../../README.md
