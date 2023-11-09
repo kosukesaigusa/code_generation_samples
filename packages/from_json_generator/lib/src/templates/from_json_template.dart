@@ -1,4 +1,5 @@
 import '../configs/code_generation_config.dart';
+import '../configs/field_config.dart';
 import '../parsers/from_json_field_parser.dart';
 
 /// A template for a class to read documents from Firestore.
@@ -13,14 +14,14 @@ class FromJsonTemplate {
   String toString() {
     return '''
 ${config.className} _\$${config.className}FromJson(Map<String, dynamic> json) => ${config.className}(
-  ${_parseFields()}
+  ${_parseFields(config.fieldConfigs)}
 );
 ''';
   }
 
-  String _parseFields() {
+  String _parseFields(List<FieldConfig> fieldConfigs) {
     final stringBuffer = StringBuffer();
-    for (final fieldConfig in config.fieldConfigs) {
+    for (final fieldConfig in fieldConfigs) {
       final result = FromJsonFieldParser(
         name: fieldConfig.name,
         dartType: fieldConfig.dartType,
