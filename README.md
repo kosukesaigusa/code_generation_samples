@@ -1,1 +1,1 @@
-# from_json_generator_monorepo
+# code_generation_samples
