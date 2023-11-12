@@ -13,6 +13,7 @@ class FromJsonFieldParser {
   /// - [dartType] The Dart type of the field.
   /// - [defaultValueString] The default value of the field as a string, if any.
   /// - [jsonConverterConfig] Configuration for JSON conversion, if any.
+  /// - [convertSnakeToCamel] Whether to convert snake case to camel case.
   const FromJsonFieldParser({
     required this.name,
     required this.dartType,
