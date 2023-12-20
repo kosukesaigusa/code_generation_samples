@@ -40,7 +40,7 @@ class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
       convertSnakeCaseToCamelCase: annotation.decodeField<bool>(
         'convertSnakeToCamel',
         decode: (obj) => obj.toBoolValue()!,
-        orElse: () => _buildYamlConfig.convertSnakeToCamel ?? false,
+        orElse: () => _buildYamlConfig.convertSnakeToCamel,
       ),
     );
 
