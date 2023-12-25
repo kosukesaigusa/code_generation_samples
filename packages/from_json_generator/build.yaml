@@ -9,7 +9,7 @@ targets:
 
 builders:
   from_json_generator:
-    import: "package:from_json_generator/builder.dart"
+    import: "package:from_json_generator/from_json_generator.dart"
     builder_factories: ["fromJsonGenerator"]
     build_extensions: {".dart": [".from_json.dart"]}
     build_to: source
