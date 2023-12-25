@@ -12,7 +12,7 @@ import 'utils/dart_object_util.dart';
 /// A generator for [FromJson] annotation.
 class FromJsonGenerator extends GeneratorForAnnotation<FromJson> {
   /// Creates a new instance of [FromJsonGenerator].
-  FromJsonGenerator(this._buildYamlConfig);
+  const FromJsonGenerator(this._buildYamlConfig);
 
   /// A [BuildYamlConfig] instance.
   final BuildYamlConfig _buildYamlConfig;
