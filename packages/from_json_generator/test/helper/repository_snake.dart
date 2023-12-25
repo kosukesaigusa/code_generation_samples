@@ -66,5 +66,5 @@ class _VisibilityConverter implements JsonConverter<Visibility, String> {
   Visibility fromJson(String json) => Visibility.fromString(json);
 
   @override
-  String toJson(Visibility visibility) => visibility.name;
+  String toJson(Visibility _) => throw UnimplementedError();
 }

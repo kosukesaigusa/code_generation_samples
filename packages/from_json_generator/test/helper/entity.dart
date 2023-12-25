@@ -170,9 +170,7 @@ class _FooJsonConverter implements JsonConverter<Foo, Map<String, dynamic>> {
   }
 
   @override
-  Map<String, dynamic> toJson(Foo foo) {
-    return <String, dynamic>{'bar': foo.bar};
-  }
+  Map<String, dynamic> toJson(Foo _) => throw UnimplementedError();
 }
 
 const _nullableFooJsonConverter = _NullableFooJsonConverter();
@@ -191,10 +189,5 @@ class _NullableFooJsonConverter
   }
 
   @override
-  Map<String, dynamic> toJson(Foo? foo) {
-    if (foo == null) {
-      return <String, dynamic>{'bar': 'defaultBar'};
-    }
-    return <String, dynamic>{'bar': foo.bar};
-  }
+  Map<String, dynamic> toJson(Foo? _) => throw UnimplementedError();
 }
